@@ -31,8 +31,18 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setMinWidth(primaryStage.getWidth());
         primaryStage.setMinHeight(primaryStage.getHeight());
+        logger.debug("OriDraw is now running.");
     }
 
+    @Override
+    public void init() throws Exception {
+        logger.info("Initializing");
+    }
+
+    @Override
+    public void stop() throws Exception {
+        logger.info("Exiting OriDraw");
+    }
 
     public static void main(String[] args) {
         launch(args);

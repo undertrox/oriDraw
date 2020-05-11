@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -11,6 +10,8 @@
     <top>
         <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
+                <Button fx:id="btnNew" mnemonicParsing="false" onAction="#btnNewClick" text="New"/>
+                <Button fx:id="btnOpen" mnemonicParsing="false" onAction="#btnOpenClick" text="Open"/>
                 <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClick" text="Save"/>
             </items>
         </ToolBar>
@@ -25,21 +26,7 @@
         <VBox fx:id="vBoxRight" prefHeight="528.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
     </right>
     <center>
-        <TabPane fx:id="mainTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE"
-                 BorderPane.alignment="CENTER">
-            <tabs>
-                <Tab text="New File">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <Canvas height="500.0" width="600.0" AnchorPane.bottomAnchor="-1.0"
-                                        AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                        AnchorPane.topAnchor="0.0"/>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
+        <TabPane fx:id="mainTabPane" prefHeight="528.0" prefWidth="600.0" tabClosingPolicy="ALL_TABS"
+                 BorderPane.alignment="CENTER"/>
     </center>
 </BorderPane>
