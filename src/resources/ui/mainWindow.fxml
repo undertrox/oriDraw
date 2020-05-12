@@ -26,7 +26,7 @@
         <VBox fx:id="vBoxRight" prefHeight="528.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
     </right>
     <center>
-        <TabPane fx:id="mainTabPane" prefHeight="528.0" prefWidth="600.0" tabClosingPolicy="ALL_TABS"
-                 BorderPane.alignment="CENTER"/>
+        <TabPane fx:id="mainTabPane" onMouseMoved="#onMouseMoved" prefHeight="528.0" prefWidth="600.0"
+                 tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER"/>
     </center>
 </BorderPane>
