@@ -1,8 +1,7 @@
 package de.undertrox.oridraw;
 
 import de.undertrox.oridraw.math.Vector;
-import de.undertrox.oridraw.origami.CreasePattern;
-import de.undertrox.oridraw.render.CreasePatternRenderer;
+import de.undertrox.oridraw.ui.render.CreasePatternRenderer;
 import de.undertrox.oridraw.ui.CreasePatternTab;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
@@ -14,7 +13,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import org.apache.log4j.Logger;
 
@@ -45,7 +43,7 @@ public class MainWindowController implements Initializable {
 
         ChangeListener<Number> sizeChangeListener = (obs, oldVal, newVal) -> {
             CreasePatternTab selected = getSelectedTab();
-            selected.getRenderer().draw(new Vector(0, 0));
+            selected.render();
         };
         mainTabPane.widthProperty().addListener(sizeChangeListener);
         mainTabPane.heightProperty().addListener(sizeChangeListener);
@@ -81,7 +79,7 @@ public class MainWindowController implements Initializable {
         CreasePatternTab tab = new CreasePatternTab(bundle.getString("oridraw.file.new"), c, mainTabPane);
         tab.setOnCloseRequest(this::onFileTabCloseRequest);
         mainTabPane.getTabs().add(tab);
-        tab.getRenderer().draw(new Vector(0, 0));
+        tab.render();
     }
 
     public void btnSaveClick() {
@@ -104,8 +102,7 @@ public class MainWindowController implements Initializable {
     }
 
     public void onMouseMoved(MouseEvent e) {
-        CreasePatternRenderer renderer = getSelectedTab().getRenderer();
-        renderer.draw(new Vector(e.getX(), e.getY()));
+        getSelectedTab().render();
     }
 
 }
