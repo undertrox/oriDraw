@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.math;
+package de.undertrox.oridraw.util.math;
 
 public class Line {
 

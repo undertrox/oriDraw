@@ -1,5 +1,8 @@
-package de.undertrox.oridraw.ui.render;
+package de.undertrox.oridraw.ui.render.renderer;
 
+import de.undertrox.oridraw.ui.render.settings.ColorManager;
+import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import javafx.scene.canvas.GraphicsContext;
 
 public class BackgroundRenderer extends Renderer {
@@ -11,7 +14,7 @@ public class BackgroundRenderer extends Renderer {
     @Override
     protected void draw() {
         GraphicsContext gc = getGc();
-        gc.setFill(ColorManager.getInstance().CP_EDITOR_BACKGROUND_COLOR);
+        gc.setFill(RenderSettings.getColorManager().CP_EDITOR_BACKGROUND_COLOR);
         gc.fillRect(0, 0, getWidth(), getHeight());
     }
 }

@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.ui.render;
+package de.undertrox.oridraw.ui.render.settings;
 
 import de.undertrox.oridraw.origami.Crease;
 import javafx.scene.paint.Color;
@@ -13,6 +13,10 @@ public class ColorManager {
     public Paint AUX_COLOR = Color.GRAY;
     public Paint UNKNOWN_COLOR = Color.GRAY;
 
+    public Paint POINT_COLOR = Color.BLACK;
+    public Paint TO_BE_SELECTED_POINT_COLOR = Color.LIMEGREEN;
+    public Paint SELECTED_POINT_COLOR = Color.GREEN;
+
     public Paint CP_EDITOR_BACKGROUND_COLOR = Color.WHITE;
 
     /**
@@ -21,7 +25,7 @@ public class ColorManager {
      * @param type: Crease type
      * @return Paint to use for type
      */
-    public static Paint getPaintForCreaseType(Crease.Type type) {
+    public Paint getPaintForCreaseType(Crease.Type type) {
         switch (type) {
             case EDGE:
                 return getInstance().EDGE_COLOR;
@@ -36,7 +40,7 @@ public class ColorManager {
         }
     }
 
-    public static ColorManager getInstance() {
+    static ColorManager getInstance() {
         if (instance == null) {
             instance = new ColorManager();
         }

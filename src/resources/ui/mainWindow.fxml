@@ -17,7 +17,11 @@
         </ToolBar>
     </top>
     <bottom>
-        <TextFlow fx:id="statusText" prefHeight="32.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+        <TextFlow fx:id="statusText" prefHeight="32.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="statusLabel" text="Label"/>
+            </children>
+        </TextFlow>
     </bottom>
     <left>
         <VBox fx:id="vBoxLeft" prefHeight="528.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
@@ -26,7 +30,7 @@
         <VBox fx:id="vBoxRight" prefHeight="528.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
     </right>
     <center>
-        <TabPane fx:id="mainTabPane" onMouseMoved="#onMouseMoved" prefHeight="528.0" prefWidth="600.0"
-                 tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER"/>
+        <TabPane fx:id="mainTabPane" onMouseClicked="#onMouseClicked" onMouseMoved="#onMouseMoved" prefHeight="528.0"
+                 prefWidth="600.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER"/>
     </center>
 </BorderPane>

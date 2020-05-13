@@ -1,6 +1,6 @@
 package de.undertrox.oridraw.ui.render;
 
-import de.undertrox.oridraw.math.Vector;
+import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Translate;
 
@@ -50,6 +50,10 @@ public class Transform {
         return p.scale(scale).add(move);
     }
 
+    public Vector applyInverted(Vector p) {
+        return p.add(move.invertSign()).scale(1 / scale);
+    }
+
     /**
      * Applies transformation (translation, rotation, scaling) to the GraphicsContext gc
      *
@@ -58,7 +62,7 @@ public class Transform {
     public void apply(GraphicsContext gc) {
         Translate t = new Translate(move.getX(), move.getY());
         gc.setTransform(t.getMxx(), t.getMyx(), t.getMxy(), t.getMyy(), t.getTx(), t.getTy());
-        //gc.rotate(rotation);
-        //gc.scale(scale,scale);
+        gc.rotate(rotation);
+        gc.scale(scale, scale);
     }
 }

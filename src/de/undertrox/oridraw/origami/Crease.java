@@ -1,7 +1,7 @@
 package de.undertrox.oridraw.origami;
 
-import de.undertrox.oridraw.math.Line;
-import de.undertrox.oridraw.math.Vector;
+import de.undertrox.oridraw.util.math.Line;
+import de.undertrox.oridraw.util.math.Vector;
 
 public class Crease {
 

@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.math;
+package de.undertrox.oridraw.util.math;
 
 /**
  * 2D Vector. Can be used as a Point or as a Vector
@@ -52,6 +52,16 @@ public class Vector {
      */
     public double distance(Vector vec) {
         return Math.sqrt(distanceSquared(vec));
+    }
+
+    /**
+     * Manhattan distance |x1-x2|+|y1-y2| between this and vec
+     *
+     * @param vec: Vector/Point to calculate the manhattan distance to
+     * @return Manhattan distance to Vector/Point
+     */
+    public double manhattanDistance(Vector vec) {
+        return Math.abs(vec.getX() - getX()) + Math.abs(vec.getY() - getY());
     }
 
     /**

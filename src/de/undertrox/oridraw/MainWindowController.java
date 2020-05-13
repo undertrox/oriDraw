@@ -1,16 +1,13 @@
 package de.undertrox.oridraw;
 
-import de.undertrox.oridraw.math.Vector;
-import de.undertrox.oridraw.ui.render.CreasePatternRenderer;
 import de.undertrox.oridraw.ui.CreasePatternTab;
+import de.undertrox.oridraw.ui.MouseHandler;
+import de.undertrox.oridraw.util.math.Vector;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
@@ -20,6 +17,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
+    public Label statusLabel;
     private Logger logger = Logger.getLogger(MainWindowController.class);
 
     public TextFlow statusText;
@@ -102,7 +100,15 @@ public class MainWindowController implements Initializable {
     }
 
     public void onMouseMoved(MouseEvent e) {
-        getSelectedTab().render();
+        CreasePatternTab tab = getSelectedTab();
+        statusLabel.setText("Mouse Position: " + MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), tab.getCpTransform()));
+        tab.getMouseHandler().handleMouseMove(e);
+        tab.render();
+    }
+
+    public void onMouseClicked(MouseEvent e) {
+        CreasePatternTab tab = getSelectedTab();
+        tab.getMouseHandler().handleMouseClick(e);
     }
 
 }
