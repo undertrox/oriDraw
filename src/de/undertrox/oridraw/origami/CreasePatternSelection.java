@@ -12,12 +12,23 @@ public class CreasePatternSelection {
     UniqueItemList<Line> toBeSelectedLines;
     UniqueItemList<Vector> toBeSelectedPoints;
 
+    Mode mode;
+
     public CreasePatternSelection(CreasePattern cp) {
         this.cp = cp;
         selectedLines = new UniqueItemList<>();
         selectedPoints = new UniqueItemList<>();
         toBeSelectedLines = new UniqueItemList<>();
         toBeSelectedPoints = new UniqueItemList<>();
+        mode = Mode.POINT;
+    }
+
+    public enum Mode {
+        LINE, POINT, LINE_AND_POINT;
+
+        public boolean selectPoints() {
+            return this == POINT || this == LINE_AND_POINT;
+        }
     }
 
     public UniqueItemList<Line> getSelectedLines() {
@@ -117,5 +128,13 @@ public class CreasePatternSelection {
     public void selectOnlyToBeSelectedPoints() {
         clearSelection();
         selectToBeSelectedPoints();
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    public Mode getMode() {
+        return mode;
     }
 }

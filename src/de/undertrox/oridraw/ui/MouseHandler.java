@@ -36,11 +36,13 @@ public class MouseHandler {
 
     public void handleMouseMove(MouseEvent e) {
         Vector mouseCoords = normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTransform);
-        Vector nearestPoint = findNearestPoint(mouseCoords, cp.getPoints());
-        if (mouseCoords.distanceSquared(nearestPoint) < Math.pow(2 * RenderSettings.getPointSideLength(), 2)) {
-            selection.singleToBeSelected(nearestPoint);
-        } else {
-            selection.clearToBeSelected();
+        if (selection.getMode().selectPoints()) {
+            Vector nearestPoint = findNearestPoint(mouseCoords, cp.getPoints());
+            if (mouseCoords.distanceSquared(nearestPoint) < Math.pow(2 * RenderSettings.getPointSideLength(), 2)) {
+                selection.singleToBeSelected(nearestPoint);
+            } else {
+                selection.clearToBeSelected();
+            }
         }
     }
 
