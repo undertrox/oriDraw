@@ -1,6 +1,8 @@
 package de.undertrox.oridraw.ui;
 
 import de.undertrox.oridraw.origami.CreasePatternSelection;
+import de.undertrox.oridraw.origami.tool.CreasePatternTool;
+import de.undertrox.oridraw.origami.tool.DrawLineTool;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.ui.render.*;
@@ -25,6 +27,8 @@ public class CreasePatternTab extends Tab {
     private CreasePatternSelection cpSel;
     private MouseHandler mouseHandler;
     private List<Renderer> renderers;
+    private List<CreasePatternTool> tools;
+    private CreasePatternTool activeTool;
     private Transform cpTransform;
     private Transform bgTransform;
 
@@ -56,6 +60,16 @@ public class CreasePatternTab extends Tab {
         logger.debug("Initializing CreasePatternSelectionPointRenderer");
         renderers.add(new CreasePatternSelectionPointRenderer(cpTransform, cpSel));
 
+        logger.debug("Initializing Tools");
+        tools = new ArrayList<>();
+        DrawLineTool dlTool = new DrawLineTool(cp, cpSel, cpTransform);
+        tools.add(dlTool);
+
+        setActiveTool(dlTool);
+
+        logger.debug("Initializing Tool Renderers");
+        tools.forEach((tool) -> renderers.add(tool.getRenderer()));
+
         canvas.widthProperty().bind(tabPane.widthProperty());
         canvas.heightProperty().bind(tabPane.heightProperty());
     }
@@ -67,6 +81,13 @@ public class CreasePatternTab extends Tab {
         for (Renderer renderer : renderers) {
             renderer.render(canvas);
         }
+    }
+
+    public void setActiveTool(CreasePatternTool activeTool) {
+        tools.forEach(t -> t.setEnabled(false));
+        this.activeTool = activeTool;
+        mouseHandler.setActiveTool(activeTool);
+        activeTool.setEnabled(true);
     }
 
     public MouseHandler getMouseHandler() {

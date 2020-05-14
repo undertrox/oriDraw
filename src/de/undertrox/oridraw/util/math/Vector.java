@@ -1,11 +1,13 @@
 package de.undertrox.oridraw.util.math;
 
+import de.undertrox.oridraw.Constants;
+
 /**
  * 2D Vector. Can be used as a Point or as a Vector
  */
 public class Vector {
     private double x, y;
-    public static final double TOLERANCE = 0.00000001;
+    public static final double TOLERANCE = Constants.EPSILON;
 
     public static final Vector ORIGIN = new Vector(0, 0);
 
@@ -134,6 +136,15 @@ public class Vector {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return True if none of the Coordinates are Infinity or NaN
+     */
+    public boolean isValid() {
+        boolean valid = Double.isFinite(getX()) && !Double.isNaN(getX());
+        valid &= Double.isFinite(getY()) && !Double.isNaN(getY());
+        return valid;
     }
 
     @Override

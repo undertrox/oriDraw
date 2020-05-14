@@ -2,16 +2,21 @@ package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
+import org.apache.log4j.Logger;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class CreasePattern {
     private UniqueItemList<Vector> points;
     private UniqueItemList<Crease> creases;
 
+    private Logger logger;
+
     public CreasePattern() {
         points = new UniqueItemList<>();
         creases = new UniqueItemList<>();
+        logger = Logger.getLogger(this.getClass());
     }
 
     /**
@@ -45,19 +50,45 @@ public class CreasePattern {
 
     /**
      * adds a Crease into the Creases list if it doesnt already exist. If it does, the old one will be overwritten
+     * It also checks for Intersections and splits the Crease if necessary
      *
-     * @param startPoint: Start point of the Crease
-     * @param endPoint:   end Point of the crease
-     * @param type        : Crease Type
-     * @return the added Crease
+     * @param startPoint : Start point of the Crease
+     * @param endPoint   :   end Point of the crease
+     * @param type       : Crease Type
      */
-    public Crease addCrease(Vector startPoint, Vector endPoint, Crease.Type type) {
+    public void addCrease(Vector startPoint, Vector endPoint, Crease.Type type) {
+        logger.debug("Adding Crease, Start Point: " + startPoint + ", End Point: " + endPoint);
+        if (startPoint.equals(endPoint)) {
+            return;
+        }
+        Crease crease = new Crease(startPoint, endPoint, type);
+        UniqueItemList<Vector> intersections = new UniqueItemList<>();
+        for (Crease c : creases) {
+            Vector intersection = crease.getLine().getIntersection(c.getLine());
+            if (intersection != null
+                    && !(intersection.equals(startPoint))
+                    && !(intersection.equals(endPoint))
+                    && intersection.isValid()) {
+                intersections.push(intersection);
+            }
+        }
+        logger.debug("found " + intersections.size() + " intersections");
+        intersections.sort(Comparator.comparingDouble(a -> crease.getLine().getStartPoint().distanceSquared(a)));
+        Vector lastPoint = startPoint;
+        for (Vector intersection : intersections) {
+            addCreaseWithoutIntersectionCheck(lastPoint, intersection, type);
+            lastPoint = intersection;
+        }
+        addCreaseWithoutIntersectionCheck(lastPoint, endPoint, type);
+    }
+
+    private void addCreaseWithoutIntersectionCheck(Vector startPoint, Vector endPoint, Crease.Type type) {
         startPoint = addPoint(startPoint);
         endPoint = addPoint(endPoint);
         Crease crease = new Crease(startPoint, endPoint, type);
+
         Crease c = creases.push(crease);
         c.setType(type);
-        return c;
     }
 
     public List<Crease> getCreases() {

@@ -65,4 +65,17 @@ public class Transform {
         gc.rotate(rotation);
         gc.scale(scale, scale);
     }
+
+    /**
+     * zooms the Transform in/out.
+     *
+     * @param delta: scale delta. negative to zoom out, positive to zoom in
+     */
+    public void zoom(double delta) {
+        if (delta < 0) {
+            scale /= 1 - delta;
+        } else {
+            scale *= 1 + delta;
+        }
+    }
 }

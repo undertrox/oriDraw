@@ -1,5 +1,6 @@
 package de.undertrox.oridraw.ui.render.renderer;
 
+import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,9 +15,9 @@ public class RenderHelper {
      * @param width: Stroke width of the line
      * @param gc:    GraphicsContext in which to draw the line
      */
-    public static void drawLine(Line line, Paint color, double width, GraphicsContext gc) {
+    public static void drawLine(Line line, Paint color, double width, GraphicsContext gc, Transform transform) {
         gc.setStroke(color);
-        gc.setLineWidth(width);
+        gc.setLineWidth(width / transform.getScale());
         Vector s = line.getStartPoint();
         Vector e = line.getEndPoint();
         gc.strokeLine(s.getX(), s.getY(), e.getX(), e.getY());
@@ -30,8 +31,9 @@ public class RenderHelper {
      * @param sideLength: Side length of the square
      * @param gc:         GraphicsContext in which to draw the square
      */
-    public static void drawSquare(Vector center, Paint color, double sideLength, GraphicsContext gc) {
+    public static void drawSquare(Vector center, Paint color, double sideLength, GraphicsContext gc, Transform transform) {
         gc.setFill(color);
+        sideLength /= transform.getScale();
         gc.fillRect(center.getX() - sideLength / 2, center.getY() - sideLength / 2, sideLength, sideLength);
     }
 }

@@ -1,8 +1,11 @@
 package de.undertrox.oridraw.util.math;
 
+import de.undertrox.oridraw.Constants;
+
 public class Line {
 
     private Vector start, end;
+    private HesseNormalLine hesse;
 
     /**
      * @return starting point of the line
@@ -74,6 +77,47 @@ public class Line {
             return equal;
         }
         return false;
+    }
+
+    /**
+     * Returns the point at which this and line intersect. if the lines are parallel or dont intersect,
+     * this method returns null
+     *
+     * @param line: Line to get the Intersection point with
+     * @return null if the lines are parallel or the lines dont intersect, the Intersection point if they do
+     */
+    public Vector getIntersection(Line line) {
+        if (lengthSquared() < Constants.EPSILON || line.lengthSquared() < Constants.EPSILON) {
+            return null;
+        }
+        Vector p = getHesse().intersect(line.getHesse());
+        if (line.contains(p) && this.contains(p)) {
+            return p;
+        }
+        return null;
+    }
+
+    public boolean contains(Vector p) {
+        double dist1 = getStartPoint().distance(p);
+        double dist2 = getEndPoint().distance(p);
+        return Math.pow(dist1 + dist2, 2) - lengthSquared() < Constants.EPSILON;
+    }
+
+    private HesseNormalLine getHesse() {
+        if (hesse == null) {
+            hesse = new HesseNormalLine(getStartPoint(), getEndPoint());
+        }
+        return hesse;
+    }
+
+    /**
+     * Distance of point to this line
+     *
+     * @param point: Point
+     * @return distance of Point to this line
+     */
+    public double getDistance(Vector point) {
+        return getHesse().distance(point);
     }
 
     @Override

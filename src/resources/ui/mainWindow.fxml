@@ -30,7 +30,8 @@
         <VBox fx:id="vBoxRight" prefHeight="528.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
     </right>
     <center>
-        <TabPane fx:id="mainTabPane" onMouseClicked="#onMouseClicked" onMouseMoved="#onMouseMoved" prefHeight="528.0"
-                 prefWidth="600.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER"/>
+        <TabPane fx:id="mainTabPane" onMouseClicked="#onMouseClicked" onMouseDragged="#onMouseDragged"
+                 onMouseMoved="#onMouseMoved" onScroll="#onScroll" prefHeight="528.0" prefWidth="600.0"
+                 tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER"/>
     </center>
 </BorderPane>

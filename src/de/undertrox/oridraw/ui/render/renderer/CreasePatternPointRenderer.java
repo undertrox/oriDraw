@@ -17,7 +17,7 @@ public class CreasePatternPointRenderer extends Renderer {
     protected void draw() {
         for (Vector point : cp.getPoints()) {
             RenderHelper.drawSquare(point, RenderSettings.getColorManager().POINT_COLOR,
-                    RenderSettings.getPointSideLength(), getGc());
+                    RenderSettings.getPointSideLength(), getGc(), getTransform());
         }
     }
 }

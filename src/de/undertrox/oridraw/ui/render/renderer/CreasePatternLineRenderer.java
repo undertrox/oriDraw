@@ -20,7 +20,8 @@ public class CreasePatternLineRenderer extends Renderer {
         getGc().fillRect(0, 0, getWidth(), getHeight());
         for (Crease crease : cp.getCreases()) {
             Paint p = RenderSettings.getColorManager().getPaintForCreaseType(crease.getType());
-            RenderHelper.drawLine(crease.getLine(), p, RenderSettings.getWidthForCreaseType(crease.getType()), getGc());
+            RenderHelper.drawLine(crease.getLine(), p, RenderSettings.getWidthForCreaseType(crease.getType()),
+                    getGc(), getTransform());
         }
     }
 

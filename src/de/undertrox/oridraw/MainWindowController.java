@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 import org.apache.log4j.Logger;
@@ -102,13 +103,24 @@ public class MainWindowController implements Initializable {
     public void onMouseMoved(MouseEvent e) {
         CreasePatternTab tab = getSelectedTab();
         statusLabel.setText("Mouse Position: " + MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), tab.getCpTransform()));
-        tab.getMouseHandler().handleMouseMove(e);
+        tab.getMouseHandler().onMove(e);
         tab.render();
     }
 
     public void onMouseClicked(MouseEvent e) {
         CreasePatternTab tab = getSelectedTab();
-        tab.getMouseHandler().handleMouseClick(e);
+        tab.getMouseHandler().onClick(e);
+        tab.render();
+    }
+
+    public void onScroll(ScrollEvent e) {
+        getSelectedTab().getMouseHandler().onScroll(e);
+        getSelectedTab().render();
+    }
+
+    public void onMouseDragged(MouseEvent e) {
+        getSelectedTab().getMouseHandler().onDrag(e);
+        getSelectedTab().render();
     }
 
 }

@@ -59,7 +59,7 @@ public abstract class Renderer {
      * @param c: Canvas to draw on
      */
     public void render(Canvas c) {
-        if (enabled) {
+        if (getEnabled()) {
             setCanvas(c);
             draw();
         }
