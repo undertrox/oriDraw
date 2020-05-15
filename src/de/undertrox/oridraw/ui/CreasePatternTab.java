@@ -1,5 +1,7 @@
 package de.undertrox.oridraw.ui;
 
+import de.undertrox.oridraw.Constants;
+import de.undertrox.oridraw.origami.Crease;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.DrawLineTool;
@@ -62,7 +64,7 @@ public class CreasePatternTab extends Tab {
 
         logger.debug("Initializing Tools");
         tools = new ArrayList<>();
-        DrawLineTool dlTool = new DrawLineTool(cp, cpSel, cpTransform);
+        DrawLineTool dlTool = new DrawLineTool(cp, cpSel, cpTransform, Crease.Type.MOUNTAIN);
         tools.add(dlTool);
 
         setActiveTool(dlTool);

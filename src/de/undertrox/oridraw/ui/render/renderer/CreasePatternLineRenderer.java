@@ -1,8 +1,6 @@
 package de.undertrox.oridraw.ui.render.renderer;
-
 import de.undertrox.oridraw.origami.Crease;
 import de.undertrox.oridraw.origami.CreasePattern;
-import de.undertrox.oridraw.ui.render.settings.ColorManager;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import de.undertrox.oridraw.ui.render.Transform;
 import javafx.scene.paint.Paint;
@@ -19,9 +17,11 @@ public class CreasePatternLineRenderer extends Renderer {
     protected void draw() {
         getGc().fillRect(0, 0, getWidth(), getHeight());
         for (Crease crease : cp.getCreases()) {
-            Paint p = RenderSettings.getColorManager().getPaintForCreaseType(crease.getType());
-            RenderHelper.drawLine(crease.getLine(), p, RenderSettings.getWidthForCreaseType(crease.getType()),
-                    getGc(), getTransform());
+            if (!crease.isAnimating()) {
+                Paint p = RenderSettings.getColorManager().getPaintForCreaseType(crease.getType());
+                RenderHelper.drawLine(crease.getLine(), p, RenderSettings.getWidthForCreaseType(crease.getType()),
+                        getGc(), getTransform());
+            }
         }
     }
 

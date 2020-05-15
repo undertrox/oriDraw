@@ -13,6 +13,7 @@ public abstract class CreasePatternTool implements MouseHandlerInterface {
     private Transform cpTransform;
     boolean enabled;
     private Vector currentMousePos;
+    ToolRenderer<? extends CreasePatternTool> renderer;
 
     public CreasePatternTool(CreasePattern cp, CreasePatternSelection selection, Transform cpTransform) {
         this.cp = cp;
@@ -50,7 +51,14 @@ public abstract class CreasePatternTool implements MouseHandlerInterface {
         return cpTransform;
     }
 
-    public abstract ToolRenderer<? extends CreasePatternTool> getRenderer();
+    public ToolRenderer<? extends CreasePatternTool> getRenderer() {
+        if (renderer == null) {
+            renderer = createRenderer();
+        }
+        return renderer;
+    }
+
+    protected abstract ToolRenderer<? extends CreasePatternTool> createRenderer();
 
     public Vector getCurrentMousePos() {
         return currentMousePos;

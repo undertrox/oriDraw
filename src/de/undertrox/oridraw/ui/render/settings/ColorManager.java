@@ -7,17 +7,17 @@ import javafx.scene.paint.Paint;
 public class ColorManager {
     private static ColorManager instance;
 
-    public Paint EDGE_COLOR = Color.BLACK;
-    public Paint MOUNTAIN_COLOR = Color.RED;
-    public Paint VALLEY_COLOR = Color.BLUE;
-    public Paint AUX_COLOR = Color.GRAY;
-    public Paint UNKNOWN_COLOR = Color.GRAY;
+    public Color EDGE_COLOR = Color.BLACK;
+    public Color MOUNTAIN_COLOR = Color.RED;
+    public Color VALLEY_COLOR = Color.BLUE;
+    public Color AUX_COLOR = Color.GRAY;
+    public Color UNKNOWN_COLOR = Color.GRAY;
 
-    public Paint POINT_COLOR = Color.BLACK;
-    public Paint TO_BE_SELECTED_POINT_COLOR = Color.LIMEGREEN;
-    public Paint SELECTED_POINT_COLOR = Color.GREEN;
+    public Color POINT_COLOR = Color.BLACK;
+    public Color TO_BE_SELECTED_POINT_COLOR = Color.LIMEGREEN;
+    public Color SELECTED_POINT_COLOR = Color.GREEN;
 
-    public Paint CP_EDITOR_BACKGROUND_COLOR = Color.WHITE;
+    public Color CP_EDITOR_BACKGROUND_COLOR = Color.WHITE;
 
     /**
      * Returns Paint to use for the Crease type
@@ -25,7 +25,7 @@ public class ColorManager {
      * @param type: Crease type
      * @return Paint to use for type
      */
-    public Paint getPaintForCreaseType(Crease.Type type) {
+    public Color getPaintForCreaseType(Crease.Type type) {
         switch (type) {
             case EDGE:
                 return getInstance().EDGE_COLOR;

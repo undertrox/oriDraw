@@ -3,6 +3,7 @@ package de.undertrox.oridraw;
 import de.undertrox.oridraw.ui.CreasePatternTab;
 import de.undertrox.oridraw.ui.MouseHandler;
 import de.undertrox.oridraw.util.math.Vector;
+import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.fxml.Initializable;
@@ -32,6 +33,7 @@ public class MainWindowController implements Initializable {
     public Button btnNew;
     public Button btnOpen;
 
+    private static final int CANVAS_CORRECTION = 28;
 
     private ResourceBundle bundle;
 
@@ -48,6 +50,13 @@ public class MainWindowController implements Initializable {
         mainTabPane.heightProperty().addListener(sizeChangeListener);
         updateText();
         createNewFileTab();
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                getSelectedTab().render();
+            }
+        };
+        timer.start();
     }
 
     CreasePatternTab getSelectedTab() {
@@ -104,23 +113,21 @@ public class MainWindowController implements Initializable {
         CreasePatternTab tab = getSelectedTab();
         statusLabel.setText("Mouse Position: " + MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), tab.getCpTransform()));
         tab.getMouseHandler().onMove(e);
-        tab.render();
     }
 
     public void onMouseClicked(MouseEvent e) {
         CreasePatternTab tab = getSelectedTab();
-        tab.getMouseHandler().onClick(e);
-        tab.render();
+        if (e.getY() > CANVAS_CORRECTION) {
+            tab.getMouseHandler().onClick(e);
+        }
     }
 
     public void onScroll(ScrollEvent e) {
         getSelectedTab().getMouseHandler().onScroll(e);
-        getSelectedTab().render();
     }
 
     public void onMouseDragged(MouseEvent e) {
         getSelectedTab().getMouseHandler().onDrag(e);
-        getSelectedTab().render();
     }
 
 }

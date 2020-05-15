@@ -110,6 +110,14 @@ public class Line {
         return hesse;
     }
 
+    public Vector toVector() {
+        return getEndPoint().sub(getStartPoint());
+    }
+
+    public Vector getPointAt(double t) {
+        return getStartPoint().add(toVector().scale(t));
+    }
+
     /**
      * Distance of point to this line
      *

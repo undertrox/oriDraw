@@ -1,10 +1,12 @@
 package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
+import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
 import org.apache.log4j.Logger;
 
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CreasePattern {
@@ -57,22 +59,12 @@ public class CreasePattern {
      * @param type       : Crease Type
      */
     public void addCrease(Vector startPoint, Vector endPoint, Crease.Type type) {
-        logger.debug("Adding Crease, Start Point: " + startPoint + ", End Point: " + endPoint);
         if (startPoint.equals(endPoint)) {
             return;
         }
         Crease crease = new Crease(startPoint, endPoint, type);
-        UniqueItemList<Vector> intersections = new UniqueItemList<>();
-        for (Crease c : creases) {
-            Vector intersection = crease.getLine().getIntersection(c.getLine());
-            if (intersection != null
-                    && !(intersection.equals(startPoint))
-                    && !(intersection.equals(endPoint))
-                    && intersection.isValid()) {
-                intersections.push(intersection);
-            }
-        }
-        logger.debug("found " + intersections.size() + " intersections");
+        UniqueItemList<Vector> intersections = getLineIntersections(crease.getLine());
+        intersections.addAll(getPointIntersections(crease.getLine()));
         intersections.sort(Comparator.comparingDouble(a -> crease.getLine().getStartPoint().distanceSquared(a)));
         Vector lastPoint = startPoint;
         for (Vector intersection : intersections) {
@@ -86,9 +78,9 @@ public class CreasePattern {
         startPoint = addPoint(startPoint);
         endPoint = addPoint(endPoint);
         Crease crease = new Crease(startPoint, endPoint, type);
-
         Crease c = creases.push(crease);
         c.setType(type);
+
     }
 
     public List<Crease> getCreases() {
@@ -97,5 +89,29 @@ public class CreasePattern {
 
     public List<Vector> getPoints() {
         return points;
+    }
+
+    public UniqueItemList<Vector> getLineIntersections(Line l) {
+        UniqueItemList<Vector> intersections = new UniqueItemList<>();
+        for (Crease c : creases) {
+            Vector intersection = l.getIntersection(c.getLine());
+            if (intersection != null
+                    && !(intersection.equals(l.getStartPoint()))
+                    && !(intersection.equals(l.getStartPoint()))
+                    && intersection.isValid()) {
+                intersections.push(intersection);
+            }
+        }
+        return intersections;
+    }
+
+    public UniqueItemList<Vector> getPointIntersections(Line l) {
+        UniqueItemList<Vector> intersections = new UniqueItemList<>();
+        for (Vector p : points) {
+            if (l.contains(p)) {
+                intersections.push(p);
+            }
+        }
+        return intersections;
     }
 }

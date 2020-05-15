@@ -11,12 +11,21 @@ import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.input.MouseEvent;
 
 public class DrawLineTool extends CreasePatternTool {
-    DrawLineToolRenderer renderer;
+    Crease.Type type;
     Vector point0, point1;
     MouseEvent lastMoveEvent;
 
-    public DrawLineTool(CreasePattern cp, CreasePatternSelection selection, Transform cpTransform) {
+    public DrawLineTool(CreasePattern cp, CreasePatternSelection selection, Transform cpTransform, Crease.Type type) {
         super(cp, selection, cpTransform);
+        this.type = type;
+    }
+
+    public Crease.Type getType() {
+        return type;
+    }
+
+    public void setType(Crease.Type type) {
+        this.type = type;
     }
 
     @Override
@@ -35,12 +44,8 @@ public class DrawLineTool extends CreasePatternTool {
         point1 = null;
     }
 
-    @Override
-    public ToolRenderer<DrawLineTool> getRenderer() {
-        if (renderer == null) {
-            renderer = new DrawLineToolRenderer(getTransform(), this);
-        }
-        return renderer;
+    protected ToolRenderer<DrawLineTool> createRenderer() {
+        return new DrawLineToolRenderer(getTransform(), this);
     }
 
     @Override
@@ -60,9 +65,9 @@ public class DrawLineTool extends CreasePatternTool {
             getCp().addPoint(point0);
         } else {
             point1 = getNextPoint();
-            getCp().addCrease(point0, point1,
-                    Crease.Type.MOUNTAIN);
+            getCp().addCrease(point0, point1, type);
             clearSelection();
+            this.type = type.flip();
         }
     }
 

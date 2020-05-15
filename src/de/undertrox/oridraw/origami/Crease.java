@@ -7,9 +7,29 @@ public class Crease {
 
     private Line line;
     private Type type;
+    private boolean animating;
+
+    public boolean isAnimating() {
+        return animating;
+    }
+
+    public void setAnimating(boolean animating) {
+        this.animating = animating;
+    }
 
     public enum Type {
-        EDGE, MOUNTAIN, VALLEY, AUX
+        EDGE, MOUNTAIN, VALLEY, AUX;
+
+        public Type flip() {
+            switch (this) {
+                case VALLEY:
+                    return MOUNTAIN;
+                case MOUNTAIN:
+                    return VALLEY;
+                default:
+                    return this;
+            }
+        }
     }
 
     /**
