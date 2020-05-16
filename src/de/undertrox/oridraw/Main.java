@@ -27,7 +27,9 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("ui/mainWindow.fxml")), bundle);
         primaryStage.setTitle(title);
-        primaryStage.setScene(new Scene(root));
+        Scene rootScene = new Scene(root);
+        rootScene.getStylesheets().add("css/main.css");
+        primaryStage.setScene(rootScene);
         primaryStage.show();
         primaryStage.setMinWidth(primaryStage.getWidth());
         primaryStage.setMinHeight(primaryStage.getHeight());

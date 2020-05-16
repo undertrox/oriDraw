@@ -6,10 +6,24 @@ import de.undertrox.oridraw.Constants;
  * 2D Vector. Can be used as a Point or as a Vector
  */
 public class Vector {
-    private double x, y;
     public static final double TOLERANCE = Constants.EPSILON;
-
     public static final Vector ORIGIN = new Vector(0, 0);
+    private double x, y;
+
+    /**
+     * Creates a new Vector
+     *
+     * @param x: X-Coordinate of the Vector
+     * @param y: Y-Coordinate of the Vector
+     */
+    public Vector(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Vector(double x) {
+        this(x, x);
+    }
 
     /**
      * @return x coordinate of the Vector
@@ -23,17 +37,6 @@ public class Vector {
      */
     public double getY() {
         return y;
-    }
-
-    /**
-     * Creates a new Vector
-     *
-     * @param x: X-Coordinate of the Vector
-     * @param y: Y-Coordinate of the Vector
-     */
-    public Vector(double x, double y) {
-        this.x = x;
-        this.y = y;
     }
 
     /**

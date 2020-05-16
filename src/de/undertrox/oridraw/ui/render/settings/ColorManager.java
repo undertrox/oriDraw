@@ -11,7 +11,7 @@ public class ColorManager {
     public Color MOUNTAIN_COLOR = Color.RED;
     public Color VALLEY_COLOR = Color.BLUE;
     public Color AUX_COLOR = Color.GRAY;
-    public Color UNKNOWN_COLOR = Color.GRAY;
+    public Color UNKNOWN_COLOR = Color.YELLOW;
 
     public Color POINT_COLOR = Color.BLACK;
     public Color TO_BE_SELECTED_POINT_COLOR = Color.LIMEGREEN;

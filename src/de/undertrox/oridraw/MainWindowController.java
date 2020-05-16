@@ -9,8 +9,10 @@ import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 import org.apache.log4j.Logger;
@@ -20,6 +22,11 @@ import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
     public Label statusLabel;
+    public RadioButton radioMountain;
+    public RadioButton radioValley;
+    public RadioButton radioEdge;
+    public RadioButton radioAux;
+    public GridPane creasetypeGridpane;
     private Logger logger = Logger.getLogger(MainWindowController.class);
 
     public TextFlow statusText;
@@ -128,6 +135,18 @@ public class MainWindowController implements Initializable {
 
     public void onMouseDragged(MouseEvent e) {
         getSelectedTab().getMouseHandler().onDrag(e);
+    }
+
+    public void onKeyPressed(KeyEvent e) {
+        getSelectedTab().getKeyboardHandler().onKeyPressed(e);
+    }
+
+    public void onKeyDown(KeyEvent e) {
+        getSelectedTab().getKeyboardHandler().onKeyDown(e);
+    }
+
+    public void onKeyUp(KeyEvent e) {
+        getSelectedTab().getKeyboardHandler().onKeyUp(e);
     }
 
 }

@@ -2,6 +2,7 @@ package de.undertrox.oridraw.ui;
 
 import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
+import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
@@ -15,15 +16,13 @@ import java.util.List;
 public class MouseHandler implements MouseHandlerInterface {
 
     private static final double CANVAS_HEIGHT_CORRECTION = 28; // px
-    private CreasePattern cp;
-    private CreasePatternSelection selection;
+    private Document doc;
     private Transform cpTransform;
     private CreasePatternTool activeTool;
 
-    public MouseHandler(CreasePattern cp, CreasePatternSelection selection, Transform cpTransform) {
+    public MouseHandler(Document doc, Transform cpTransform) {
         this.cpTransform = cpTransform;
-        this.cp = cp;
-        this.selection = selection;
+        this.doc = doc;
     }
 
     /**
@@ -48,21 +47,19 @@ public class MouseHandler implements MouseHandlerInterface {
     }
 
     public void onMouseCoordsChange(Vector mouseCoords) {
-        if (selection.getMode().selectPoints()) {
-            Vector nearestPoint = findNearestPoint(mouseCoords, cp.getPoints());
+        if (doc.getSelection().getMode().selectPoints()) {
+            Vector nearestPoint = findNearestPoint(mouseCoords, doc.getAllVisiblePoints());
             if (mouseCoords.distanceSquared(nearestPoint)
                     < Math.pow(2 * RenderSettings.getPointSideLength() / cpTransform.getScale(), 2)) {
-                selection.singleToBeSelected(nearestPoint);
+                doc.getSelection().singleToBeSelected(nearestPoint);
             } else {
-                selection.clearToBeSelected();
+                doc.getSelection().clearToBeSelected();
             }
         }
     }
 
     public void onClick(MouseEvent e) {
-        if (e.getButton().equals(MouseButton.PRIMARY)) {
-            activeTool.onClick(e);
-        }
+        activeTool.onClick(e);
     }
 
     public void onDrag(MouseEvent e) {

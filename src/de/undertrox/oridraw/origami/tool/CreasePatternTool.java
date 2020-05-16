@@ -2,24 +2,25 @@ package de.undertrox.oridraw.origami.tool;
 
 import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
+import de.undertrox.oridraw.origami.Document;
+import de.undertrox.oridraw.ui.KeyboardHandlerInterface;
 import de.undertrox.oridraw.ui.MouseHandlerInterface;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.renderer.tool.ToolRenderer;
 import de.undertrox.oridraw.util.math.Vector;
 
-public abstract class CreasePatternTool implements MouseHandlerInterface {
-    private CreasePattern cp;
-    private CreasePatternSelection selection;
+public abstract class CreasePatternTool implements MouseHandlerInterface, KeyboardHandlerInterface {
+    private Document doc;
     private Transform cpTransform;
     boolean enabled;
     private Vector currentMousePos;
     ToolRenderer<? extends CreasePatternTool> renderer;
 
-    public CreasePatternTool(CreasePattern cp, CreasePatternSelection selection, Transform cpTransform) {
-        this.cp = cp;
-        this.selection = selection;
+    public CreasePatternTool(Document doc, Transform cpTransform) {
+        this.doc = doc;
         this.cpTransform = cpTransform;
         this.currentMousePos = new Vector(0, 0);
+        reset();
     }
 
     public void setEnabled(boolean e) {
@@ -39,12 +40,14 @@ public abstract class CreasePatternTool implements MouseHandlerInterface {
      */
     protected abstract void disable();
 
+    public abstract void reset();
+
     public CreasePattern getCp() {
-        return cp;
+        return doc.getCp();
     }
 
     public CreasePatternSelection getSelection() {
-        return selection;
+        return doc.getSelection();
     }
 
     public Transform getTransform() {

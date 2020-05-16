@@ -1,21 +1,21 @@
 package de.undertrox.oridraw.ui.render.renderer;
 
+import de.undertrox.oridraw.origami.CreaseCollection;
 import de.undertrox.oridraw.util.math.Vector;
-import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import de.undertrox.oridraw.ui.render.Transform;
 
-public class CreasePatternPointRenderer extends Renderer {
-    CreasePattern cp;
+public class CreaseCollectionPointRenderer extends Renderer {
+    CreaseCollection cc;
 
-    public CreasePatternPointRenderer(Transform t, CreasePattern cp) {
+    public CreaseCollectionPointRenderer(Transform t, CreaseCollection cc) {
         super(t);
-        this.cp = cp;
+        this.cc = cc;
     }
 
     @Override
     protected void draw() {
-        for (Vector point : cp.getPoints()) {
+        for (Vector point : cc.getPoints()) {
             RenderHelper.drawSquare(point, RenderSettings.getColorManager().POINT_COLOR,
                     RenderSettings.getPointSideLength(), getGc(), getTransform());
         }

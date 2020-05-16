@@ -6,19 +6,16 @@ import de.undertrox.oridraw.util.math.Vector;
 import org.apache.log4j.Logger;
 
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
-public class CreasePattern {
-    private UniqueItemList<Vector> points;
-    private UniqueItemList<Crease> creases;
+public class CreasePattern extends CreaseCollection {
 
     private Logger logger;
 
     public CreasePattern() {
-        points = new UniqueItemList<>();
-        creases = new UniqueItemList<>();
+        super();
         logger = Logger.getLogger(this.getClass());
+
     }
 
     /**
@@ -40,17 +37,6 @@ public class CreasePattern {
     }
 
     /**
-     * Adds a Point into the Points list if it isnt already there
-     *
-     * @param vec: Point to be added
-     * @return vec if it wasnt in the List, otherwise the point that is in the list with vec's coordinates
-     */
-    public Vector addPoint(Vector vec) {
-        return points.push(vec);
-    }
-
-
-    /**
      * adds a Crease into the Creases list if it doesnt already exist. If it does, the old one will be overwritten
      * It also checks for Intersections and splits the Crease if necessary
      *
@@ -68,27 +54,10 @@ public class CreasePattern {
         intersections.sort(Comparator.comparingDouble(a -> crease.getLine().getStartPoint().distanceSquared(a)));
         Vector lastPoint = startPoint;
         for (Vector intersection : intersections) {
-            addCreaseWithoutIntersectionCheck(lastPoint, intersection, type);
+            super.addCrease(lastPoint, intersection, type);
             lastPoint = intersection;
         }
-        addCreaseWithoutIntersectionCheck(lastPoint, endPoint, type);
-    }
-
-    private void addCreaseWithoutIntersectionCheck(Vector startPoint, Vector endPoint, Crease.Type type) {
-        startPoint = addPoint(startPoint);
-        endPoint = addPoint(endPoint);
-        Crease crease = new Crease(startPoint, endPoint, type);
-        Crease c = creases.push(crease);
-        c.setType(type);
-
-    }
-
-    public List<Crease> getCreases() {
-        return creases;
-    }
-
-    public List<Vector> getPoints() {
-        return points;
+        super.addCrease(lastPoint, endPoint, type);
     }
 
     public UniqueItemList<Vector> getLineIntersections(Line l) {
