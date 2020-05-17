@@ -92,6 +92,7 @@ public class CreasePatternTab extends Tab {
         tools.forEach(t -> t.setEnabled(false));
         this.activeTool = activeTool;
         mouseHandler.setActiveTool(activeTool);
+        keyboardHandler.setActiveTool(activeTool);
         activeTool.setEnabled(true);
     }
 

@@ -1,5 +1,6 @@
 package de.undertrox.oridraw.ui;
 
+import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.Document;
@@ -48,9 +49,10 @@ public class MouseHandler implements MouseHandlerInterface {
 
     public void onMouseCoordsChange(Vector mouseCoords) {
         if (doc.getSelection().getMode().selectPoints()) {
+            // Adds the nearest Point to Selection.toBeSelected
             Vector nearestPoint = findNearestPoint(mouseCoords, doc.getAllVisiblePoints());
             if (mouseCoords.distanceSquared(nearestPoint)
-                    < Math.pow(2 * RenderSettings.getPointSideLength() / cpTransform.getScale(), 2)) {
+                    < Math.pow(2 * Constants.MOUSE_RANGE / cpTransform.getScale(), 2)) {
                 doc.getSelection().singleToBeSelected(nearestPoint);
             } else {
                 doc.getSelection().clearToBeSelected();

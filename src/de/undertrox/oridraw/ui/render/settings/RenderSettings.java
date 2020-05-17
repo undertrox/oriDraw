@@ -5,12 +5,12 @@ import de.undertrox.oridraw.origami.Crease;
 public class RenderSettings {
     private static RenderSettings instance;
 
-    private double EDGE_WIDTH = 1;
-    private double FOLD_WIDTH = 1;
-    private double AUX_WIDTH = 1;
-    private double DEFAULT_WIDTH = 1;
+    private double EDGE_WIDTH = 0.7;
+    private double FOLD_WIDTH = 0.7;
+    private double AUX_WIDTH = 0.7;
+    private double DEFAULT_WIDTH = 0.7;
 
-    private double POINT_SIDELENGTH = 6;
+    private double POINT_SIDELENGTH = 4;
 
     public static ColorManager getColorManager() {
         return ColorManager.getInstance();

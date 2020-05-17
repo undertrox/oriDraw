@@ -60,9 +60,8 @@ public class DrawLineTool extends TypedCreasePatternTool {
                 getCp().addPoint(point0);
             } else {
                 point1 = getNextPoint();
-                getCp().addCrease(point0, point1, type);
+                getCp().addCrease(point0, point1, getType());
                 clearSelection();
-                this.type = type.flip();
             }
         } else if (e.getButton() == MouseButton.SECONDARY) {
             reset();
