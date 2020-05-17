@@ -1,5 +1,6 @@
-package de.undertrox.oridraw.origami;
+package de.undertrox.oridraw.ui.render.renderer;
 
+import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.renderer.CreaseCollectionLineRenderer;
 import de.undertrox.oridraw.ui.render.renderer.CreaseCollectionPointRenderer;
