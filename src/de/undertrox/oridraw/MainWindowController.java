@@ -1,5 +1,6 @@
 package de.undertrox.oridraw;
 
+import de.undertrox.oridraw.ui.CanvasTab;
 import de.undertrox.oridraw.ui.CreasePatternTab;
 import de.undertrox.oridraw.ui.MouseHandler;
 import de.undertrox.oridraw.util.math.Vector;
@@ -50,8 +51,7 @@ public class MainWindowController implements Initializable {
         bundle = resources;
 
         ChangeListener<Number> sizeChangeListener = (obs, oldVal, newVal) -> {
-            CreasePatternTab selected = getSelectedTab();
-            selected.render();
+            getSelectedTab().render();
         };
         mainTabPane.widthProperty().addListener(sizeChangeListener);
         mainTabPane.heightProperty().addListener(sizeChangeListener);
@@ -66,7 +66,7 @@ public class MainWindowController implements Initializable {
         timer.start();
     }
 
-    CreasePatternTab getSelectedTab() {
+    CanvasTab getSelectedTab() {
         Tab selected = mainTabPane.getSelectionModel().getSelectedItem();
         if (selected instanceof CreasePatternTab) {
             return (CreasePatternTab) selected;
@@ -117,15 +117,18 @@ public class MainWindowController implements Initializable {
     }
 
     public void onMouseMoved(MouseEvent e) {
-        CreasePatternTab tab = getSelectedTab();
-        statusLabel.setText("Mouse Position: " + MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), tab.getCpTransform()));
+        CanvasTab tab = getSelectedTab();
+        if (tab instanceof CreasePatternTab) {
+            CreasePatternTab cpTab = (CreasePatternTab) tab;
+            statusLabel.setText("Mouse Position: " + MouseHandler
+                .normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTab.getCpTransform()));
+        }
         tab.getMouseHandler().onMove(e);
     }
 
     public void onMouseClicked(MouseEvent e) {
-        CreasePatternTab tab = getSelectedTab();
         if (e.getY() > CANVAS_CORRECTION) {
-            tab.getMouseHandler().onClick(e);
+            getSelectedTab().getMouseHandler().onClick(e);
         }
     }
 
