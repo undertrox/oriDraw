@@ -12,6 +12,13 @@ public class RenderSettings {
 
     private double POINT_SIDELENGTH = 4;
 
+    public static RenderSettings getInstance() {
+        if (instance == null) {
+            instance = new RenderSettings();
+        }
+        return instance;
+    }
+
     public static ColorManager getColorManager() {
         return ColorManager.getInstance();
     }
@@ -38,12 +45,5 @@ public class RenderSettings {
 
     public static double getPointSideLength() {
         return getInstance().POINT_SIDELENGTH;
-    }
-
-    public static RenderSettings getInstance() {
-        if (instance == null) {
-            instance = new RenderSettings();
-        }
-        return instance;
     }
 }

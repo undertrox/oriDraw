@@ -10,24 +10,17 @@ import de.undertrox.oridraw.ui.render.renderer.tool.ToolRenderer;
 import de.undertrox.oridraw.util.math.Vector;
 
 public abstract class CreasePatternTool implements MouseHandlerInterface, KeyboardHandlerInterface {
+    boolean enabled;
+    ToolRenderer<? extends CreasePatternTool> renderer;
     private Document doc;
     private Transform cpTransform;
-    boolean enabled;
     private Vector currentMousePos;
-    ToolRenderer<? extends CreasePatternTool> renderer;
 
     public CreasePatternTool(Document doc, Transform cpTransform) {
         this.doc = doc;
         this.cpTransform = cpTransform;
         this.currentMousePos = new Vector(0, 0);
         reset();
-    }
-
-    public void setEnabled(boolean e) {
-        if (e && !enabled) {
-            enable();
-        } else if (!e && enabled) disable();
-        this.enabled = e;
     }
 
     /**
@@ -67,12 +60,19 @@ public abstract class CreasePatternTool implements MouseHandlerInterface, Keyboa
         return currentMousePos;
     }
 
+    protected void setCurrentMousePos(Vector mousePos) {
+        this.currentMousePos = mousePos;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
 
-    protected void setCurrentMousePos(Vector mousePos) {
-        this.currentMousePos = mousePos;
+    public void setEnabled(boolean e) {
+        if (e && !enabled) {
+            enable();
+        } else if (!e && enabled) disable();
+        this.enabled = e;
     }
 
     public abstract void update();

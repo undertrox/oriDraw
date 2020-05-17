@@ -1,13 +1,11 @@
 package de.undertrox.oridraw.ui.render.renderer.tool;
 
-import de.undertrox.oridraw.origami.Crease;
 import de.undertrox.oridraw.origami.tool.DrawLineTool;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.renderer.RenderHelper;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import de.undertrox.oridraw.util.math.Line;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class DrawLineToolRenderer extends ToolRenderer<DrawLineTool> {
     public DrawLineToolRenderer(Transform t, DrawLineTool tool) {

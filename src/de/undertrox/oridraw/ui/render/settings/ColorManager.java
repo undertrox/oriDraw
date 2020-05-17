@@ -2,7 +2,6 @@ package de.undertrox.oridraw.ui.render.settings;
 
 import de.undertrox.oridraw.origami.Crease;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class ColorManager {
     private static ColorManager instance;

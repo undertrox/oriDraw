@@ -2,12 +2,6 @@ package de.undertrox.oridraw.ui.render.renderer;
 
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.ui.render.Transform;
-import de.undertrox.oridraw.ui.render.renderer.CreaseCollectionLineRenderer;
-import de.undertrox.oridraw.ui.render.renderer.CreaseCollectionPointRenderer;
-import de.undertrox.oridraw.ui.render.renderer.CreasePatternSelectionPointRenderer;
-import de.undertrox.oridraw.ui.render.renderer.Renderer;
-
-import javax.print.Doc;
 
 public class DocumentRenderer extends Renderer {
     private CreaseCollectionLineRenderer creases;

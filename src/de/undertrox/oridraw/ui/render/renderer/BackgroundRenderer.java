@@ -1,6 +1,5 @@
 package de.undertrox.oridraw.ui.render.renderer;
 
-import de.undertrox.oridraw.ui.render.settings.ColorManager;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import javafx.scene.canvas.GraphicsContext;

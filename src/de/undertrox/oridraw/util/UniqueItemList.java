@@ -1,7 +1,6 @@
 package de.undertrox.oridraw.util;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class UniqueItemList<T> extends ArrayList<T> {
     @Override

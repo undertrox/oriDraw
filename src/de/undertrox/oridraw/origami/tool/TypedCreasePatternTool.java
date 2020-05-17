@@ -3,7 +3,6 @@ package de.undertrox.oridraw.origami.tool;
 import de.undertrox.oridraw.origami.Crease;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.ui.render.Transform;
-import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 

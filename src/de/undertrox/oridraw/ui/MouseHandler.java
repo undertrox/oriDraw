@@ -1,14 +1,10 @@
 package de.undertrox.oridraw.ui;
 
 import de.undertrox.oridraw.Constants;
-import de.undertrox.oridraw.origami.CreasePattern;
-import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.ui.render.Transform;
-import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import de.undertrox.oridraw.util.math.Vector;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 

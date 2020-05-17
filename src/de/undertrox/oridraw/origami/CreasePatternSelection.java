@@ -23,14 +23,6 @@ public class CreasePatternSelection {
         mode = Mode.POINT;
     }
 
-    public enum Mode {
-        LINE, POINT, LINE_AND_POINT;
-
-        public boolean selectPoints() {
-            return this == POINT || this == LINE_AND_POINT;
-        }
-    }
-
     public UniqueItemList<Line> getSelectedLines() {
         return selectedLines;
     }
@@ -130,11 +122,19 @@ public class CreasePatternSelection {
         selectToBeSelectedPoints();
     }
 
+    public Mode getMode() {
+        return mode;
+    }
+
     public void setMode(Mode mode) {
         this.mode = mode;
     }
 
-    public Mode getMode() {
-        return mode;
+    public enum Mode {
+        LINE, POINT, LINE_AND_POINT;
+
+        public boolean selectPoints() {
+            return this == POINT || this == LINE_AND_POINT;
+        }
     }
 }

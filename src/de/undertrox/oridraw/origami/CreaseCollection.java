@@ -3,8 +3,6 @@ package de.undertrox.oridraw.origami;
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
 
-import java.util.List;
-
 public class CreaseCollection {
     protected UniqueItemList<Crease> creases;
     protected UniqueItemList<Vector> points;

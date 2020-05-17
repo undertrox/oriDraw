@@ -6,7 +6,6 @@ import de.undertrox.oridraw.util.math.Vector;
 import org.apache.log4j.Logger;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class CreasePattern extends CreaseCollection {
 
@@ -15,7 +14,6 @@ public class CreasePattern extends CreaseCollection {
     public CreasePattern() {
         super();
         logger = Logger.getLogger(this.getClass());
-
     }
 
     /**

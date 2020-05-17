@@ -5,6 +5,7 @@ import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.renderer.Renderer;
 
 public abstract class ToolRenderer<T extends CreasePatternTool> extends Renderer {
+
     private T tool;
 
     public ToolRenderer(Transform t, T tool) {

@@ -8,6 +8,17 @@ public class Line {
     private HesseNormalLine hesse;
 
     /**
+     * Creates a new Line starting in start and ending in end
+     *
+     * @param start: starting point of the line
+     * @param end:   ending Point of the line
+     */
+    public Line(Vector start, Vector end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    /**
      * @return starting point of the line
      */
     public Vector getStartPoint() {
@@ -19,17 +30,6 @@ public class Line {
      */
     public Vector getEndPoint() {
         return end;
-    }
-
-    /**
-     * Creates a new Line starting in start and ending in end
-     *
-     * @param start: starting point of the line
-     * @param end:   ending Point of the line
-     */
-    public Line(Vector start, Vector end) {
-        this.start = start;
-        this.end = end;
     }
 
     /**

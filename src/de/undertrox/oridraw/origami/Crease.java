@@ -9,29 +9,6 @@ public class Crease {
     private Type type;
     private boolean animating;
 
-    public boolean isAnimating() {
-        return animating;
-    }
-
-    public void setAnimating(boolean animating) {
-        this.animating = animating;
-    }
-
-    public enum Type {
-        EDGE, MOUNTAIN, VALLEY, AUX;
-
-        public Type flip() {
-            switch (this) {
-                case VALLEY:
-                    return MOUNTAIN;
-                case MOUNTAIN:
-                    return VALLEY;
-                default:
-                    return this;
-            }
-        }
-    }
-
     /**
      * Creates a new Crease starting in start and ending in end
      *
@@ -44,11 +21,23 @@ public class Crease {
         this.type = type;
     }
 
+    public boolean isAnimating() {
+        return animating;
+    }
+
+    public void setAnimating(boolean animating) {
+        this.animating = animating;
+    }
+
     /**
      * @return Crease Type of this Crease
      */
     public Type getType() {
         return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     @Override
@@ -91,7 +80,18 @@ public class Crease {
         return line;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public enum Type {
+        EDGE, MOUNTAIN, VALLEY, AUX;
+
+        public Type flip() {
+            switch (this) {
+                case VALLEY:
+                    return MOUNTAIN;
+                case MOUNTAIN:
+                    return VALLEY;
+                default:
+                    return this;
+            }
+        }
     }
 }
