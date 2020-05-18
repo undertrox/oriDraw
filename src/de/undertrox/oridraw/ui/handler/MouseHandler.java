@@ -2,9 +2,11 @@ package de.undertrox.oridraw.ui.handler;
 
 import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.Document;
+import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -52,9 +54,38 @@ public class MouseHandler implements MouseHandlerInterface {
                     < Math.pow(2 * Constants.MOUSE_RANGE / cpTransform.getScale(), 2)) {
                 doc.getSelection().singleToBeSelected(nearestPoint);
             } else {
-                doc.getSelection().clearToBeSelected();
+                doc.getSelection().clearToBeSelectedPoints();
             }
         }
+        if (doc.getSelection().getMode().selectLines()) {
+            OriLine nearestLine = findNearestLine(mouseCoords, doc.getCp().getOriLines());
+            if (nearestLine == null) {
+                return;
+            }
+            if (nearestLine.getDistance(mouseCoords) < 2 * Constants.MOUSE_RANGE / cpTransform.getScale()) {
+                doc.getSelection().singleToBeSelected(nearestLine);
+            } else {
+                doc.getSelection().clearToBeSelectedLines();
+            }
+        }
+    }
+
+    private OriLine findNearestLine(Vector mouseCoords, UniqueItemList<OriLine> oriLines) {
+        double smallestDist = Double.POSITIVE_INFINITY;
+        OriLine nearestLine = null;
+        for (OriLine oriLine : oriLines) {
+            if (oriLine.lengthSquared() < Constants.EPSILON) {
+                continue;
+            }
+            double d = oriLine.getSquaredDistance(mouseCoords);
+            Vector p = oriLine.getHesse().getShadowPoint(mouseCoords);
+
+            if (d < smallestDist && oriLine.contains(p)) {
+                smallestDist = d;
+                nearestLine = oriLine;
+            }
+        }
+        return nearestLine;
     }
 
     public void onClick(MouseEvent e) {

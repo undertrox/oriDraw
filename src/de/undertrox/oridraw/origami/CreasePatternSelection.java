@@ -7,10 +7,10 @@ import de.undertrox.oridraw.util.math.Vector;
 public class CreasePatternSelection {
     CreasePattern cp;
 
-    UniqueItemList<Line> selectedLines;
-    UniqueItemList<Vector> selectedPoints;
-    UniqueItemList<Line> toBeSelectedLines;
-    UniqueItemList<Vector> toBeSelectedPoints;
+    UniqueItemList<OriLine> selectedLines;
+    UniqueItemList<OriPoint> selectedPoints;
+    UniqueItemList<OriLine> toBeSelectedLines;
+    UniqueItemList<OriPoint> toBeSelectedPoints;
 
     Mode mode;
 
@@ -20,22 +20,22 @@ public class CreasePatternSelection {
         selectedPoints = new UniqueItemList<>();
         toBeSelectedLines = new UniqueItemList<>();
         toBeSelectedPoints = new UniqueItemList<>();
-        mode = Mode.POINT;
+        mode = Mode.LINE;
     }
 
-    public UniqueItemList<Line> getSelectedLines() {
+    public UniqueItemList<OriLine> getSelectedLines() {
         return selectedLines;
     }
 
-    public UniqueItemList<Vector> getSelectedPoints() {
+    public UniqueItemList<OriPoint> getSelectedPoints() {
         return selectedPoints;
     }
 
-    public UniqueItemList<Line> getToBeSelectedLines() {
+    public UniqueItemList<OriLine> getToBeSelectedLines() {
         return toBeSelectedLines;
     }
 
-    public UniqueItemList<Vector> getToBeSelectedPoints() {
+    public UniqueItemList<OriPoint> getToBeSelectedPoints() {
         return toBeSelectedPoints;
     }
 
@@ -59,7 +59,7 @@ public class CreasePatternSelection {
      *
      * @param p: Point to be selected
      */
-    public void selectSingle(Vector p) {
+    public void selectSingle(OriPoint p) {
         selectedPoints.clear();
         select(p);
     }
@@ -69,7 +69,7 @@ public class CreasePatternSelection {
      *
      * @param p: Point to add to the selection
      */
-    public void select(Vector p) {
+    public void select(OriPoint p) {
         toBeSelectedPoints.remove(p);
         selectedPoints.push(p);
     }
@@ -79,7 +79,7 @@ public class CreasePatternSelection {
      *
      * @param p: point to be added to the list
      */
-    public void addToBeSelected(Vector p) {
+    public void addToBeSelected(OriPoint p) {
         toBeSelectedPoints.add(p);
     }
 
@@ -88,9 +88,18 @@ public class CreasePatternSelection {
      *
      * @param p: point to be added to the list
      */
-    public void singleToBeSelected(Vector p) {
+    public void singleToBeSelected(OriPoint p) {
         toBeSelectedPoints.clear();
         addToBeSelected(p);
+    }
+
+    public void singleToBeSelected(OriLine l) {
+        toBeSelectedLines.clear();
+        addToBeSelected(l);
+    }
+
+    public void addToBeSelected(OriLine l) {
+        toBeSelectedLines.add(l);
     }
 
     /**
@@ -105,7 +114,7 @@ public class CreasePatternSelection {
      * Toggles the Selection status on all points in toBeSelected
      */
     public void toggleToBeSelectedPoints() {
-        for (Vector point : toBeSelectedPoints) {
+        for (OriPoint point : toBeSelectedPoints) {
             if (selectedPoints.contains(point)) {
                 selectedPoints.remove(point);
             } else {
@@ -130,11 +139,23 @@ public class CreasePatternSelection {
         this.mode = mode;
     }
 
+    public void clearToBeSelectedLines() {
+        toBeSelectedLines.clear();
+    }
+
+    public void clearToBeSelectedPoints() {
+        toBeSelectedPoints.clear();
+    }
+
     public enum Mode {
         LINE, POINT, LINE_AND_POINT;
 
         public boolean selectPoints() {
             return this == POINT || this == LINE_AND_POINT;
+        }
+
+        public boolean selectLines() {
+            return this == LINE_AND_POINT || this == LINE;
         }
     }
 }

@@ -47,38 +47,56 @@ public class CreasePattern extends CreaseCollection {
             return;
         }
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
-        UniqueItemList<Vector> intersections = getLineIntersections(oriLine.getLine());
-        intersections.addAll(getPointIntersections(oriLine.getLine()));
-        intersections.sort(Comparator.comparingDouble(a -> oriLine.getLine().getStartPoint().distanceSquared(a)));
+        UniqueItemList<OriPoint> intersections = getLineIntersections(oriLine);
+        intersections.addAll(getPointIntersections(oriLine));
+        intersections.sort(Comparator.comparingDouble(a -> oriLine.getStartPoint().distanceSquared(a)));
         OriPoint lastPoint = startPoint;
-        for (Vector intersection : intersections) {
+        for (OriPoint intersection : intersections) {
             super.addCrease(lastPoint, new OriPoint(intersection), type);
-            lastPoint = new OriPoint(intersection);
+            if (intersection.getLines().size() == 1) {
+                OriLine l = intersection.getLines().get(0);
+                intersection.getLines().remove(l);
+                splitLine(l, intersection);
+            }
+            lastPoint = intersection;
         }
         super.addCrease(lastPoint, endPoint, type);
     }
 
-    public UniqueItemList<Vector> getLineIntersections(Line l) {
-        UniqueItemList<Vector> intersections = new UniqueItemList<>();
+    public UniqueItemList<OriPoint> getLineIntersections(Line l) {
+        UniqueItemList<OriPoint> intersections = new UniqueItemList<>();
         for (OriLine c : oriLines) {
-            Vector intersection = l.getIntersection(c.getLine());
+            Vector intersection = l.getIntersection(c);
             if (intersection != null
                     && !(intersection.equals(l.getStartPoint()))
                     && !(intersection.equals(l.getStartPoint()))
                     && intersection.isValid()) {
-                intersections.push(intersection);
+                OriPoint p = new OriPoint(intersection);
+                p.addLine(c);
+                intersections.push(p);
             }
         }
         return intersections;
     }
 
-    public UniqueItemList<Vector> getPointIntersections(Line l) {
-        UniqueItemList<Vector> intersections = new UniqueItemList<>();
+    public UniqueItemList<OriPoint> getPointIntersections(Line l) {
+        UniqueItemList<OriPoint> intersections = new UniqueItemList<>();
         for (Vector p : points) {
             if (l.contains(p)) {
-                intersections.push(p);
+                intersections.push(new OriPoint(p));
             }
         }
         return intersections;
+    }
+
+    public void splitLine(OriLine l, OriPoint p) {
+        OriPoint start = l.getStartPoint();
+        OriPoint end = l.getEndPoint();
+        OriLine.Type t = l.getType();
+        getOriLines().remove(l);
+        start.getLines().remove(l);
+        end.getLines().remove(l);
+        super.addCrease(start, p, t);
+        super.addCrease(p, end, t);
     }
 }

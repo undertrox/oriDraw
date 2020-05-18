@@ -16,11 +16,11 @@ public class CreasePatternSelectionPointRenderer extends Renderer {
     @Override
     protected void draw() {
         for (Vector point : selection.getSelectedPoints()) {
-            RenderHelper.drawSquare(point, RenderSettings.getColorManager().SELECTED_POINT_COLOR,
+            RenderHelper.drawSquare(point, RenderSettings.getColorManager().SELECTED_COLOR,
                     RenderSettings.getPointSideLength(), getGc(), getTransform());
         }
         for (Vector point : selection.getToBeSelectedPoints()) {
-            RenderHelper.drawSquare(point, RenderSettings.getColorManager().TO_BE_SELECTED_POINT_COLOR,
+            RenderHelper.drawSquare(point, RenderSettings.getColorManager().TO_BE_SELECTED_COLOR,
                     RenderSettings.getPointSideLength(), getGc(), getTransform());
         }
     }

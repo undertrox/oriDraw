@@ -18,7 +18,7 @@ public class CreaseCollectionLineRenderer extends Renderer {
         for (OriLine oriLine : cc.getOriLines()) {
             if (!oriLine.isAnimating()) {
                 Paint p = RenderSettings.getColorManager().getPaintForCreaseType(oriLine.getType());
-                RenderHelper.drawLine(oriLine.getLine(), p, RenderSettings.getWidthForCreaseType(oriLine.getType()),
+                RenderHelper.drawLine(oriLine, p, RenderSettings.getWidthForCreaseType(oriLine.getType()),
                         getGc(), getTransform());
             }
         }

@@ -3,9 +3,8 @@ package de.undertrox.oridraw.origami;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
 
-public class OriLine {
+public class OriLine extends Line {
 
-    private Line line;
     private Type type;
     private boolean animating;
 
@@ -17,7 +16,7 @@ public class OriLine {
      * @param type  : Type of the OriLine
      */
     public OriLine(OriPoint start, OriPoint end, Type type) {
-        this.line = new Line(start, end);
+        super(start, end);
         this.type = type;
         start.addLine(this);
         end.addLine(this);
@@ -44,7 +43,7 @@ public class OriLine {
 
     @Override
     public String toString() {
-        return "OriLine(" + line +
+        return "OriLine(" + super.toString() +
                 ",type=" + type +
                 ')';
     }
@@ -59,7 +58,7 @@ public class OriLine {
     public boolean equals(Object obj) {
         if (obj instanceof OriLine) {
             OriLine c = (OriLine) obj;
-            return getLine().equals(c.getLine());
+            return super.equals(c.asLine());
         }
         return false;
     }
@@ -78,12 +77,12 @@ public class OriLine {
         return false;
     }
 
-    public Line getLine() {
-        return line;
+    public Line asLine() {
+        return this;
     }
 
     public enum Type {
-        EDGE, MOUNTAIN, VALLEY, AUX;
+        EDGE, MOUNTAIN, VALLEY, AUX, UNKNOWN;
 
         public Type flip() {
             switch (this) {
@@ -95,5 +94,43 @@ public class OriLine {
                     return this;
             }
         }
+
+        public int toCpId() {
+            switch (this) {
+                case MOUNTAIN:
+                    return 2;
+                case VALLEY:
+                    return 3;
+                case EDGE:
+                    return 1;
+                case AUX:
+                    return 4;
+                default:
+                    return 0;
+            }
+        }
+
+        public static Type fromCpId(int cpId) {
+            switch (cpId) {
+                case 1:
+                    return EDGE;
+                case 2:
+                    return MOUNTAIN;
+                case 3:
+                    return VALLEY;
+                case 4:
+                    return AUX;
+                default:
+                    return UNKNOWN;
+            }
+        }
+    }
+
+    public OriPoint getStartPoint() {
+        return (OriPoint) super.getStartPoint();
+    }
+
+    public OriPoint getEndPoint() {
+        return (OriPoint) super.getEndPoint();
     }
 }

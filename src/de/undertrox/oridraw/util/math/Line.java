@@ -128,6 +128,10 @@ public class Line {
         return getHesse().distance(point);
     }
 
+    public double getSquaredDistance(Vector point) {
+        return getHesse().squaredDistance(point);
+    }
+
     @Override
     public String toString() {
         return "Line(" + getStartPoint() + "," + getEndPoint() + ")";

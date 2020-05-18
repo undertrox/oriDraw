@@ -2,6 +2,7 @@ package de.undertrox.oridraw.ui.tab;
 
 import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.*;
+import de.undertrox.oridraw.origami.tool.AngleBisectorTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.DrawLineTool;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
@@ -28,6 +29,11 @@ public class CreasePatternTab extends CanvasTab {
     private Document doc;
 
     private DrawLineTool p2pTool;
+    private AngleBisectorTool angleBisectorTool;
+
+    public AngleBisectorTool getAngleBisectorTool() {
+        return angleBisectorTool;
+    }
 
     /**
      * Constructor. Binds the width of the Canvas to that of the tabPane
@@ -45,6 +51,7 @@ public class CreasePatternTab extends CanvasTab {
         super(doc.getTitle(), canvas);
         logger.debug("Initializing OriLine Pattern");
         this.doc = doc;
+        doc.getCp().createSquare(Vector.ORIGIN, Constants.DEFAULT_PAPER_SIZE);
         cpTransform = new Transform(new Vector(300, 250), 1, 0);
         bgTransform = new Transform(new Vector(0, 0), 1, 0);
         logger.debug("Initializing Renderers");
@@ -60,6 +67,8 @@ public class CreasePatternTab extends CanvasTab {
         DrawLineTool dlTool = new DrawLineTool(this, OriLine.Type.MOUNTAIN);
         p2pTool = dlTool;
         tools.add(dlTool);
+        angleBisectorTool = new AngleBisectorTool(this, OriLine.Type.MOUNTAIN);
+        tools.add(angleBisectorTool);
 
         setActiveTool(dlTool);
 

@@ -69,6 +69,34 @@ public class HesseNormalLine {
     }
 
     /**
+     * Returns p projected onto this line so that there is a Normal line orthogonal to this line that goes throuh
+     * p and the projected Point
+     *
+     * @param p: Point to be projected
+     * @return: Shadow point of p / p projected onto this line
+     */
+    public Vector getShadowPoint(Vector p) {
+        return intersect(normal(p));
+    }
+
+    /**
+     * returns a Normal line orthogonal to this line that goes through p
+     *
+     * @param p: point for the Normal line to go through
+     * @return Normal line going through p
+     */
+    public HesseNormalLine normal(Vector p) {
+        HesseNormalLine l = new HesseNormalLine(0, 0, 0);
+        double e;
+        double x = p.getX();
+        double y = p.getY();
+        l.c = -b * x + a * y;
+        l.a = b;
+        l.b = -a;
+        return l;
+    }
+
+    /**
      * @param l: Line to intersect
      * @return Intersection point between this line and l
      */

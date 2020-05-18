@@ -20,7 +20,6 @@ public class Document {
         this.grid = new Grid(gridDivisions, paperSize, paperSize, Vector.ORIGIN);
         showGrid = true;
 
-        cp.createSquare(Vector.ORIGIN, paperSize);
         this.selection = new CreasePatternSelection(cp);
         this.title = title;
     }
@@ -45,7 +44,7 @@ public class Document {
         return grid;
     }
 
-    public boolean isShowGrid() {
+    public boolean showGrid() {
         return showGrid;
     }
 

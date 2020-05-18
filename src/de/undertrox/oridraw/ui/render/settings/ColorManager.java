@@ -13,8 +13,8 @@ public class ColorManager {
     public Color UNKNOWN_COLOR = Color.YELLOW;
 
     public Color POINT_COLOR = Color.BLACK;
-    public Color TO_BE_SELECTED_POINT_COLOR = Color.LIMEGREEN;
-    public Color SELECTED_POINT_COLOR = Color.GREEN;
+    public Color TO_BE_SELECTED_COLOR = Color.LIMEGREEN;
+    public Color SELECTED_COLOR = Color.GREEN;
 
     public Color CP_EDITOR_BACKGROUND_COLOR = Color.WHITE;
 

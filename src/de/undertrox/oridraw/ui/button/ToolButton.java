@@ -4,12 +4,12 @@ import de.undertrox.oridraw.OriDraw;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 
 import java.util.function.Supplier;
 
 
-public class ToolButton extends Button {
+public class ToolButton extends ToggleButton {
     Supplier<CreasePatternTool> toolSupplier;
     boolean isActive;
 

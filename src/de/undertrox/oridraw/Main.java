@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 public class Main extends Application {
     private static Logger logger = Logger.getLogger(Main.class);
     private static String title = "OriDraw v" + OriDraw.VERSION;
+    public static Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -31,6 +32,7 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setMinWidth(primaryStage.getWidth());
         primaryStage.setMinHeight(primaryStage.getHeight());
+        Main.primaryStage = primaryStage;
         logger.debug("OriDraw is now running.");
     }
 

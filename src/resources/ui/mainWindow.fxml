@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.undertrox.oridraw.ui.button.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<?import de.undertrox.oridraw.ui.button.ToolButton?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0"
             xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.undertrox.oridraw.ui.MainWindowController">
@@ -45,28 +45,33 @@
                     <children>
                         <ToggleButton fx:id="btnMountain" maxHeight="1.7976931348623157E308"
                                       maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                      onAction="#setTypeMountain" text="Mountain">
+                                      onAction="#setTypeMountain" selected="true" text="Mountain">
                             <GridPane.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
                             </GridPane.margin>
+                            <toggleGroup>
+                                <ToggleGroup fx:id="type"/>
+                            </toggleGroup>
                         </ToggleButton>
                         <ToggleButton fx:id="btnValley" maxHeight="1.7976931348623157E308"
                                       maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                      onAction="#setTypeValley" text="Valley" GridPane.columnIndex="1">
+                                      onAction="#setTypeValley" text="Valley" toggleGroup="$type"
+                                      GridPane.columnIndex="1">
                             <GridPane.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
                             </GridPane.margin>
                         </ToggleButton>
                         <ToggleButton fx:id="btnEdge" maxHeight="1.7976931348623157E308"
                                       maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTypeEdge"
-                                      text="Edge" GridPane.rowIndex="1">
+                                      text="Edge" toggleGroup="$type" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
                             </GridPane.margin>
                         </ToggleButton>
                         <ToggleButton fx:id="btnAux" maxHeight="1.7976931348623157E308"
                                       maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTypeAux"
-                                      text="Auxiliary" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                      text="Auxiliary" toggleGroup="$type" GridPane.columnIndex="1"
+                                      GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
                             </GridPane.margin>
@@ -88,8 +93,16 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <ToolButton fx:id="btnPointToPoint" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                    text="P2P"/>
+                        <ToolButton fx:id="btnPointToPoint" maxHeight="1.7976931348623157E308"
+                                    maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true"
+                                    text="P2P">
+                            <toggleGroup>
+                                <ToggleGroup fx:id="tools"/>
+                            </toggleGroup>
+                        </ToolButton>
+                        <ToolButton fx:id="btnAngleBisector" maxHeight="1.7976931348623157E308"
+                                    maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="AngBis"
+                                    toggleGroup="$tools" GridPane.columnIndex="1"/>
                     </children>
                 </GridPane>
             </children>

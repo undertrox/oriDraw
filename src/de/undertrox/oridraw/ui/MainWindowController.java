@@ -1,5 +1,8 @@
 package de.undertrox.oridraw.ui;
 
+import de.undertrox.oridraw.Main;
+import de.undertrox.oridraw.origami.CreasePattern;
+import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.TypedCreasePatternTool;
@@ -8,6 +11,7 @@ import de.undertrox.oridraw.ui.tab.CanvasTab;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
+import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
@@ -22,8 +26,10 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,6 +41,7 @@ public class MainWindowController implements Initializable {
     public ToggleButton btnEdge;
     public ToggleButton btnAux;
     public ToolButton btnPointToPoint;
+    public ToolButton btnAngleBisector;
     private Logger logger = Logger.getLogger(MainWindowController.class);
 
     public TextFlow statusText;
@@ -62,7 +69,7 @@ public class MainWindowController implements Initializable {
         mainTabPane.widthProperty().addListener(sizeChangeListener);
         mainTabPane.heightProperty().addListener(sizeChangeListener);
         updateText();
-        createNewFileTab();
+        createNewFileTab(null);
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -79,7 +86,15 @@ public class MainWindowController implements Initializable {
             return null;
         });
         btnPointToPoint.setActive(true);
+        btnAngleBisector.setToolSupplier(() -> {
+            CanvasTab tab = getSelectedTab();
+            if (tab instanceof CreasePatternTab) {
+                return ((CreasePatternTab) tab).getAngleBisectorTool();
+            }
+            return null;
+        });
         timer.start();
+        mainTabPane.requestFocus();
     }
 
     CanvasTab getSelectedTab() {
@@ -104,10 +119,15 @@ public class MainWindowController implements Initializable {
     /**
      * Creates a new Tab for editing a new OriLine Pattern
      */
-    public void createNewFileTab() {
+    public void createNewFileTab(Document doc) {
         logger.debug("Creating new File Tab");
         Canvas c = new Canvas();
-        CreasePatternTab tab = new CreasePatternTab(bundle.getString("oridraw.file.new"), c, mainTabPane);
+        CreasePatternTab tab;
+        if (doc == null) {
+            tab = new CreasePatternTab(bundle.getString("oridraw.file.new"), c, mainTabPane);
+        } else {
+            tab = new CreasePatternTab(doc, c, mainTabPane);
+        }
         tab.setOnCloseRequest(this::onFileTabCloseRequest);
         mainTabPane.getTabs().add(tab);
         tab.render();
@@ -115,21 +135,55 @@ public class MainWindowController implements Initializable {
 
     public void btnSaveClick() {
         logger.debug("Save Button clicked");
+        CreasePatternTab tab;
+        if (getSelectedTab() instanceof CreasePatternTab) {
+            tab = (CreasePatternTab) getSelectedTab();
+        } else {
+            return;
+        }
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle(bundle.getString("oridraw.action.save.filedialog.title"));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                bundle.getString("oridraw.action.save.filedialog.description.cp"), ".cp");
+        chooser.getExtensionFilters().add(filter);
+        File file = chooser.showSaveDialog(Main.primaryStage);
+        if (file == null) {
+            return;
+        }
+        IOHelper.saveToFile(file.getAbsolutePath(), tab.getDoc());
     }
 
     public void btnNewClick() {
         logger.debug("New Button clicked");
-        createNewFileTab();
+        createNewFileTab(null);
         mainTabPane.getSelectionModel().selectLast();
 
     }
 
     public void onFileTabCloseRequest(Event e) {
-        logger.info("Closed Tab '");
+        logger.info("Closed Tab ");
     }
 
     public void btnOpenClick() {
         logger.debug("Open Button clicked");
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle(bundle.getString("oridraw.action.open.filedialog.title"));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                bundle.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
+
+        chooser.getExtensionFilters().add(filter);
+        File file = chooser.showOpenDialog(Main.primaryStage);
+        if (file == null) {
+            return;
+        }
+        Document doc = IOHelper.readFromFile(file.getAbsolutePath());
+        if (doc == null) {
+            Alert info = new Alert(Alert.AlertType.ERROR, bundle.getString("oridraw.action.open.error"));
+            info.showAndWait();
+            return;
+        }
+        createNewFileTab(doc);
+        mainTabPane.getSelectionModel().selectLast();
     }
 
     public void onMouseMoved(MouseEvent e) {
@@ -230,15 +284,19 @@ public class MainWindowController implements Initializable {
         switch (type) {
             case MOUNTAIN:
                 setBorderColor(btnMountain, RenderSettings.getColorManager().MOUNTAIN_COLOR);
+                btnMountain.setSelected(true);
                 break;
             case VALLEY:
                 setBorderColor(btnValley, RenderSettings.getColorManager().VALLEY_COLOR);
+                btnValley.setSelected(true);
                 break;
             case EDGE:
                 setBorderColor(btnEdge, RenderSettings.getColorManager().EDGE_COLOR);
+                btnEdge.setSelected(true);
                 break;
             case AUX:
                 setBorderColor(btnAux, RenderSettings.getColorManager().AUX_COLOR);
+                btnAux.setSelected(true);
                 break;
         }
     }
