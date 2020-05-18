@@ -3,10 +3,11 @@ package de.undertrox.oridraw.origami.tool;
 import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.Document;
-import de.undertrox.oridraw.ui.KeyboardHandlerInterface;
-import de.undertrox.oridraw.ui.MouseHandlerInterface;
+import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
+import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.renderer.tool.ToolRenderer;
+import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.math.Vector;
 
 public abstract class CreasePatternTool implements MouseHandlerInterface, KeyboardHandlerInterface {
@@ -15,12 +16,18 @@ public abstract class CreasePatternTool implements MouseHandlerInterface, Keyboa
     private Document doc;
     private Transform cpTransform;
     private Vector currentMousePos;
+    private CreasePatternTab tab;
 
-    public CreasePatternTool(Document doc, Transform cpTransform) {
-        this.doc = doc;
-        this.cpTransform = cpTransform;
+    public CreasePatternTool(CreasePatternTab tab) {
+        this.doc = tab.getDoc();
+        this.cpTransform = tab.getCpTransform();
         this.currentMousePos = new Vector(0, 0);
+        this.tab = tab;
         reset();
+    }
+
+    public void activate() {
+        this.tab.setActiveTool(this);
     }
 
     /**

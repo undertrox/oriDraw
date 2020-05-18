@@ -3,6 +3,7 @@ package de.undertrox.oridraw.origami.tool;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -15,8 +16,8 @@ public abstract class TypedCreasePatternTool extends CreasePatternTool {
     boolean flipped;
 
 
-    public TypedCreasePatternTool(Document doc, Transform cpTransform, OriLine.Type type) {
-        super(doc, cpTransform);
+    public TypedCreasePatternTool(CreasePatternTab tab, OriLine.Type type) {
+        super(tab);
         this.type = type;
         flipped = false;
     }

@@ -5,9 +5,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import de.undertrox.oridraw.ui.button.ToolButton?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0"
             xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="de.undertrox.oridraw.MainWindowController">
+            fx:controller="de.undertrox.oridraw.ui.MainWindowController">
     <top>
         <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <items>
@@ -30,6 +31,8 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </padding>
             <children>
+                <Label text="Crease Type"/>
+                <Separator prefWidth="200.0"/>
                 <GridPane fx:id="creasetypeGridpane">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -40,30 +43,53 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                                mnemonicParsing="false" text="Mountain">
+                        <ToggleButton fx:id="btnMountain" maxHeight="1.7976931348623157E308"
+                                      maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                      onAction="#setTypeMountain" text="Mountain">
                             <GridPane.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
                             </GridPane.margin>
-                        </Button>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                                mnemonicParsing="false" text="Valley" GridPane.columnIndex="1">
+                        </ToggleButton>
+                        <ToggleButton fx:id="btnValley" maxHeight="1.7976931348623157E308"
+                                      maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                      onAction="#setTypeValley" text="Valley" GridPane.columnIndex="1">
                             <GridPane.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
                             </GridPane.margin>
-                        </Button>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                                mnemonicParsing="false" text="Edge" GridPane.rowIndex="1">
+                        </ToggleButton>
+                        <ToggleButton fx:id="btnEdge" maxHeight="1.7976931348623157E308"
+                                      maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTypeEdge"
+                                      text="Edge" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
                             </GridPane.margin>
-                        </Button>
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                                mnemonicParsing="false" text="Auxiliary" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        </ToggleButton>
+                        <ToggleButton fx:id="btnAux" maxHeight="1.7976931348623157E308"
+                                      maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTypeAux"
+                                      text="Auxiliary" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
                             </GridPane.margin>
-                        </Button>
+                        </ToggleButton>
+                    </children>
+                </GridPane>
+                <Separator prefHeight="19.0" prefWidth="180.0" visible="false"/>
+                <Label text="Tools"/>
+                <Separator prefWidth="200.0"/>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <ToolButton fx:id="btnPointToPoint" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                    text="P2P"/>
                     </children>
                 </GridPane>
             </children>

@@ -1,5 +1,7 @@
-package de.undertrox.oridraw.ui;
+package de.undertrox.oridraw.ui.tab;
 
+import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
+import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;
 import de.undertrox.oridraw.ui.render.renderer.Renderer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Tab;

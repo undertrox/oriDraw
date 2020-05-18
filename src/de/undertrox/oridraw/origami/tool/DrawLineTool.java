@@ -4,10 +4,11 @@ import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriPoint;
-import de.undertrox.oridraw.ui.MouseHandler;
+import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.renderer.tool.DrawLineToolRenderer;
 import de.undertrox.oridraw.ui.render.renderer.tool.ToolRenderer;
+import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -16,8 +17,8 @@ public class DrawLineTool extends TypedCreasePatternTool {
     OriPoint point0, point1;
     MouseEvent lastMoveEvent;
 
-    public DrawLineTool(Document doc, Transform cpTransform, OriLine.Type type) {
-        super(doc, cpTransform, type);
+    public DrawLineTool(CreasePatternTab tab, OriLine.Type type) {
+        super(tab, type);
     }
 
     @Override

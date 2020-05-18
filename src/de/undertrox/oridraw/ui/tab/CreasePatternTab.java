@@ -1,9 +1,11 @@
-package de.undertrox.oridraw.ui;
+package de.undertrox.oridraw.ui.tab;
 
 import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.*;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.DrawLineTool;
+import de.undertrox.oridraw.ui.handler.KeyboardHandler;
+import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.ui.render.*;
 import de.undertrox.oridraw.ui.render.renderer.*;
@@ -24,6 +26,8 @@ public class CreasePatternTab extends CanvasTab {
     private Transform cpTransform;
     private Transform bgTransform;
     private Document doc;
+
+    private DrawLineTool p2pTool;
 
     /**
      * Constructor. Binds the width of the Canvas to that of the tabPane
@@ -53,7 +57,8 @@ public class CreasePatternTab extends CanvasTab {
 
         logger.debug("Initializing Tools");
         tools = new ArrayList<>();
-        DrawLineTool dlTool = new DrawLineTool(doc, cpTransform, OriLine.Type.MOUNTAIN);
+        DrawLineTool dlTool = new DrawLineTool(this, OriLine.Type.MOUNTAIN);
+        p2pTool = dlTool;
         tools.add(dlTool);
 
         setActiveTool(dlTool);
@@ -65,6 +70,10 @@ public class CreasePatternTab extends CanvasTab {
         canvas.heightProperty().bind(tabPane.heightProperty());
     }
 
+    public DrawLineTool getPointToPointTool() {
+        return p2pTool;
+    }
+
     public void setActiveTool(CreasePatternTool activeTool) {
         tools.forEach(t -> t.setEnabled(false));
         this.activeTool = activeTool;
@@ -73,7 +82,15 @@ public class CreasePatternTab extends CanvasTab {
         activeTool.setEnabled(true);
     }
 
+    public CreasePatternTool getActiveTool() {
+        return activeTool;
+    }
+
     public Transform getCpTransform() {
         return cpTransform;
+    }
+
+    public Document getDoc() {
+        return doc;
     }
 }

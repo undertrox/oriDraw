@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.ui;
+package de.undertrox.oridraw.ui.handler;
 
 import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.Document;

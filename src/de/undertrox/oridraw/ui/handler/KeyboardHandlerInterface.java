@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.ui;
+package de.undertrox.oridraw.ui.handler;
 
 import javafx.scene.input.KeyEvent;
 
