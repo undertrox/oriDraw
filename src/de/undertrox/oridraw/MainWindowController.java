@@ -86,7 +86,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Creates a new Tab for editing a new Crease Pattern
+     * Creates a new Tab for editing a new OriLine Pattern
      */
     public void createNewFileTab() {
         logger.debug("Creating new File Tab");

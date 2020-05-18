@@ -1,6 +1,6 @@
 package de.undertrox.oridraw.ui.render.settings;
 
-import de.undertrox.oridraw.origami.Crease;
+import de.undertrox.oridraw.origami.OriLine;
 
 public class RenderSettings {
     private static RenderSettings instance;
@@ -24,12 +24,12 @@ public class RenderSettings {
     }
 
     /**
-     * Returns the line width for the Crease Type
+     * Returns the line width for the OriLine Type
      *
-     * @param type: Crease Type for which to get the width
+     * @param type: OriLine Type for which to get the width
      * @return Line Width for type
      */
-    public static double getWidthForCreaseType(Crease.Type type) {
+    public static double getWidthForCreaseType(OriLine.Type type) {
         switch (type) {
             case MOUNTAIN:
             case VALLEY:

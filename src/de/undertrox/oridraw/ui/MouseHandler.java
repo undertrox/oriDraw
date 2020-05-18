@@ -2,6 +2,7 @@ package de.undertrox.oridraw.ui;
 
 import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.Document;
+import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.util.math.Vector;
@@ -23,11 +24,11 @@ public class MouseHandler implements MouseHandlerInterface {
     }
 
     /**
-     * Maps Mouse coordinates from Canvas to Crease Pattern Coordinates
+     * Maps Mouse coordinates from Canvas to OriLine Pattern Coordinates
      *
      * @param mousePos:  Mouse Position
-     * @param transform: Transform of the Crease pattern
-     * @return Mouse Coordinates mapped to the Crease Pattern
+     * @param transform: Transform of the OriLine pattern
+     * @return Mouse Coordinates mapped to the OriLine Pattern
      */
     public static Vector normalizeMouseCoords(Vector mousePos, Transform transform) {
         return transform.applyInverted(new Vector(mousePos.getX(), mousePos.getY() - CANVAS_HEIGHT_CORRECTION));
@@ -46,7 +47,7 @@ public class MouseHandler implements MouseHandlerInterface {
     public void onMouseCoordsChange(Vector mouseCoords) {
         if (doc.getSelection().getMode().selectPoints()) {
             // Adds the nearest Point to Selection.toBeSelected
-            Vector nearestPoint = findNearestPoint(mouseCoords, doc.getAllVisiblePoints());
+            OriPoint nearestPoint = findNearestPoint(mouseCoords, doc.getAllVisiblePoints());
             if (mouseCoords.distanceSquared(nearestPoint)
                     < Math.pow(2 * Constants.MOUSE_RANGE / cpTransform.getScale(), 2)) {
                 doc.getSelection().singleToBeSelected(nearestPoint);
@@ -64,7 +65,7 @@ public class MouseHandler implements MouseHandlerInterface {
         activeTool.onDrag(e);
     }
 
-    public Vector findNearestPoint(Vector p, List<Vector> points) {
+    public OriPoint findNearestPoint(Vector p, List<OriPoint> points) {
         Vector nearest = points.get(0);
         double smallesSqrDist = p.distanceSquared(nearest);
         for (Vector point : points) {
@@ -74,7 +75,7 @@ public class MouseHandler implements MouseHandlerInterface {
                 nearest = point;
             }
         }
-        return nearest;
+        return new OriPoint(nearest);
     }
 
     public void onScroll(ScrollEvent e) {

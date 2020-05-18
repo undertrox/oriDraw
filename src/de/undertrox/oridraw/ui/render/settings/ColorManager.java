@@ -1,6 +1,6 @@
 package de.undertrox.oridraw.ui.render.settings;
 
-import de.undertrox.oridraw.origami.Crease;
+import de.undertrox.oridraw.origami.OriLine;
 import javafx.scene.paint.Color;
 
 public class ColorManager {
@@ -19,12 +19,12 @@ public class ColorManager {
     public Color CP_EDITOR_BACKGROUND_COLOR = Color.WHITE;
 
     /**
-     * Returns Paint to use for the Crease type
+     * Returns Paint to use for the OriLine type
      *
-     * @param type: Crease type
+     * @param type: OriLine type
      * @return Paint to use for type
      */
-    public Color getPaintForCreaseType(Crease.Type type) {
+    public Color getPaintForCreaseType(OriLine.Type type) {
         switch (type) {
             case EDGE:
                 return getInstance().EDGE_COLOR;

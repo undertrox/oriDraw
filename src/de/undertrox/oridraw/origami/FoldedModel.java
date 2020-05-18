@@ -1,4 +1,4 @@
 package de.undertrox.oridraw.origami;
 
-public class FoldedModel {
+public class FoldedModel extends CreaseCollection {
 }

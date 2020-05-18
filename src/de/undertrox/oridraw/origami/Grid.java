@@ -2,8 +2,10 @@ package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
+import org.apache.log4j.Logger;
 
 public class Grid extends CreaseCollection {
+    private Logger logger = Logger.getLogger(Grid.class);
     private int divisions;
     private double paperSize;
     private double gridSize;
@@ -18,18 +20,15 @@ public class Grid extends CreaseCollection {
         this.gridSize = gridSize;
         this.center = center;
         updateGridSquareSize();
+        logger.info("Creating Grid");
         Vector topLeftCorner = center.sub(new Vector(gridSize / 2));
         Vector bottomRightCorner = center.add(new Vector(gridSize / 2));
         for (double x = topLeftCorner.getX(); x <= bottomRightCorner.getX(); x += getGridSquareSize()) {
+            addCrease(new OriPoint(x, topLeftCorner.getY()), new OriPoint(x, bottomRightCorner.getY()), OriLine.Type.AUX);
             for (double y = topLeftCorner.getY(); y <= bottomRightCorner.getY(); y += getGridSquareSize()) {
-                getPoints().push(new Vector(x, y));
-                if (y > topLeftCorner.getY()) {
-                    creases.add(new Crease(new Vector(x, y), new Vector(x, y - getGridSquareSize()),
-                            Crease.Type.AUX));
-                }
-                if (x > topLeftCorner.getX()) {
-                    creases.add(new Crease(new Vector(x, y), new Vector(x - getGridSquareSize(), y),
-                            Crease.Type.AUX));
+                getPoints().push(new OriPoint(x, y));
+                if (x == topLeftCorner.getX()) {
+                    addCrease(new OriPoint(x, y), new OriPoint(bottomRightCorner.getX(), y), OriLine.Type.AUX);
                 }
             }
         }
@@ -77,11 +76,11 @@ public class Grid extends CreaseCollection {
         this.gridSize = gridSize;
     }
 
-    public UniqueItemList<Crease> getCreases() {
-        return creases;
+    public UniqueItemList<OriLine> getOriLines() {
+        return oriLines;
     }
 
-    public UniqueItemList<Vector> getPoints() {
+    public UniqueItemList<OriPoint> getPoints() {
         return points;
     }
 }

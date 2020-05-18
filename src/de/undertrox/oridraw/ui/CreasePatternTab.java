@@ -8,7 +8,6 @@ import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.ui.render.*;
 import de.undertrox.oridraw.ui.render.renderer.*;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 
@@ -34,13 +33,13 @@ public class CreasePatternTab extends CanvasTab {
      * @param tabPane parent tabPane of the Tab
      */
     public CreasePatternTab(String title, Canvas canvas, TabPane tabPane) {
-        this(new Document(title, Constants.DEFAULT_PAPER_SIZE, 4), canvas, tabPane);
+        this(new Document(title, Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS), canvas, tabPane);
 
     }
 
     public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane) {
         super(doc.getTitle(), canvas);
-        logger.debug("Initializing Crease Pattern");
+        logger.debug("Initializing OriLine Pattern");
         this.doc = doc;
         cpTransform = new Transform(new Vector(300, 250), 1, 0);
         bgTransform = new Transform(new Vector(0, 0), 1, 0);
@@ -54,7 +53,7 @@ public class CreasePatternTab extends CanvasTab {
 
         logger.debug("Initializing Tools");
         tools = new ArrayList<>();
-        DrawLineTool dlTool = new DrawLineTool(doc, cpTransform, Crease.Type.MOUNTAIN);
+        DrawLineTool dlTool = new DrawLineTool(doc, cpTransform, OriLine.Type.MOUNTAIN);
         tools.add(dlTool);
 
         setActiveTool(dlTool);

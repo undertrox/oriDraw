@@ -3,22 +3,24 @@ package de.undertrox.oridraw.origami;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
 
-public class Crease {
+public class OriLine {
 
     private Line line;
     private Type type;
     private boolean animating;
 
     /**
-     * Creates a new Crease starting in start and ending in end
+     * Creates a new OriLine starting in start and ending in end
      *
      * @param start : starting point of the line
      * @param end   : ending Point of the line
-     * @param type  : Type of the Crease
+     * @param type  : Type of the OriLine
      */
-    public Crease(Vector start, Vector end, Type type) {
+    public OriLine(OriPoint start, OriPoint end, Type type) {
         this.line = new Line(start, end);
         this.type = type;
+        start.addLine(this);
+        end.addLine(this);
     }
 
     public boolean isAnimating() {
@@ -30,7 +32,7 @@ public class Crease {
     }
 
     /**
-     * @return Crease Type of this Crease
+     * @return OriLine Type of this OriLine
      */
     public Type getType() {
         return type;
@@ -42,21 +44,21 @@ public class Crease {
 
     @Override
     public String toString() {
-        return "Crease(" + line +
+        return "OriLine(" + line +
                 ",type=" + type +
                 ')';
     }
 
     /**
-     * Equals Method for Crease. The type attribute is ignored on purpose
+     * Equals Method for OriLine. The type attribute is ignored on purpose
      *
      * @param obj: object to compare
      * @return whether the lines equal (Line type is ignored)
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Crease) {
-            Crease c = (Crease) obj;
+        if (obj instanceof OriLine) {
+            OriLine c = (OriLine) obj;
             return getLine().equals(c.getLine());
         }
         return false;
@@ -66,11 +68,11 @@ public class Crease {
      * Exact equals method that doesnt ignore the Type
      *
      * @param obj: object to compare
-     * @return whethere the creases are equal
+     * @return whethere the oriLines are equal
      */
     public boolean equalsExact(Object obj) {
-        if (obj instanceof Crease) {
-            Crease c = (Crease) obj;
+        if (obj instanceof OriLine) {
+            OriLine c = (OriLine) obj;
             return equals(c) && getType().equals(c.getType());
         }
         return false;

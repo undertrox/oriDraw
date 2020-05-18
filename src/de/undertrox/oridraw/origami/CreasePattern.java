@@ -24,43 +24,43 @@ public class CreasePattern extends CreaseCollection {
      */
     public void createSquare(Vector center, double sideLength) {
         double radius = sideLength / 2;
-        Vector point1 = center.add(new Vector(-radius, -radius));
-        Vector point2 = center.add(new Vector(-radius, radius));
-        Vector point3 = center.add(new Vector(radius, radius));
-        Vector point4 = center.add(new Vector(radius, -radius));
-        addCrease(point1, point2, Crease.Type.EDGE);
-        addCrease(point2, point3, Crease.Type.EDGE);
-        addCrease(point3, point4, Crease.Type.EDGE);
-        addCrease(point4, point1, Crease.Type.EDGE);
+        OriPoint point1 = new OriPoint(center.add(new Vector(-radius, -radius)));
+        OriPoint point2 = new OriPoint(center.add(new Vector(-radius, radius)));
+        OriPoint point3 = new OriPoint(center.add(new Vector(radius, radius)));
+        OriPoint point4 = new OriPoint(center.add(new Vector(radius, -radius)));
+        addCrease(point1, point2, OriLine.Type.EDGE);
+        addCrease(point2, point3, OriLine.Type.EDGE);
+        addCrease(point3, point4, OriLine.Type.EDGE);
+        addCrease(point4, point1, OriLine.Type.EDGE);
     }
 
     /**
-     * adds a Crease into the Creases list if it doesnt already exist. If it does, the old one will be overwritten
-     * It also checks for Intersections and splits the Crease if necessary
+     * adds a OriLine into the Creases list if it doesnt already exist. If it does, the old one will be overwritten
+     * It also checks for Intersections and splits the OriLine if necessary
      *
-     * @param startPoint : Start point of the Crease
+     * @param startPoint : Start point of the OriLine
      * @param endPoint   :   end Point of the crease
-     * @param type       : Crease Type
+     * @param type       : OriLine Type
      */
-    public void addCrease(Vector startPoint, Vector endPoint, Crease.Type type) {
+    public void addCrease(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
         if (startPoint.equals(endPoint)) {
             return;
         }
-        Crease crease = new Crease(startPoint, endPoint, type);
-        UniqueItemList<Vector> intersections = getLineIntersections(crease.getLine());
-        intersections.addAll(getPointIntersections(crease.getLine()));
-        intersections.sort(Comparator.comparingDouble(a -> crease.getLine().getStartPoint().distanceSquared(a)));
-        Vector lastPoint = startPoint;
+        OriLine oriLine = new OriLine(startPoint, endPoint, type);
+        UniqueItemList<Vector> intersections = getLineIntersections(oriLine.getLine());
+        intersections.addAll(getPointIntersections(oriLine.getLine()));
+        intersections.sort(Comparator.comparingDouble(a -> oriLine.getLine().getStartPoint().distanceSquared(a)));
+        OriPoint lastPoint = startPoint;
         for (Vector intersection : intersections) {
-            super.addCrease(lastPoint, intersection, type);
-            lastPoint = intersection;
+            super.addCrease(lastPoint, new OriPoint(intersection), type);
+            lastPoint = new OriPoint(intersection);
         }
         super.addCrease(lastPoint, endPoint, type);
     }
 
     public UniqueItemList<Vector> getLineIntersections(Line l) {
         UniqueItemList<Vector> intersections = new UniqueItemList<>();
-        for (Crease c : creases) {
+        for (OriLine c : oriLines) {
             Vector intersection = l.getIntersection(c.getLine());
             if (intersection != null
                     && !(intersection.equals(l.getStartPoint()))

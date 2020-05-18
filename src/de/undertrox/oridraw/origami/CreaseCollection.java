@@ -4,11 +4,11 @@ import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
 
 public class CreaseCollection {
-    protected UniqueItemList<Crease> creases;
-    protected UniqueItemList<Vector> points;
+    protected UniqueItemList<OriLine> oriLines;
+    protected UniqueItemList<OriPoint> points;
 
     public CreaseCollection() {
-        creases = new UniqueItemList<>();
+        oriLines = new UniqueItemList<>();
         points = new UniqueItemList<>();
     }
 
@@ -18,24 +18,24 @@ public class CreaseCollection {
      * @param vec: Point to be added
      * @return vec if it wasnt in the List, otherwise the point that is in the list with vec's coordinates
      */
-    public Vector addPoint(Vector vec) {
+    public OriPoint addPoint(OriPoint vec) {
         return points.push(vec);
     }
 
-    public void addCrease(Vector startPoint, Vector endPoint, Crease.Type type) {
+    public void addCrease(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
         startPoint = addPoint(startPoint);
         endPoint = addPoint(endPoint);
-        Crease crease = new Crease(startPoint, endPoint, type);
-        Crease c = creases.push(crease);
+        OriLine oriLine = new OriLine(startPoint, endPoint, type);
+        OriLine c = oriLines.push(oriLine);
         c.setType(type);
     }
 
 
-    public UniqueItemList<Crease> getCreases() {
-        return creases;
+    public UniqueItemList<OriLine> getOriLines() {
+        return oriLines;
     }
 
-    public UniqueItemList<Vector> getPoints() {
+    public UniqueItemList<OriPoint> getPoints() {
         return points;
     }
 }

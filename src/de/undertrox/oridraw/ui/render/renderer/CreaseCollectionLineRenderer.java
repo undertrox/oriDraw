@@ -1,5 +1,5 @@
 package de.undertrox.oridraw.ui.render.renderer;
-import de.undertrox.oridraw.origami.Crease;
+import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.CreaseCollection;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import de.undertrox.oridraw.ui.render.Transform;
@@ -15,10 +15,10 @@ public class CreaseCollectionLineRenderer extends Renderer {
 
     @Override
     protected void draw() {
-        for (Crease crease : cc.getCreases()) {
-            if (!crease.isAnimating()) {
-                Paint p = RenderSettings.getColorManager().getPaintForCreaseType(crease.getType());
-                RenderHelper.drawLine(crease.getLine(), p, RenderSettings.getWidthForCreaseType(crease.getType()),
+        for (OriLine oriLine : cc.getOriLines()) {
+            if (!oriLine.isAnimating()) {
+                Paint p = RenderSettings.getColorManager().getPaintForCreaseType(oriLine.getType());
+                RenderHelper.drawLine(oriLine.getLine(), p, RenderSettings.getWidthForCreaseType(oriLine.getType()),
                         getGc(), getTransform());
             }
         }

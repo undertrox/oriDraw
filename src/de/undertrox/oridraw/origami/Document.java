@@ -57,9 +57,9 @@ public class Document {
         return paperSize;
     }
 
-    public UniqueItemList<Vector> getAllVisiblePoints() {
+    public UniqueItemList<OriPoint> getAllVisiblePoints() {
         if (showGrid) {
-            UniqueItemList<Vector> points = new UniqueItemList<>();
+            UniqueItemList<OriPoint> points = new UniqueItemList<>();
             points.addAll(cp.getPoints());
             points.addAll(grid.getPoints());
             return points;

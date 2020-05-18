@@ -1,8 +1,9 @@
 package de.undertrox.oridraw.origami.tool;
 
-import de.undertrox.oridraw.origami.Crease;
+import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.Document;
+import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.ui.MouseHandler;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.renderer.tool.DrawLineToolRenderer;
@@ -12,10 +13,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class DrawLineTool extends TypedCreasePatternTool {
-    Vector point0, point1;
+    OriPoint point0, point1;
     MouseEvent lastMoveEvent;
 
-    public DrawLineTool(Document doc, Transform cpTransform, Crease.Type type) {
+    public DrawLineTool(Document doc, Transform cpTransform, OriLine.Type type) {
         super(doc, cpTransform, type);
     }
 
@@ -72,11 +73,11 @@ public class DrawLineTool extends TypedCreasePatternTool {
         getSelection().clearSelection();
     }
 
-    public Vector getNextPoint() {
+    public OriPoint getNextPoint() {
         if (!getSelection().getToBeSelectedPoints().isEmpty()) {
-            return getSelection().getToBeSelectedPoints().get(0);
+            return new OriPoint(getSelection().getToBeSelectedPoints().get(0));
         } else {
-            return getCurrentMousePos();
+            return new OriPoint(getCurrentMousePos());
         }
     }
 
