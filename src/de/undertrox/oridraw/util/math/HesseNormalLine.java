@@ -2,6 +2,8 @@ package de.undertrox.oridraw.util.math;
 
 import de.undertrox.oridraw.Constants;
 
+import static java.lang.Math.sqrt;
+
 public class HesseNormalLine {
     private double a;
     private double b;
@@ -18,10 +20,18 @@ public class HesseNormalLine {
         }
 
         a = y2 - y1;
-        b = x1 - x2;
-        c = y1 * x2 - x1 * y2;
+        b = -(x2 - x1);
+        c = -a * x1 - b * y1;
         correctCoeffs();
     }
+
+    public HesseNormalLine(double a, double b, double c) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        correctCoeffs();
+    }
+
 
     private void correctCoeffs() {
         if ((a < 0.0)) {
@@ -38,6 +48,14 @@ public class HesseNormalLine {
         }
     }
 
+    public HesseNormalLine normalize() {
+        double m = sqrt(a * a + b * b);
+        double newA = a / m;
+        double newB = b / m;
+        double newC = c / m;
+        return new HesseNormalLine(a, b, c);
+    }
+
     public double squaredDistance(Vector p) {
         double x = p.getX();
         double y = p.getY();
@@ -47,7 +65,7 @@ public class HesseNormalLine {
     public double distance(Vector p) {
         double x = p.getX();
         double y = p.getY();
-        return Math.abs((a * x + b * y + c) / Math.sqrt(a * a + b * b));
+        return Math.abs((a * x + b * y + c) / sqrt(a * a + b * b));
     }
 
     /**
@@ -62,5 +80,17 @@ public class HesseNormalLine {
         double x = (b * c2 - b2 * c) / (a * b2 - a2 * b);
         double y = (a2 * c - a * c2) / (a * b2 - a2 * b);
         return new Vector(x, y);
+    }
+
+    /**
+     * Flips the Vector along the line
+     *
+     * @return
+     */
+    public Vector flip(Vector p) {
+        double d = distance(p);
+        double newX = p.getX() - 2 * a * d;
+        double newY = p.getY() - 2 * b * d;
+        return new Vector(newX, newY);
     }
 }

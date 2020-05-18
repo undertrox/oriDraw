@@ -103,7 +103,7 @@ public class Line {
         return Math.pow(dist1 + dist2, 2) - lengthSquared() < Constants.EPSILON;
     }
 
-    private HesseNormalLine getHesse() {
+    public HesseNormalLine getHesse() {
         if (hesse == null) {
             hesse = new HesseNormalLine(getStartPoint(), getEndPoint());
         }
