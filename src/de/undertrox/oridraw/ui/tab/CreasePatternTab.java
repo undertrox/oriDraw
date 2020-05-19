@@ -1,21 +1,30 @@
 package de.undertrox.oridraw.ui.tab;
 
 import de.undertrox.oridraw.Constants;
+import de.undertrox.oridraw.Main;
 import de.undertrox.oridraw.origami.*;
 import de.undertrox.oridraw.origami.tool.AngleBisectorTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.DrawLineTool;
+import de.undertrox.oridraw.ui.MainWindowController;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
+import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.ui.render.*;
 import de.undertrox.oridraw.ui.render.renderer.*;
+import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TabPane;
+import javafx.stage.FileChooser;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * This class is used to use a Canvas inside a tab while scaling it appropriately
@@ -27,6 +36,7 @@ public class CreasePatternTab extends CanvasTab {
     private Transform cpTransform;
     private Transform bgTransform;
     private Document doc;
+
 
     private DrawLineTool p2pTool;
     private AngleBisectorTool angleBisectorTool;
@@ -42,13 +52,13 @@ public class CreasePatternTab extends CanvasTab {
      * @param canvas  Canvas to be rendered inside the tab
      * @param tabPane parent tabPane of the Tab
      */
-    public CreasePatternTab(String title, Canvas canvas, TabPane tabPane) {
-        this(new Document(title, Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS), canvas, tabPane);
+    public CreasePatternTab(String title, Canvas canvas, TabPane tabPane, ResourceBundle bundle) {
+        this(new Document(title, Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS), canvas, tabPane, bundle);
 
     }
 
-    public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane) {
-        super(doc.getTitle(), canvas);
+    public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane, ResourceBundle bundle) {
+        super(doc.getTitle(), canvas, bundle);
         logger.debug("Initializing OriLine Pattern");
         this.doc = doc;
         doc.getCp().createSquare(Vector.ORIGIN, Constants.DEFAULT_PAPER_SIZE);
@@ -77,6 +87,8 @@ public class CreasePatternTab extends CanvasTab {
 
         canvas.widthProperty().bind(tabPane.widthProperty());
         canvas.heightProperty().bind(tabPane.heightProperty());
+
+        this.setOnCloseRequest(this::onCloseRequest);
     }
 
     public DrawLineTool getPointToPointTool() {
@@ -101,5 +113,41 @@ public class CreasePatternTab extends CanvasTab {
 
     public Document getDoc() {
         return doc;
+    }
+
+    public void onCloseRequest(Event e) {
+        if (getDoc().hasUnsavedChanges() && !e.isConsumed()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("oridraw.action.close.alert.desc"),
+                    ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                if (!saveDocument()) {
+                    e.consume();
+                    return;
+                }
+            } else if (alert.getResult() == ButtonType.CANCEL) {
+                e.consume();
+                return;
+            }
+        }
+        this.getTabPane().getTabs().remove(this);
+    }
+
+    public boolean saveDocument() {
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle(bundle.getString("oridraw.action.save.filedialog.title"));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                bundle.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
+        chooser.getExtensionFilters().add(filter);
+        File file = chooser.showSaveDialog(Main.primaryStage);
+        if (file == null) {
+            return false;
+        }
+        IOHelper.saveToFile(file.getAbsolutePath(), getDoc());
+        getDoc().setTitle(file.getName());
+        getDoc().setHasUnsavedChanges(false);
+        return true;
     }
 }

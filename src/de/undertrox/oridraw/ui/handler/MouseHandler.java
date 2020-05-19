@@ -92,6 +92,7 @@ public class MouseHandler implements MouseHandlerInterface {
     }
 
     public void onClick(MouseEvent e) {
+        doc.setHasUnsavedChanges(true);
         activeTool.onClick(e);
         lastMousePos = null;
     }

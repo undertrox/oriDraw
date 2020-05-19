@@ -1,7 +1,6 @@
 package de.undertrox.oridraw.ui;
 
 import de.undertrox.oridraw.Main;
-import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
@@ -20,6 +19,8 @@ import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -34,15 +35,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
+
+    private Logger logger = Logger.getLogger(MainWindowController.class);
+
     public Label statusLabel;
     public GridPane creasetypeGridpane;
     public ToggleButton btnMountain;
     public ToggleButton btnValley;
     public ToggleButton btnEdge;
     public ToggleButton btnAux;
+
     public ToolButton btnPointToPoint;
     public ToolButton btnAngleBisector;
-    private Logger logger = Logger.getLogger(MainWindowController.class);
 
     public TextFlow statusText;
     public VBox vBoxLeft;
@@ -55,6 +59,7 @@ public class MainWindowController implements Initializable {
     public Button btnOpen;
 
     private static final int CANVAS_CORRECTION = 28;
+
 
     private ResourceBundle bundle;
 
@@ -73,10 +78,20 @@ public class MainWindowController implements Initializable {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                getSelectedTab().render();
+                CanvasTab tab = getSelectedTab();
+                if (tab == null) {
+                    Main.primaryStage.close();
+                    return;
+                }
+                tab.render();
+                if (tab instanceof CreasePatternTab) {
+                    CreasePatternTab cpTab = (CreasePatternTab) tab;
+                    cpTab.setText(cpTab.getDoc().getTitle());
+                }
                 updateCreaseType();
             }
         };
+
 
         btnPointToPoint.setToolSupplier(() -> {
             CanvasTab tab = getSelectedTab();
@@ -85,7 +100,14 @@ public class MainWindowController implements Initializable {
             }
             return null;
         });
+        Image image = new Image(getClass().getClassLoader().getResourceAsStream("ui/icon/pointtopoint/lightmode/enabled_mountain.png"));
+        ImageView view = new ImageView(image);
+        view.setFitHeight(32);
+        view.setPreserveRatio(true);
+        btnPointToPoint.setGraphic(view);
         btnPointToPoint.setActive(true);
+
+
         btnAngleBisector.setToolSupplier(() -> {
             CanvasTab tab = getSelectedTab();
             if (tab instanceof CreasePatternTab) {
@@ -93,8 +115,16 @@ public class MainWindowController implements Initializable {
             }
             return null;
         });
+        image = new Image(getClass().getClassLoader().getResourceAsStream("ui/icon/anglebisect/lightmode/enabled_mountain.png"));
+        view = new ImageView(image);
+        view.setFitHeight(32);
+        view.setPreserveRatio(true);
+        btnAngleBisector.setGraphic(view);
+
         timer.start();
         mainTabPane.requestFocus();
+
+        Main.primaryStage.setOnCloseRequest(this::onCloseRequest);
     }
 
     CanvasTab getSelectedTab() {
@@ -117,18 +147,17 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Creates a new Tab for editing a new OriLine Pattern
+     * Creates a new Tab for editing a new Crease Pattern
      */
     public void createNewFileTab(Document doc) {
         logger.debug("Creating new File Tab");
         Canvas c = new Canvas();
         CreasePatternTab tab;
         if (doc == null) {
-            tab = new CreasePatternTab(bundle.getString("oridraw.file.new"), c, mainTabPane);
+            tab = new CreasePatternTab(bundle.getString("oridraw.file.new"), c, mainTabPane, bundle);
         } else {
-            tab = new CreasePatternTab(doc, c, mainTabPane);
+            tab = new CreasePatternTab(doc, c, mainTabPane, bundle);
         }
-        tab.setOnCloseRequest(this::onFileTabCloseRequest);
         mainTabPane.getTabs().add(tab);
         tab.render();
     }
@@ -138,19 +167,8 @@ public class MainWindowController implements Initializable {
         CreasePatternTab tab;
         if (getSelectedTab() instanceof CreasePatternTab) {
             tab = (CreasePatternTab) getSelectedTab();
-        } else {
-            return;
+            tab.saveDocument();
         }
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle(bundle.getString("oridraw.action.save.filedialog.title"));
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                bundle.getString("oridraw.action.save.filedialog.description.cp"), ".cp");
-        chooser.getExtensionFilters().add(filter);
-        File file = chooser.showSaveDialog(Main.primaryStage);
-        if (file == null) {
-            return;
-        }
-        IOHelper.saveToFile(file.getAbsolutePath(), tab.getDoc());
     }
 
     public void btnNewClick() {
@@ -160,8 +178,11 @@ public class MainWindowController implements Initializable {
 
     }
 
-    public void onFileTabCloseRequest(Event e) {
-        logger.info("Closed Tab ");
+    public void onCloseRequest(Event e) {
+        while (getSelectedTab() != null && !e.isConsumed()) {
+            getSelectedTab().onCloseRequest(e);
+            logger.info("Closed Tab ");
+        }
     }
 
     public void btnOpenClick() {

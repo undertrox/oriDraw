@@ -14,6 +14,7 @@ public class Document {
     private CreasePatternSelection selection;
     private String title;
     private double paperSize;
+    private boolean hasUnsavedChanges;
 
     public Document(String title, double paperSize, int gridDivisions) {
         this.paperSize = paperSize;
@@ -23,6 +24,15 @@ public class Document {
 
         this.selection = new CreasePatternSelection(cp);
         this.title = title;
+        hasUnsavedChanges = false;
+    }
+
+    public boolean hasUnsavedChanges() {
+        return hasUnsavedChanges;
+    }
+
+    public void setHasUnsavedChanges(boolean hasUnsavedChanges) {
+        this.hasUnsavedChanges = hasUnsavedChanges;
     }
 
     public String getTitle() {

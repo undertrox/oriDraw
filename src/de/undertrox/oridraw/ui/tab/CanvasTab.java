@@ -3,11 +3,13 @@ package de.undertrox.oridraw.ui.tab;
 import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
 import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;
 import de.undertrox.oridraw.ui.render.renderer.Renderer;
+import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Tab;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class CanvasTab extends Tab {
 
@@ -16,9 +18,12 @@ public class CanvasTab extends Tab {
     private KeyboardHandlerInterface keyboardHandler;
     private List<Renderer> renderers;
 
-    public CanvasTab(String title, Canvas canvas) {
+    protected ResourceBundle bundle;
+
+    public CanvasTab(String title, Canvas canvas, ResourceBundle bundle) {
         super(title, canvas);
         this.canvas = canvas;
+        this.bundle = bundle;
         renderers = new ArrayList<>();
     }
 
@@ -46,6 +51,8 @@ public class CanvasTab extends Tab {
         this.keyboardHandler = keyboardHandler;
     }
 
+    public void onCloseRequest(Event e) {
+    }
 
     /**
      * Renders all enabled renderers

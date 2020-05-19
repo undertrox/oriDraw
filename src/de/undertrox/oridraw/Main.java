@@ -1,5 +1,6 @@
 package de.undertrox.oridraw;
 
+import de.undertrox.oridraw.ui.MainWindowController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,6 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Main.primaryStage = primaryStage;
         logger.info("Starting " + title);
         logger.debug("Loading Resources");
         Locale locale = new Locale("en");
@@ -32,7 +34,6 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setMinWidth(primaryStage.getWidth());
         primaryStage.setMinHeight(primaryStage.getHeight());
-        Main.primaryStage = primaryStage;
         logger.debug("OriDraw is now running.");
     }
 
