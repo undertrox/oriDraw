@@ -3,7 +3,9 @@ package de.undertrox.oridraw.ui;
 import de.undertrox.oridraw.Main;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
+import de.undertrox.oridraw.origami.tool.AngleBisectorTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
+import de.undertrox.oridraw.origami.tool.DrawLineTool;
 import de.undertrox.oridraw.origami.tool.TypedCreasePatternTool;
 import de.undertrox.oridraw.ui.button.ToolButton;
 import de.undertrox.oridraw.ui.tab.CanvasTab;
@@ -89,6 +91,7 @@ public class MainWindowController implements Initializable {
                     cpTab.setText(cpTab.getDoc().getTitle());
                 }
                 updateCreaseType();
+                updateActiveTool();
             }
         };
 
@@ -125,6 +128,19 @@ public class MainWindowController implements Initializable {
         mainTabPane.requestFocus();
 
         Main.primaryStage.setOnCloseRequest(this::onCloseRequest);
+    }
+
+    private void updateActiveTool() {
+        CreasePatternTab tab;
+        if (getSelectedTab() instanceof CreasePatternTab) {
+            tab = (CreasePatternTab) getSelectedTab();
+            CreasePatternTool activeTool = tab.getActiveTool();
+            if (activeTool instanceof DrawLineTool) {
+                btnPointToPoint.setSelected(true);
+            } else if (activeTool instanceof AngleBisectorTool) {
+                btnAngleBisector.setSelected(true);
+            }
+        }
     }
 
     CanvasTab getSelectedTab() {
