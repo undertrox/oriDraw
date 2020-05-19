@@ -4,12 +4,18 @@ import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Grid extends CreaseCollection {
     private Logger logger = Logger.getLogger(Grid.class);
     private int divisions;
     private double paperSize;
     private double gridSize;
     private double gridSquareSize;
+    private Vector topLeftCorner;
+
+    private Vector bottomRightCorner;
 
     private Vector center;
 
@@ -20,13 +26,12 @@ public class Grid extends CreaseCollection {
         this.gridSize = gridSize;
         this.center = center;
         updateGridSquareSize();
+        updateCorners();
         logger.info("Creating Grid");
-        Vector topLeftCorner = center.sub(new Vector(gridSize / 2));
-        Vector bottomRightCorner = center.add(new Vector(gridSize / 2));
         for (double x = topLeftCorner.getX(); x <= bottomRightCorner.getX(); x += getGridSquareSize()) {
             addCrease(new OriPoint(x, topLeftCorner.getY()), new OriPoint(x, bottomRightCorner.getY()), OriLine.Type.AUX);
             for (double y = topLeftCorner.getY(); y <= bottomRightCorner.getY(); y += getGridSquareSize()) {
-                getPoints().push(new OriPoint(x, y));
+                //getPoints().push(new OriPoint(x, y));
                 if (x == topLeftCorner.getX()) {
                     addCrease(new OriPoint(x, y), new OriPoint(bottomRightCorner.getX(), y), OriLine.Type.AUX);
                 }
@@ -40,6 +45,12 @@ public class Grid extends CreaseCollection {
 
     public void setCenter(Vector center) {
         this.center = center;
+        updateCorners();
+    }
+
+    public void updateCorners() {
+        topLeftCorner = center.sub(new Vector(gridSize / 2));
+        bottomRightCorner = center.add(new Vector(gridSize / 2));
     }
 
     public double getGridSquareSize() {
@@ -66,6 +77,8 @@ public class Grid extends CreaseCollection {
     public void setPaperSize(double paperSize) {
         this.paperSize = paperSize;
         updateGridSquareSize();
+
+        updateCorners();
     }
 
     public double getGridSize() {
@@ -74,6 +87,8 @@ public class Grid extends CreaseCollection {
 
     public void setGridSize(double gridSize) {
         this.gridSize = gridSize;
+
+        updateCorners();
     }
 
     public UniqueItemList<OriLine> getOriLines() {
@@ -82,5 +97,37 @@ public class Grid extends CreaseCollection {
 
     public UniqueItemList<OriPoint> getPoints() {
         return points;
+    }
+
+    public ArrayList<OriPoint> getGridPointsNear(Vector pos, int radius) {
+        double x = topLeftCorner.getX();
+        double y = topLeftCorner.getY();
+        ArrayList<OriPoint> points = new ArrayList<>();
+
+        while (x < pos.getX()) {
+            x += getGridSquareSize();
+        }
+        while (y < pos.getY()) {
+            y += getGridSquareSize();
+        }
+        for (double gridX = x - getGridSquareSize() * radius;
+             gridX < x + getGridSquareSize() * radius;
+             gridX += getGridSquareSize()) {
+            for (double gridY = y - getGridSquareSize() * radius;
+                 gridY < y + getGridSquareSize() * radius;
+                 gridY += getGridSquareSize()) {
+                OriPoint p = new OriPoint(gridX, gridY);
+                if (inGrid(p)) {
+                    points.add(new OriPoint(gridX, gridY));
+                }
+            }
+        }
+
+        return points;
+    }
+
+    private boolean inGrid(OriPoint p) {
+        return p.getX() >= topLeftCorner.getX() && p.getY() >= topLeftCorner.getY() &&
+                p.getY() <= bottomRightCorner.getY() && p.getX() <= bottomRightCorner.getX();
     }
 }

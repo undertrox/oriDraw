@@ -69,13 +69,20 @@ public class Transform {
     /**
      * zooms the Transform in/out.
      *
-     * @param delta: scale delta. negative to zoom out, positive to zoom in
+     * @param center: Point to zoom in on
+     * @param delta   : scale delta. negative to zoom out, positive to zoom in
      */
-    public void zoom(double delta) {
+    public void zoom(Vector center, double delta) {
+        double oldScale = scale;
         if (delta < 0) {
             scale /= 1 - delta;
         } else {
             scale *= 1 + delta;
         }
+        double scalechange = oldScale - scale;
+        double offsetX = (center.getX() * scalechange);
+        double offsetY = (center.getY() * scalechange);
+
+        move = move.add(new Vector(offsetX, offsetY));
     }
 }

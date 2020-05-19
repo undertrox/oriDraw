@@ -1,5 +1,6 @@
 package de.undertrox.oridraw.origami;
 
+import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
 import org.apache.log4j.Logger;
@@ -56,11 +57,11 @@ public class Document {
         return paperSize;
     }
 
-    public UniqueItemList<OriPoint> getAllVisiblePoints() {
+    public UniqueItemList<OriPoint> getAllVisiblePoints(Vector mousePos) {
         if (showGrid) {
             UniqueItemList<OriPoint> points = new UniqueItemList<>();
             points.addAll(cp.getPoints());
-            points.addAll(grid.getPoints());
+            points.addAll(grid.getGridPointsNear(mousePos, 3));
             return points;
         }
         return cp.getPoints();

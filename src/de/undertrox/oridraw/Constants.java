@@ -8,5 +8,5 @@ public class Constants {
 
     public static final double DEFAULT_PAPER_SIZE = 400;
     public static final double MOUSE_RANGE = 8;
-    public static final int DEFAULT_GRID_DIVISIONS = 16;
+    public static final int DEFAULT_GRID_DIVISIONS = 8;
 }

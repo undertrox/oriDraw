@@ -8,6 +8,7 @@ import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
@@ -19,6 +20,7 @@ public class MouseHandler implements MouseHandlerInterface {
     private Document doc;
     private Transform cpTransform;
     private CreasePatternTool activeTool;
+    private Vector lastMousePos;
 
     public MouseHandler(Document doc, Transform cpTransform) {
         this.cpTransform = cpTransform;
@@ -47,9 +49,10 @@ public class MouseHandler implements MouseHandlerInterface {
     }
 
     public void onMouseCoordsChange(Vector mouseCoords) {
+        lastMousePos = mouseCoords;
         if (doc.getSelection().getMode().selectPoints()) {
             // Adds the nearest Point to Selection.toBeSelected
-            OriPoint nearestPoint = findNearestPoint(mouseCoords, doc.getAllVisiblePoints());
+            OriPoint nearestPoint = findNearestPoint(mouseCoords, doc.getAllVisiblePoints(mouseCoords));
             if (mouseCoords.distanceSquared(nearestPoint)
                     < Math.pow(2 * Constants.MOUSE_RANGE / cpTransform.getScale(), 2)) {
                 doc.getSelection().singleToBeSelected(nearestPoint);
@@ -90,9 +93,23 @@ public class MouseHandler implements MouseHandlerInterface {
 
     public void onClick(MouseEvent e) {
         activeTool.onClick(e);
+        lastMousePos = null;
     }
 
     public void onDrag(MouseEvent e) {
+        if (e.getButton() == MouseButton.MIDDLE) {
+            Vector mp = normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTransform);
+
+            if (lastMousePos != null) {
+                // Move the Crease Pattern
+                Vector m = cpTransform.getMove();
+                Vector mn = mp.sub(lastMousePos);
+                cpTransform.setMove(m.add(mn.scale(cpTransform.getScale())));
+            }
+            lastMousePos = new Vector(e.getX(), e.getY());
+        }
+        Vector mousePos = normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTransform);
+        onMouseCoordsChange(mousePos);
         activeTool.onDrag(e);
     }
 
@@ -113,7 +130,7 @@ public class MouseHandler implements MouseHandlerInterface {
         activeTool.update();
         Vector mouseCoords = normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTransform);
         onMouseCoordsChange(mouseCoords);
-        cpTransform.zoom(e.getDeltaY() / (e.getMultiplierY() * 10));
+        cpTransform.zoom(mouseCoords, e.getDeltaY() / (e.getMultiplierY() * 10));
     }
 
 }
