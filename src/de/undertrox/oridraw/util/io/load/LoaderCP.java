@@ -11,6 +11,11 @@ import java.util.StringTokenizer;
 
 public class LoaderCP extends Loader<Document> {
     @Override
+    public String[] extensions() {
+        return new String[]{"cp"};
+    }
+
+    @Override
     public Document load(Reader r) throws Exception {
         Document doc = new Document("", Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS);
         String line;

@@ -70,9 +70,7 @@ public class MainWindowController implements Initializable {
         logger.debug("Initializing MainWindowController");
         bundle = resources;
 
-        ChangeListener<Number> sizeChangeListener = (obs, oldVal, newVal) -> {
-            getSelectedTab().render();
-        };
+        ChangeListener<Number> sizeChangeListener = (obs, oldVal, newVal) -> getSelectedTab().render();
         mainTabPane.widthProperty().addListener(sizeChangeListener);
         mainTabPane.heightProperty().addListener(sizeChangeListener);
         updateText();
@@ -82,7 +80,7 @@ public class MainWindowController implements Initializable {
             public void handle(long l) {
                 CanvasTab tab = getSelectedTab();
                 if (tab == null) {
-                    Main.primaryStage.close();
+                    MainApp.primaryStage.close();
                     return;
                 }
                 tab.render();
@@ -103,6 +101,8 @@ public class MainWindowController implements Initializable {
             }
             return null;
         });
+
+        // TODO: this is temporary
         Image image = new Image(getClass().getClassLoader().getResourceAsStream("ui/icon/pointtopoint/lightmode/enabled_mountain.png"));
         ImageView view = new ImageView(image);
         view.setFitHeight(32);
@@ -127,7 +127,7 @@ public class MainWindowController implements Initializable {
         timer.start();
         mainTabPane.requestFocus();
 
-        Main.primaryStage.setOnCloseRequest(this::onCloseRequest);
+        MainApp.primaryStage.setOnCloseRequest(this::onCloseRequest);
     }
 
     private void updateActiveTool() {
@@ -148,7 +148,9 @@ public class MainWindowController implements Initializable {
         if (selected instanceof CreasePatternTab) {
             return (CreasePatternTab) selected;
         }
-        logger.error("Selected Tab is not a CreasePatternTab");
+        if (selected != null) {
+            logger.error("Selected Tab is not a CreasePatternTab");
+        }
         return null;
     }
 
@@ -209,7 +211,7 @@ public class MainWindowController implements Initializable {
                 bundle.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
 
         chooser.getExtensionFilters().add(filter);
-        File file = chooser.showOpenDialog(Main.primaryStage);
+        File file = chooser.showOpenDialog(MainApp.primaryStage);
         if (file == null) {
             return;
         }
@@ -219,6 +221,7 @@ public class MainWindowController implements Initializable {
             info.showAndWait();
             return;
         }
+        doc.setTitle(file.getName());
         createNewFileTab(doc);
         mainTabPane.getSelectionModel().selectLast();
     }

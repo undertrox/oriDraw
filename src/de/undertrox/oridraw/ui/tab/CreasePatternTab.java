@@ -6,6 +6,7 @@ import de.undertrox.oridraw.origami.*;
 import de.undertrox.oridraw.origami.tool.AngleBisectorTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.DrawLineTool;
+import de.undertrox.oridraw.ui.MainApp;
 import de.undertrox.oridraw.ui.MainWindowController;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
@@ -59,7 +60,7 @@ public class CreasePatternTab extends CanvasTab {
 
     public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane, ResourceBundle bundle) {
         super(doc.getTitle(), canvas, bundle);
-        logger.debug("Initializing OriLine Pattern");
+        logger.debug("Initializing Crease Pattern");
         this.doc = doc;
         doc.getCp().createSquare(Vector.ORIGIN, Constants.DEFAULT_PAPER_SIZE);
         cpTransform = new Transform(new Vector(300, 250), 1, 0);
@@ -141,7 +142,7 @@ public class CreasePatternTab extends CanvasTab {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
                 bundle.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
         chooser.getExtensionFilters().add(filter);
-        File file = chooser.showSaveDialog(Main.primaryStage);
+        File file = chooser.showSaveDialog(MainApp.primaryStage);
         if (file == null) {
             return false;
         }

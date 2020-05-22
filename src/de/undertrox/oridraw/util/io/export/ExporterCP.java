@@ -7,6 +7,11 @@ import java.io.Writer;
 
 public class ExporterCP extends Exporter<Document> {
     @Override
+    public String[] extensions() {
+        return new String[]{"cp"};
+    }
+
+    @Override
     public void export(Document doc, Writer writer) throws Exception {
         for (OriLine line : doc.getCp().getOriLines()) {
             writer.write(line.getType().toCpId() + " " + line.getStartPoint().getX() + " " + line.getStartPoint().getY()
