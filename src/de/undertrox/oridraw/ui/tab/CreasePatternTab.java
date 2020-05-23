@@ -1,19 +1,17 @@
 package de.undertrox.oridraw.ui.tab;
 
 import de.undertrox.oridraw.Constants;
-import de.undertrox.oridraw.Main;
-import de.undertrox.oridraw.origami.*;
-import de.undertrox.oridraw.origami.tool.AngleBisectorTool;
+import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
-import de.undertrox.oridraw.origami.tool.DrawLineTool;
 import de.undertrox.oridraw.ui.MainApp;
-import de.undertrox.oridraw.ui.MainWindowController;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
+import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.ui.render.renderer.BackgroundRenderer;
+import de.undertrox.oridraw.ui.render.renderer.DocumentRenderer;
 import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
-import de.undertrox.oridraw.ui.render.*;
-import de.undertrox.oridraw.ui.render.renderer.*;
+import de.undertrox.oridraw.util.registry.Registries;
 import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
@@ -38,13 +36,6 @@ public class CreasePatternTab extends CanvasTab {
     private Transform bgTransform;
     private Document doc;
 
-
-    private DrawLineTool p2pTool;
-    private AngleBisectorTool angleBisectorTool;
-
-    public AngleBisectorTool getAngleBisectorTool() {
-        return angleBisectorTool;
-    }
 
     /**
      * Constructor. Binds the width of the Canvas to that of the tabPane
@@ -75,13 +66,11 @@ public class CreasePatternTab extends CanvasTab {
 
         logger.debug("Initializing Tools");
         tools = new ArrayList<>();
-        DrawLineTool dlTool = new DrawLineTool(this, OriLine.Type.MOUNTAIN);
-        p2pTool = dlTool;
-        tools.add(dlTool);
-        angleBisectorTool = new AngleBisectorTool(this, OriLine.Type.MOUNTAIN);
-        tools.add(angleBisectorTool);
+        for (var toolFactory : Registries.TOOL_FACTORY_REGISTRY.getItems()) {
+            tools.add(toolFactory.getValue().create(this));
+        }
 
-        setActiveTool(dlTool);
+        setActiveTool(tools.get(0));
 
         logger.debug("Initializing Tool Renderers");
         tools.forEach((tool) -> getRenderers().add(tool.getRenderer()));
@@ -92,8 +81,8 @@ public class CreasePatternTab extends CanvasTab {
         this.setOnCloseRequest(this::onCloseRequest);
     }
 
-    public DrawLineTool getPointToPointTool() {
-        return p2pTool;
+    public List<CreasePatternTool> getTools() {
+        return tools;
     }
 
     public void setActiveTool(CreasePatternTool activeTool) {

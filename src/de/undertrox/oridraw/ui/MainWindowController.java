@@ -1,19 +1,20 @@
 package de.undertrox.oridraw.ui;
 
-import de.undertrox.oridraw.Main;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
-import de.undertrox.oridraw.origami.tool.AngleBisectorTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
-import de.undertrox.oridraw.origami.tool.DrawLineTool;
 import de.undertrox.oridraw.origami.tool.TypedCreasePatternTool;
+import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.button.ToolButton;
-import de.undertrox.oridraw.ui.tab.CanvasTab;
-import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
+import de.undertrox.oridraw.ui.tab.CanvasTab;
+import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
+import de.undertrox.oridraw.util.registry.Registries;
+import de.undertrox.oridraw.util.registry.RegistryItem;
+import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -34,11 +35,17 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
 
+    public GridPane toolGridPane;
+    public ToggleGroup type;
     private Logger logger = Logger.getLogger(MainWindowController.class);
+
+    private List<ToolButton> toolButtons;
 
     public Label statusLabel;
     public GridPane creasetypeGridpane;
@@ -47,13 +54,12 @@ public class MainWindowController implements Initializable {
     public ToggleButton btnEdge;
     public ToggleButton btnAux;
 
-    public ToolButton btnPointToPoint;
-    public ToolButton btnAngleBisector;
-
     public TextFlow statusText;
     public VBox vBoxLeft;
     public VBox vBoxRight;
     public TabPane mainTabPane;
+
+    public ToggleGroup toolToggleGroup;
 
     public ToolBar toolBar;
     public Button btnSave;
@@ -69,7 +75,8 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         logger.debug("Initializing MainWindowController");
         bundle = resources;
-
+        toolButtons = new ArrayList<>();
+        toolToggleGroup = new ToggleGroup();
         ChangeListener<Number> sizeChangeListener = (obs, oldVal, newVal) -> getSelectedTab().render();
         mainTabPane.widthProperty().addListener(sizeChangeListener);
         mainTabPane.heightProperty().addListener(sizeChangeListener);
@@ -92,37 +99,45 @@ public class MainWindowController implements Initializable {
                 updateActiveTool();
             }
         };
-
-
-        btnPointToPoint.setToolSupplier(() -> {
-            CanvasTab tab = getSelectedTab();
-            if (tab instanceof CreasePatternTab) {
-                return ((CreasePatternTab) tab).getPointToPointTool();
+        int col = 0;
+        int row = 0;
+        int maxCol = 4;
+        for (RegistryItem<CreasePatternToolFactory<? extends CreasePatternTool>> item :
+                Registries.TOOL_FACTORY_REGISTRY.getItems()) {
+            var iconStream = getClass().getClassLoader().getResourceAsStream("ui/icon/" + item.getKey().getId() + "/lightmode/enabled_mountain.png");
+            ToolButton btn;
+            if (iconStream != null) {
+                Image image = new Image(iconStream);
+                ImageView view = new ImageView(image);
+                view.setFitHeight(32);
+                view.setPreserveRatio(true);
+                btn = new ToolButton("", view);
+            } else {
+                btn = new ToolButton(item.getKey().getId());
+                logger.warn("Could not find icon for '" + item.getKey() + "'. Using id as text insted");
             }
-            return null;
-        });
-
-        // TODO: this is temporary
-        Image image = new Image(getClass().getClassLoader().getResourceAsStream("ui/icon/pointtopoint/lightmode/enabled_mountain.png"));
-        ImageView view = new ImageView(image);
-        view.setFitHeight(32);
-        view.setPreserveRatio(true);
-        btnPointToPoint.setGraphic(view);
-        btnPointToPoint.setActive(true);
-
-
-        btnAngleBisector.setToolSupplier(() -> {
-            CanvasTab tab = getSelectedTab();
-            if (tab instanceof CreasePatternTab) {
-                return ((CreasePatternTab) tab).getAngleBisectorTool();
+            btn.setToolKey(item.getKey());
+            btn.setToggleGroup(toolToggleGroup);
+            btn.setToolSupplier(() -> {
+                CreasePatternTab tab;
+                if (getSelectedTab() instanceof CreasePatternTab) {
+                    tab = (CreasePatternTab) getSelectedTab();
+                    for (CreasePatternTool tool : tab.getTools()) {
+                        if (tool.getFactory().getRegistryEntry().getKey().equals(item.getKey())) {
+                            return tool;
+                        }
+                    }
+                }
+                return null;
+            });
+            toolGridPane.add(btn, col, row);
+            toolButtons.add(btn);
+            col++;
+            if (col >= maxCol) {
+                col = 0;
+                row++;
             }
-            return null;
-        });
-        image = new Image(getClass().getClassLoader().getResourceAsStream("ui/icon/anglebisect/lightmode/enabled_mountain.png"));
-        view = new ImageView(image);
-        view.setFitHeight(32);
-        view.setPreserveRatio(true);
-        btnAngleBisector.setGraphic(view);
+        }
 
         timer.start();
         mainTabPane.requestFocus();
@@ -135,10 +150,12 @@ public class MainWindowController implements Initializable {
         if (getSelectedTab() instanceof CreasePatternTab) {
             tab = (CreasePatternTab) getSelectedTab();
             CreasePatternTool activeTool = tab.getActiveTool();
-            if (activeTool instanceof DrawLineTool) {
-                btnPointToPoint.setSelected(true);
-            } else if (activeTool instanceof AngleBisectorTool) {
-                btnAngleBisector.setSelected(true);
+            RegistryKey key = activeTool.getFactory().getRegistryEntry().getKey();
+            for (ToolButton toolButton : toolButtons) {
+                if (toolButton.getToolKey().equals(key)) {
+                    toolButton.setSelected(true);
+                    break;
+                }
             }
         }
     }
@@ -296,8 +313,7 @@ public class MainWindowController implements Initializable {
             CreasePatternTab cptab = (CreasePatternTab) tab;
             CreasePatternTool tool = cptab.getActiveTool();
             if (tool instanceof TypedCreasePatternTool) {
-                TypedCreasePatternTool ttool = (TypedCreasePatternTool) tool;
-                return ttool;
+                return (TypedCreasePatternTool) tool;
             }
         }
         return null;

@@ -4,30 +4,32 @@ import org.apache.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public abstract class Registry<T> {
+public abstract class Registry<T extends Registerable> {
     private Logger logger = Logger.getLogger(Registry.class);
     private Map<RegistryKey, RegistryItem<T>> registry;
     private boolean locked;
 
     public Registry() {
-        logger.debug("Initializing " + getClass().getCanonicalName());
+        logger.debug("Initializing " + getClass().getSimpleName());
         registry = new HashMap<>();
         locked = false;
     }
 
     public void register(RegistryKey key, T item) {
         if (locked) {
-            throw new RegistryException(getClass().getCanonicalName() + " is locked.");
+            throw new RegistryException(getClass().getSimpleName() + " is locked.");
         }
         if (registry.containsKey(key)) {
-            throw new RegistryException(key + " is already registered.");
+            throw new RegistryException("'" + key + "' is already registered.");
         }
-        registry.put(key, new RegistryItem<>(key, item));
+        RegistryItem<T> registryItem = new RegistryItem<>(key, item);
+        registry.put(key, registryItem);
+        item.setEntry(registryItem);
+
         onRegistered(key, item);
-        logger.debug(getClass().getCanonicalName() + ": registered item " + item + " for key " + key);
+        logger.debug(getClass().getSimpleName() + ": registered item " + item + " for key '" + key + "'");
     }
 
     public void register(String domain, String id, T item) {

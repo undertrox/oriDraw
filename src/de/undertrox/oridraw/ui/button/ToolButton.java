@@ -2,6 +2,7 @@ package de.undertrox.oridraw.ui.button;
 
 import de.undertrox.oridraw.OriDraw;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
+import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
@@ -11,6 +12,16 @@ import java.util.function.Supplier;
 
 public class ToolButton extends ToggleButton {
     Supplier<CreasePatternTool> toolSupplier;
+    RegistryKey toolKey;
+
+    public RegistryKey getToolKey() {
+        return toolKey;
+    }
+
+    public void setToolKey(RegistryKey toolKey) {
+        this.toolKey = toolKey;
+    }
+
     boolean isActive;
 
     public ToolButton() {

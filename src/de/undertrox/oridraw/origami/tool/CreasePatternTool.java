@@ -3,26 +3,34 @@ package de.undertrox.oridraw.origami.tool;
 import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.Document;
+import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
 import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;
 import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.renderer.tool.ToolRenderer;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.math.Vector;
+import de.undertrox.oridraw.util.registry.Registerable;
 
-public abstract class CreasePatternTool implements MouseHandlerInterface, KeyboardHandlerInterface {
+public abstract class CreasePatternTool extends Registerable implements MouseHandlerInterface, KeyboardHandlerInterface {
     boolean enabled;
     ToolRenderer<? extends CreasePatternTool> renderer;
     private Document doc;
     private Transform cpTransform;
     private Vector currentMousePos;
     private CreasePatternTab tab;
+    private CreasePatternToolFactory<? extends CreasePatternTool> factory;
 
-    public CreasePatternTool(CreasePatternTab tab) {
+    public CreasePatternToolFactory<? extends CreasePatternTool> getFactory() {
+        return factory;
+    }
+
+    public CreasePatternTool(CreasePatternTab tab, CreasePatternToolFactory<? extends CreasePatternTool> factory) {
         this.doc = tab.getDoc();
         this.cpTransform = tab.getCpTransform();
         this.currentMousePos = new Vector(0, 0);
         this.tab = tab;
+        this.factory = factory;
         reset();
     }
 

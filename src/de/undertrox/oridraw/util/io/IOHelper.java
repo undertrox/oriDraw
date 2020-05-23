@@ -7,7 +7,9 @@ import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryItem;
 import org.apache.log4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Arrays;
 
 public class IOHelper {
@@ -16,7 +18,7 @@ public class IOHelper {
     public static void saveToFile(String filename, Document doc) {
         String extension = getExtension(filename);
 
-        for (RegistryItem<Exporter<Document>> item : Registries.documentExporterRegistry.getItems()) {
+        for (RegistryItem<Exporter<Document>> item : Registries.DOCUMENT_EXPORTER_REGISTRY.getItems()) {
             if (Arrays.asList(item.getValue().extensions()).contains(extension)) {
                 logger.debug("Saving Document to '" + filename + "'");
                 saveToFile(filename, doc, item.getValue());
@@ -27,7 +29,7 @@ public class IOHelper {
     public static Document readFromFile(String filename) {
         String extension = getExtension(filename);
 
-        for (RegistryItem<Loader<Document>> item : Registries.documentLoaderRegistry.getItems()) {
+        for (RegistryItem<Loader<Document>> item : Registries.DOCUMENT_LOADER_REGISTRY.getItems()) {
             if (Arrays.asList(item.getValue().extensions()).contains(extension)) {
                 logger.debug("Reading Document from '" + filename + "'");
                 return readFromFile(filename, item.getValue());

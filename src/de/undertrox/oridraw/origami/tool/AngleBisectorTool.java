@@ -2,13 +2,15 @@ package de.undertrox.oridraw.origami.tool;
 
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.OriLine;
+import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.render.renderer.tool.AngleBisectorToolRenderer;
 import de.undertrox.oridraw.ui.render.renderer.tool.ToolRenderer;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 
 public class AngleBisectorTool extends TypedCreasePatternTool {
-    public AngleBisectorTool(CreasePatternTab tab, OriLine.Type type) {
-        super(tab, type);
+    public AngleBisectorTool(CreasePatternTab tab, OriLine.Type type,
+                             CreasePatternToolFactory<? extends CreasePatternTool> factory) {
+        super(tab, type, factory);
     }
 
     @Override
