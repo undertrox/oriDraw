@@ -3,6 +3,7 @@ package de.undertrox.oridraw.ui.tab;
 import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
+import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.MainApp;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
@@ -12,13 +13,15 @@ import de.undertrox.oridraw.ui.render.renderer.DocumentRenderer;
 import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registries;
+import de.undertrox.oridraw.util.registry.RegistryItem;
 import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ import java.util.ResourceBundle;
  * This class is used to use a Canvas inside a tab while scaling it appropriately
  */
 public class CreasePatternTab extends CanvasTab {
-    private Logger logger = Logger.getLogger(CreasePatternTab.class);
+    private Logger logger = LogManager.getLogger(CreasePatternTab.class);
     private List<CreasePatternTool> tools;
     private CreasePatternTool activeTool;
     private Transform cpTransform;
@@ -66,7 +69,8 @@ public class CreasePatternTab extends CanvasTab {
 
         logger.debug("Initializing Tools");
         tools = new ArrayList<>();
-        for (var toolFactory : Registries.TOOL_FACTORY_REGISTRY.getItems()) {
+        for (RegistryItem<CreasePatternToolFactory<? extends CreasePatternTool>> toolFactory :
+                Registries.TOOL_FACTORY_REGISTRY.getItems()) {
             tools.add(toolFactory.getValue().create(this));
         }
 

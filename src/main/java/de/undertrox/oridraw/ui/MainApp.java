@@ -2,24 +2,31 @@ package de.undertrox.oridraw.ui;
 
 import de.undertrox.oridraw.Main;
 import de.undertrox.oridraw.OriDraw;
+import de.undertrox.oridraw.origami.Document;
+import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.factory.AngleBisectorToolFactory;
+import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.origami.tool.factory.DrawLineToolFactory;
+import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.io.export.ExporterCP;
+import de.undertrox.oridraw.util.io.load.Loader;
 import de.undertrox.oridraw.util.io.load.LoaderCP;
 import de.undertrox.oridraw.util.registry.Registries;
+import de.undertrox.oridraw.util.registry.Registry;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainApp extends Application {
-    private static Logger logger = Logger.getLogger(Main.class);
+    private static Logger logger = LogManager.getLogger(Main.class);
     private static String title = "OriDraw v" + OriDraw.VERSION;
     public static Stage primaryStage;
 
@@ -51,19 +58,19 @@ public class MainApp extends Application {
 
     private void registerDocumentExporters() {
         String domain = "document_exporter";
-        var registry = Registries.DOCUMENT_EXPORTER_REGISTRY;
+        Registry<Exporter<Document>> registry = Registries.DOCUMENT_EXPORTER_REGISTRY;
         registry.register(domain, "cp", new ExporterCP());
     }
 
     private void registerDocumentLoaders() {
         String domain = "document_loader";
-        var registry = Registries.DOCUMENT_LOADER_REGISTRY;
+        Registry<Loader<Document>> registry = Registries.DOCUMENT_LOADER_REGISTRY;
         registry.register(domain, "cp", new LoaderCP());
     }
 
     private void registerTools() {
         String domain = "cp_tool";
-        var registry = Registries.TOOL_FACTORY_REGISTRY;
+        Registry<CreasePatternToolFactory<? extends CreasePatternTool>> registry = Registries.TOOL_FACTORY_REGISTRY;
         registry.register(domain, "point_to_point", new DrawLineToolFactory());
         registry.register(domain, "angle_bisect", new AngleBisectorToolFactory());
     }

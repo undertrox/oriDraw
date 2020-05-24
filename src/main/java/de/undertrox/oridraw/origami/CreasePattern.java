@@ -3,7 +3,8 @@ package de.undertrox.oridraw.origami;
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Comparator;
 
@@ -13,7 +14,7 @@ public class CreasePattern extends CreaseCollection {
 
     public CreasePattern() {
         super();
-        logger = Logger.getLogger(this.getClass());
+        logger = LogManager.getLogger(this.getClass());
     }
 
     /**

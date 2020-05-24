@@ -5,7 +5,8 @@ import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.io.load.Loader;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryItem;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,7 +14,7 @@ import java.io.FileWriter;
 import java.util.Arrays;
 
 public class IOHelper {
-    private static Logger logger = Logger.getLogger(IOHelper.class);
+    private static Logger logger = LogManager.getLogger(IOHelper.class);
 
     public static void saveToFile(String filename, Document doc) {
         String extension = getExtension(filename);

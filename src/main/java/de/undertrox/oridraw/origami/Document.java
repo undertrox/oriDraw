@@ -1,12 +1,12 @@
 package de.undertrox.oridraw.origami;
 
-import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Document {
-    private Logger logger = Logger.getLogger(Document.class);
+    private Logger logger = LogManager.getLogger(Document.class);
 
     private CreasePattern cp;
     private Grid grid;

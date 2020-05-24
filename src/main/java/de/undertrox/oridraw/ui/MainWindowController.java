@@ -31,9 +31,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class MainWindowController implements Initializable {
     public ToggleGroup type;
     public TextField gridSize;
     public CheckBox showGrid;
-    private Logger logger = Logger.getLogger(MainWindowController.class);
+    private Logger logger = LogManager.getLogger(MainWindowController.class);
 
     private List<ToolButton> toolButtons;
 
@@ -106,7 +108,7 @@ public class MainWindowController implements Initializable {
         int maxCol = 4;
         for (RegistryItem<CreasePatternToolFactory<? extends CreasePatternTool>> item :
                 Registries.TOOL_FACTORY_REGISTRY.getItems()) {
-            var iconStream = getClass().getClassLoader().getResourceAsStream("ui/icon/" + item.getKey().getId() + "/lightmode/enabled_mountain.png");
+            InputStream iconStream = getClass().getClassLoader().getResourceAsStream("ui/icon/" + item.getKey().getId() + "/lightmode/enabled_mountain.png");
             ToolButton btn;
             if (iconStream != null) {
                 Image image = new Image(iconStream);
@@ -360,7 +362,7 @@ public class MainWindowController implements Initializable {
         btnValley.setDisable(false);
         btnEdge.setDisable(false);
         btnAux.setDisable(false);
-        var type = tool.getType();
+        OriLine.Type type = tool.getType();
         switch (type) {
             case MOUNTAIN:
                 setBorderColor(btnMountain, RenderSettings.getColorManager().MOUNTAIN_COLOR);

@@ -2,12 +2,13 @@ package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
 public class Grid extends CreaseCollection {
-    private Logger logger = Logger.getLogger(Grid.class);
+    private Logger logger = LogManager.getLogger(Grid.class);
     private int divisions;
     private double paperSize;
     private double gridSize;

@@ -1,13 +1,14 @@
 package de.undertrox.oridraw.util.registry;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Registry<T extends Registerable> {
-    private Logger logger = Logger.getLogger(Registry.class);
+    private Logger logger = LogManager.getLogger(Registry.class);
     private Map<RegistryKey, RegistryItem<T>> registry;
     private boolean locked;
 

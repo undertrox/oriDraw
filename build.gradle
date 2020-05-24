@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version('0.0.8')
+    id 'org.beryx.jlink' version('2.12.0')
+}
+
+mainClassName = 'de.undertrox.oridraw.Main'
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
+
+group 'de.undertrox'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation 'org.openjfx:javafx-maven-archetypes:0.0.5'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.3'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
+    javafx {
+        version = '14'
+        modules = ['javafx.controls', 'javafx.fxml']
+    }
+}
+
+jlink {
+    forceMerge('log4j-api')
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'de.undertrox.oridraw.Main'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
