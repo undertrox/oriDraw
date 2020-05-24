@@ -23,7 +23,9 @@ public class DocumentRenderer extends Renderer {
 
     @Override
     protected void draw() {
-        grid.render(getCanvas());
+        if (doc.showGrid()) {
+            grid.render(getCanvas());
+        }
         creases.render(getCanvas());
         points.render(getCanvas());
         lineSelection.render(getCanvas());

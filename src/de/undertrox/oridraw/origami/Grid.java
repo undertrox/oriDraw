@@ -5,7 +5,6 @@ import de.undertrox.oridraw.util.math.Vector;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Grid extends CreaseCollection {
     private Logger logger = Logger.getLogger(Grid.class);
@@ -25,6 +24,16 @@ public class Grid extends CreaseCollection {
         this.paperSize = paperSize;
         this.gridSize = gridSize;
         this.center = center;
+        updateGrid();
+    }
+
+    public void reset() {
+        getOriLines().clear();
+        getPoints().clear();
+    }
+
+    public void updateGrid() {
+        reset();
         updateGridSquareSize();
         updateCorners();
         logger.info("Creating Grid");
@@ -45,7 +54,7 @@ public class Grid extends CreaseCollection {
 
     public void setCenter(Vector center) {
         this.center = center;
-        updateCorners();
+        updateGrid();
     }
 
     public void updateCorners() {
@@ -67,7 +76,7 @@ public class Grid extends CreaseCollection {
 
     public void setDivisions(int divisions) {
         this.divisions = divisions;
-        updateGridSquareSize();
+        updateGrid();
     }
 
     public double getPaperSize() {
@@ -76,9 +85,7 @@ public class Grid extends CreaseCollection {
 
     public void setPaperSize(double paperSize) {
         this.paperSize = paperSize;
-        updateGridSquareSize();
-
-        updateCorners();
+        updateGrid();
     }
 
     public double getGridSize() {
@@ -87,8 +94,7 @@ public class Grid extends CreaseCollection {
 
     public void setGridSize(double gridSize) {
         this.gridSize = gridSize;
-
-        updateCorners();
+        updateGrid();
     }
 
     public UniqueItemList<OriLine> getOriLines() {

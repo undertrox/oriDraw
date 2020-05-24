@@ -43,6 +43,8 @@ public class MainWindowController implements Initializable {
 
     public GridPane toolGridPane;
     public ToggleGroup type;
+    public TextField gridSize;
+    public CheckBox showGrid;
     private Logger logger = Logger.getLogger(MainWindowController.class);
 
     private List<ToolButton> toolButtons;
@@ -82,6 +84,12 @@ public class MainWindowController implements Initializable {
         mainTabPane.heightProperty().addListener(sizeChangeListener);
         updateText();
         createNewFileTab(null);
+
+        gridSize.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                gridSize.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -91,12 +99,6 @@ public class MainWindowController implements Initializable {
                     return;
                 }
                 tab.render();
-                if (tab instanceof CreasePatternTab) {
-                    CreasePatternTab cpTab = (CreasePatternTab) tab;
-                    cpTab.setText(cpTab.getDoc().getTitle());
-                }
-                updateCreaseType();
-                updateActiveTool();
             }
         };
         int col = 0;
@@ -138,11 +140,33 @@ public class MainWindowController implements Initializable {
                 row++;
             }
         }
+        updateTab();
+
+        mainTabPane.getSelectionModel().selectedItemProperty().addListener((ov, t, t1) -> updateTab());
 
         timer.start();
         mainTabPane.requestFocus();
 
         MainApp.primaryStage.setOnCloseRequest(this::onCloseRequest);
+    }
+
+    private void updateGridControls() {
+        CreasePatternTab tab = getSelectedCpTab();
+        if (tab != null && !gridSize.isFocused()) {
+            gridSize.setText(String.valueOf(tab.getDoc().getGrid().getDivisions()));
+            showGrid.setSelected(tab.getDoc().showGrid());
+        }
+    }
+
+    private void updateTab() {
+        CanvasTab tab = getSelectedTab();
+        if (tab instanceof CreasePatternTab) {
+            CreasePatternTab cpTab = (CreasePatternTab) tab;
+            cpTab.setText(cpTab.getDoc().getTitle());
+        }
+        updateCreaseType();
+        updateActiveTool();
+        updateGridControls();
     }
 
     private void updateActiveTool() {
@@ -367,5 +391,29 @@ public class MainWindowController implements Initializable {
 
     public void onMouseDown(MouseEvent event) {
         getSelectedTab().getMouseHandler().onMouseDown(event);
+    }
+
+    public void setGridSize(ActionEvent actionEvent) {
+        int grid = Integer.parseInt(gridSize.getText());
+        CreasePatternTab tab = getSelectedCpTab();
+        if (tab != null) {
+            tab.getDoc().getGrid().setDivisions(grid);
+        }
+    }
+
+    public CreasePatternTab getSelectedCpTab() {
+        CanvasTab tab = getSelectedTab();
+        if (tab instanceof CreasePatternTab) {
+            return (CreasePatternTab) tab;
+        }
+        return null;
+    }
+
+    public void updateShowGrid(ActionEvent actionEvent) {
+        System.out.println(showGrid.isSelected());
+        CreasePatternTab tab = getSelectedCpTab();
+        if (tab != null) {
+            tab.getDoc().setShowGrid(showGrid.isSelected());
+        }
     }
 }
