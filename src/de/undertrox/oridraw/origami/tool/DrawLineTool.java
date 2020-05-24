@@ -52,12 +52,10 @@ public class DrawLineTool extends TypedCreasePatternTool {
     public void onClick(MouseEvent e) {
         super.onClick(e);
         if (e.getButton() == MouseButton.PRIMARY) {
-            getCp().addPoint(getNextPoint());
             // If this is the first Point
             if (point0 == null) {
                 point0 = getNextPoint();
                 getSelection().select(point0);
-                getCp().addPoint(point0);
             } else {
                 point1 = getNextPoint();
                 getCp().addCrease(point0, point1, getType());
@@ -69,9 +67,7 @@ public class DrawLineTool extends TypedCreasePatternTool {
     }
 
     public void reset() {
-        point0 = null;
-        point1 = null;
-        getSelection().clearSelection();
+        clearSelection();
     }
 
     public OriPoint getNextPoint() {
