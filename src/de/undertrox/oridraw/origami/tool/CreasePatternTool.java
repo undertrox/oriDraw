@@ -11,6 +11,10 @@ import de.undertrox.oridraw.ui.render.renderer.tool.ToolRenderer;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registerable;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 public abstract class CreasePatternTool extends Registerable implements MouseHandlerInterface, KeyboardHandlerInterface {
     boolean enabled;
@@ -90,5 +94,15 @@ public abstract class CreasePatternTool extends Registerable implements MouseHan
         this.enabled = e;
     }
 
-    public abstract void update();
+    public void onClick(MouseEvent e) {
+        if (e.getButton().equals(MouseButton.SECONDARY)) {
+            reset();
+        }
+    }
+
+    public void onKeyDown(KeyEvent e) {
+        if (e.getCode().equals(KeyCode.ESCAPE)) {
+            reset();
+        }
+    }
 }

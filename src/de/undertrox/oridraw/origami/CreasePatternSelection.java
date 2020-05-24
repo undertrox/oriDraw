@@ -1,8 +1,6 @@
 package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
-import de.undertrox.oridraw.util.math.Line;
-import de.undertrox.oridraw.util.math.Vector;
 
 public class CreasePatternSelection {
     CreasePattern cp;
@@ -60,6 +58,7 @@ public class CreasePatternSelection {
      * @param p: Point to be selected
      */
     public void selectSingle(OriPoint p) {
+        if (p == null) return;
         selectedPoints.clear();
         select(p);
     }
@@ -70,6 +69,7 @@ public class CreasePatternSelection {
      * @param p: Point to add to the selection
      */
     public void select(OriPoint p) {
+        if (p == null) return;
         toBeSelectedPoints.remove(p);
         selectedPoints.push(p);
     }
@@ -80,6 +80,7 @@ public class CreasePatternSelection {
      * @param p: point to be added to the list
      */
     public void addToBeSelected(OriPoint p) {
+        if (p == null) return;
         toBeSelectedPoints.add(p);
     }
 
@@ -89,16 +90,19 @@ public class CreasePatternSelection {
      * @param p: point to be added to the list
      */
     public void singleToBeSelected(OriPoint p) {
+        if (p == null) return;
         toBeSelectedPoints.clear();
         addToBeSelected(p);
     }
 
     public void singleToBeSelected(OriLine l) {
+        if (l == null) return;
         toBeSelectedLines.clear();
         addToBeSelected(l);
     }
 
     public void addToBeSelected(OriLine l) {
+        if (l == null) return;
         toBeSelectedLines.add(l);
     }
 

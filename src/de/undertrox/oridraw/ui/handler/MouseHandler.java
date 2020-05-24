@@ -22,6 +22,8 @@ public class MouseHandler implements MouseHandlerInterface {
     private CreasePatternTool activeTool;
     private Vector lastMousePos;
 
+    private MouseEvent lastMove;
+
     public MouseHandler(Document doc, Transform cpTransform) {
         this.cpTransform = cpTransform;
         this.doc = doc;
@@ -43,6 +45,7 @@ public class MouseHandler implements MouseHandlerInterface {
     }
 
     public void onMove(MouseEvent e) {
+        lastMove = e;
         Vector mouseCoords = normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTransform);
         onMouseCoordsChange(mouseCoords);
         activeTool.onMove(e);
@@ -130,10 +133,19 @@ public class MouseHandler implements MouseHandlerInterface {
     }
 
     public void onScroll(ScrollEvent e) {
-        activeTool.update();
+        activeTool.onMove(lastMove);
+
         Vector mouseCoords = normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTransform);
         onMouseCoordsChange(mouseCoords);
         cpTransform.zoom(mouseCoords, e.getDeltaY() / (e.getMultiplierY() * 10));
+    }
+
+    public void onMouseDown(MouseEvent e) {
+        activeTool.onMouseDown(e);
+    }
+
+    public void onMouseUp(MouseEvent e) {
+        activeTool.onMouseUp(e);
     }
 
 }

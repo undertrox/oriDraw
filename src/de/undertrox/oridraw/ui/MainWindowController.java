@@ -360,4 +360,12 @@ public class MainWindowController implements Initializable {
     public void setBorderColor(Region region, Paint color) {
         region.setBorder(new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(2))));
     }
+
+    public void onMouseUp(MouseEvent event) {
+        getSelectedTab().getMouseHandler().onMouseUp(event);
+    }
+
+    public void onMouseDown(MouseEvent event) {
+        getSelectedTab().getMouseHandler().onMouseDown(event);
+    }
 }

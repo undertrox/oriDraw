@@ -36,6 +36,7 @@ public abstract class TypedCreasePatternTool extends CreasePatternTool {
     }
 
     public void onKeyDown(KeyEvent e) {
+        super.onKeyDown(e);
         flipped = e.isAltDown();
     }
 
@@ -44,6 +45,7 @@ public abstract class TypedCreasePatternTool extends CreasePatternTool {
     }
 
     public void onClick(MouseEvent e) {
+        super.onClick(e);
         flipped = e.isAltDown();
     }
 

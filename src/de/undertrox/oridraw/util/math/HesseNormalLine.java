@@ -73,7 +73,7 @@ public class HesseNormalLine {
      * p and the projected Point
      *
      * @param p: Point to be projected
-     * @return: Shadow point of p / p projected onto this line
+     * @return Shadow point of p / p projected onto this line
      */
     public Vector getShadowPoint(Vector p) {
         return intersect(normal(p));
@@ -110,10 +110,14 @@ public class HesseNormalLine {
         return new Vector(x, y);
     }
 
+    public boolean parallel(HesseNormalLine l) {
+        return a == l.a && b == l.b;
+    }
+
     /**
      * Flips the Vector along the line
      *
-     * @return
+     * @return flipped Vector
      */
     public Vector flip(Vector p) {
         double d = distance(p);

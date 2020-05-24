@@ -1,7 +1,6 @@
 package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
-import de.undertrox.oridraw.util.math.Vector;
 
 public class CreaseCollection {
     protected UniqueItemList<OriLine> oriLines;
@@ -37,5 +36,9 @@ public class CreaseCollection {
 
     public UniqueItemList<OriPoint> getPoints() {
         return points;
+    }
+
+    public void addCrease(OriLine line) {
+        addCrease(line.getStartPoint(), line.getEndPoint(), line.getType());
     }
 }

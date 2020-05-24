@@ -93,7 +93,8 @@
     <center>
         <TabPane fx:id="mainTabPane" onKeyPressed="#onKeyDown" onKeyReleased="#onKeyUp" onKeyTyped="#onKeyPressed"
                  onMouseClicked="#onMouseClicked" onMouseDragged="#onMouseDragged" onMouseMoved="#onMouseMoved"
-                 onScroll="#onScroll" prefHeight="528.0" prefWidth="600.0" tabClosingPolicy="ALL_TABS"
+                 onScroll="#onScroll" onMousePressed="#onMouseDown" onMouseReleased="#onMouseUp" prefHeight="528.0"
+                 prefWidth="600.0" tabClosingPolicy="ALL_TABS"
                  BorderPane.alignment="CENTER"/>
     </center>
 </BorderPane>

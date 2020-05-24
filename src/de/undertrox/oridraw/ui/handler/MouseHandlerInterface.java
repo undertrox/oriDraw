@@ -10,6 +10,12 @@ public interface MouseHandlerInterface {
 
     void onMove(MouseEvent e);
 
+    default void onMouseDown(MouseEvent e) {
+    }
+
+    default void onMouseUp(MouseEvent e) {
+    }
+
     default void onScroll(ScrollEvent e) {
 
     }

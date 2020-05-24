@@ -14,7 +14,6 @@ import javafx.scene.input.MouseEvent;
 
 public class DrawLineTool extends TypedCreasePatternTool {
     OriPoint point0, point1;
-    MouseEvent lastMoveEvent;
 
     public DrawLineTool(CreasePatternTab tab, OriLine.Type type,
                         CreasePatternToolFactory<? extends CreasePatternTool> factory) {
@@ -42,15 +41,9 @@ public class DrawLineTool extends TypedCreasePatternTool {
     }
 
     @Override
-    public void update() {
-        if (lastMoveEvent != null) {
-            onMove(lastMoveEvent);
-        }
-    }
-
-    @Override
     public void onClick(MouseEvent e) {
         super.onClick(e);
+        if (e.isConsumed()) return;
         if (e.getButton() == MouseButton.PRIMARY) {
             // If this is the first Point
             if (point0 == null) {
@@ -61,8 +54,6 @@ public class DrawLineTool extends TypedCreasePatternTool {
                 getCp().addCrease(point0, point1, getType());
                 clearSelection();
             }
-        } else if (e.getButton() == MouseButton.SECONDARY) {
-            reset();
         }
     }
 
@@ -79,18 +70,10 @@ public class DrawLineTool extends TypedCreasePatternTool {
     }
 
     @Override
-    public void onDrag(MouseEvent e) {
-        super.onDrag(e);
-        setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
-        point1 = getNextPoint();
-    }
-
-    @Override
     public void onMove(MouseEvent e) {
         super.onMove(e);
         setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
         point1 = getNextPoint();
-        lastMoveEvent = e;
     }
 
     public Vector getPoint0() {

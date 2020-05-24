@@ -1,12 +1,10 @@
 package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.math.Line;
-import de.undertrox.oridraw.util.math.Vector;
 
 public class OriLine extends Line {
 
     private Type type;
-    private boolean animating;
 
     /**
      * Creates a new OriLine starting in start and ending in end
@@ -22,12 +20,8 @@ public class OriLine extends Line {
         end.addLine(this);
     }
 
-    public boolean isAnimating() {
-        return animating;
-    }
-
-    public void setAnimating(boolean animating) {
-        this.animating = animating;
+    public OriLine(OriLine oriLine) {
+        this(new OriPoint(oriLine.getStartPoint()), new OriPoint(oriLine.getEndPoint()), oriLine.getType());
     }
 
     /**
