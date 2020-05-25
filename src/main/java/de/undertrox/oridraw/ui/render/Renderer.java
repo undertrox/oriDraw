@@ -1,6 +1,6 @@
-package de.undertrox.oridraw.ui.render.renderer;
+package de.undertrox.oridraw.ui.render;
 
-import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.util.math.Transform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -17,6 +17,10 @@ public abstract class Renderer {
         enabled = true;
     }
 
+    /**
+     *
+     * @return the Canvas that this renderer draws on
+     */
     protected Canvas getCanvas() {
         return canvas;
     }

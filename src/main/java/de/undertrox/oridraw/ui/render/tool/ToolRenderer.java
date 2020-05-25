@@ -1,8 +1,8 @@
-package de.undertrox.oridraw.ui.render.renderer.tool;
+package de.undertrox.oridraw.ui.render.tool;
 
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
-import de.undertrox.oridraw.ui.render.Transform;
-import de.undertrox.oridraw.ui.render.renderer.Renderer;
+import de.undertrox.oridraw.util.math.Transform;
+import de.undertrox.oridraw.ui.render.Renderer;
 
 public abstract class ToolRenderer<T extends CreasePatternTool> extends Renderer {
 
@@ -17,6 +17,7 @@ public abstract class ToolRenderer<T extends CreasePatternTool> extends Renderer
         return tool;
     }
 
+    @Override
     public boolean getEnabled() {
         return tool.isEnabled();
     }

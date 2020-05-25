@@ -1,6 +1,6 @@
-package de.undertrox.oridraw.ui.render.renderer;
+package de.undertrox.oridraw.ui.render;
 
-import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.util.math.Transform;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -13,7 +13,7 @@ public class BackgroundRenderer extends Renderer {
     @Override
     protected void draw() {
         GraphicsContext gc = getGc();
-        gc.setFill(RenderSettings.getColorManager().CP_EDITOR_BACKGROUND_COLOR);
+        gc.setFill(RenderSettings.getColorManager().getCpEditorBackgroundColor());
         gc.fillRect(0, 0, getWidth(), getHeight());
     }
 }

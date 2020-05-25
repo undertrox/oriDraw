@@ -5,7 +5,7 @@ import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
-import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.util.math.Transform;
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.input.MouseButton;
@@ -132,6 +132,7 @@ public class MouseHandler implements MouseHandlerInterface {
         return new OriPoint(nearest);
     }
 
+    @Override
     public void onScroll(ScrollEvent e) {
         activeTool.onMove(lastMove);
 
@@ -140,10 +141,12 @@ public class MouseHandler implements MouseHandlerInterface {
         cpTransform.zoom(mouseCoords, e.getDeltaY() / (e.getMultiplierY() * 10));
     }
 
+    @Override
     public void onMouseDown(MouseEvent e) {
         activeTool.onMouseDown(e);
     }
 
+    @Override
     public void onMouseUp(MouseEvent e) {
         activeTool.onMouseUp(e);
     }

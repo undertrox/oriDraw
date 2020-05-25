@@ -1,6 +1,5 @@
-package de.undertrox.oridraw.ui.render;
+package de.undertrox.oridraw.util.math;
 
-import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Translate;
 
@@ -79,9 +78,9 @@ public class Transform {
         } else {
             scale *= 1 + delta;
         }
-        double scalechange = oldScale - scale;
-        double offsetX = (center.getX() * scalechange);
-        double offsetY = (center.getY() * scalechange);
+        double scaleChange = oldScale - scale;
+        double offsetX = (center.getX() * scaleChange);
+        double offsetY = (center.getY() * scaleChange);
 
         move = move.add(new Vector(offsetX, offsetY));
     }

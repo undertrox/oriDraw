@@ -1,6 +1,6 @@
-package de.undertrox.oridraw.ui.render.renderer;
+package de.undertrox.oridraw.ui.render;
 
-import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.util.math.Transform;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.canvas.GraphicsContext;
@@ -36,4 +36,7 @@ public class RenderHelper {
         sideLength /= transform.getScale();
         gc.fillRect(center.getX() - sideLength / 2, center.getY() - sideLength / 2, sideLength, sideLength);
     }
+
+    // Prevent instantiation
+    private RenderHelper()  {}
 }

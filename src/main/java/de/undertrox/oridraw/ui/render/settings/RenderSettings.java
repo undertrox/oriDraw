@@ -5,12 +5,12 @@ import de.undertrox.oridraw.origami.OriLine;
 public class RenderSettings {
     private static RenderSettings instance;
 
-    private double EDGE_WIDTH = 0.7;
-    private double FOLD_WIDTH = 0.7;
-    private double AUX_WIDTH = 0.7;
-    private double DEFAULT_WIDTH = 0.7;
+    private double edgeWidth = 0.7;
+    private double creaseWidth = 0.7;
+    private double auxWidth = 0.7;
+    private double defaultWidth = 0.7;
 
-    private double POINT_SIDELENGTH = 4;
+    private double pointSidelength = 4;
 
     public static RenderSettings getInstance() {
         if (instance == null) {
@@ -33,17 +33,17 @@ public class RenderSettings {
         switch (type) {
             case MOUNTAIN:
             case VALLEY:
-                return getInstance().FOLD_WIDTH;
+                return getInstance().creaseWidth;
             case EDGE:
-                return getInstance().EDGE_WIDTH;
+                return getInstance().edgeWidth;
             case AUX:
-                return getInstance().AUX_WIDTH;
+                return getInstance().auxWidth;
             default:
-                return getInstance().DEFAULT_WIDTH;
+                return getInstance().defaultWidth;
         }
     }
 
     public static double getPointSideLength() {
-        return getInstance().POINT_SIDELENGTH;
+        return getInstance().pointSidelength;
     }
 }

@@ -2,13 +2,17 @@ package de.undertrox.oridraw.util.math;
 
 import de.undertrox.oridraw.Constants;
 
+import java.util.Objects;
+
 /**
  * 2D Vector. Can be used as a Point or as a Vector
  */
 public class Vector {
     public static final double TOLERANCE = Constants.EPSILON;
     public static final Vector ORIGIN = new Vector(0, 0);
-    private double x, y;
+    public static final Vector UNDEFINED = new Vector(Double.POSITIVE_INFINITY);
+    private double x;
+    private double y;
 
     /**
      * Creates a new Vector
@@ -133,12 +137,14 @@ public class Vector {
             if (Math.abs(getX() - v.getX()) > TOLERANCE) {
                 return false;
             }
-            if (Math.abs(getY() - v.getY()) > TOLERANCE) {
-                return false;
-            }
-            return true;
+            return Math.abs(getY() - v.getY()) < TOLERANCE;
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY());
     }
 
     /**

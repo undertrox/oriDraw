@@ -1,6 +1,5 @@
 package de.undertrox.oridraw.ui;
 
-import de.undertrox.oridraw.Main;
 import de.undertrox.oridraw.OriDraw;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
@@ -25,10 +24,12 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import static de.undertrox.oridraw.Constants.REGISTRY_DOMAIN;
+
 public class MainApp extends Application {
-    private static Logger logger = LogManager.getLogger(Main.class);
+    private static Logger logger = LogManager.getLogger(MainApp.class);
     private static String title = "OriDraw v" + OriDraw.VERSION;
-    public static Stage primaryStage;
+    private static Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -50,34 +51,43 @@ public class MainApp extends Application {
         Registries.lockAll();
     }
 
+    /**
+     * registers all Elements
+     */
     private void populateRegistries() {
         registerDocumentExporters();
         registerDocumentLoaders();
         registerTools();
     }
 
+    /**
+     * registers Document exporters
+     */
     private void registerDocumentExporters() {
-        String domain = "document_exporter";
         Registry<Exporter<Document>> registry = Registries.DOCUMENT_EXPORTER_REGISTRY;
-        registry.register(domain, "cp", new ExporterCP());
+        registry.register(REGISTRY_DOMAIN, "cp", new ExporterCP());
     }
 
+    /**
+     * registers Document loaders
+     */
     private void registerDocumentLoaders() {
-        String domain = "document_loader";
         Registry<Loader<Document>> registry = Registries.DOCUMENT_LOADER_REGISTRY;
-        registry.register(domain, "cp", new LoaderCP());
+        registry.register(REGISTRY_DOMAIN, "cp", new LoaderCP());
     }
 
+    /**
+     * registers Crease Pattern Tools
+     */
     private void registerTools() {
-        String domain = "cp_tool";
         Registry<CreasePatternToolFactory<? extends CreasePatternTool>> registry = Registries.TOOL_FACTORY_REGISTRY;
-        registry.register(domain, "point_to_point", new DrawLineToolFactory());
-        registry.register(domain, "angle_bisect", new AngleBisectorToolFactory());
+        registry.register(REGISTRY_DOMAIN, "point_to_point", new DrawLineToolFactory());
+        registry.register(REGISTRY_DOMAIN, "angle_bisect", new AngleBisectorToolFactory());
     }
 
     @Override
     public void init() {
-        logger.info("Starting " + title);
+        logger.info("Starting {}", title);
         logger.info("Initializing");
         populateRegistries();
     }
@@ -89,5 +99,9 @@ public class MainApp extends Application {
 
     public static void run(String[] args) {
         launch(args);
+    }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 }

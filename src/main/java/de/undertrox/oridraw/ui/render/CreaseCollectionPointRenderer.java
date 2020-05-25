@@ -1,14 +1,14 @@
-package de.undertrox.oridraw.ui.render.renderer;
+package de.undertrox.oridraw.ui.render;
 
-import de.undertrox.oridraw.origami.CreaseCollection;
+import de.undertrox.oridraw.origami.OriLineCollection;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
-import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.util.math.Transform;
 
 public class CreaseCollectionPointRenderer extends Renderer {
-    CreaseCollection cc;
+    OriLineCollection cc;
 
-    public CreaseCollectionPointRenderer(Transform t, CreaseCollection cc) {
+    public CreaseCollectionPointRenderer(Transform t, OriLineCollection cc) {
         super(t);
         this.cc = cc;
     }
@@ -16,7 +16,7 @@ public class CreaseCollectionPointRenderer extends Renderer {
     @Override
     protected void draw() {
         for (Vector point : cc.getPoints()) {
-            RenderHelper.drawSquare(point, RenderSettings.getColorManager().POINT_COLOR,
+            RenderHelper.drawSquare(point, RenderSettings.getColorManager().getPointColor(),
                     RenderSettings.getPointSideLength(), getGc(), getTransform());
         }
     }

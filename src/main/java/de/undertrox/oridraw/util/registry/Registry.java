@@ -3,40 +3,58 @@ package de.undertrox.oridraw.util.registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public abstract class Registry<T extends Registerable> {
+public abstract class Registry<T extends Registrable> {
     private Logger logger = LogManager.getLogger(Registry.class);
-    private Map<RegistryKey, RegistryItem<T>> registry;
+    // This map stores all registry entries
+    private Map<RegistryKey, RegistryEntry<T>> registryEntries;
+    // if this is set to true, no registry entries can be added
     private boolean locked;
 
     public Registry() {
-        logger.debug("Initializing " + getClass().getSimpleName());
-        registry = new HashMap<>();
+        logger.debug("Initializing {}", getClass().getSimpleName());
+        registryEntries = new HashMap<>();
         locked = false;
     }
 
+    /**
+     * Registers an item
+     * Throws a RegistryException if the Registry is locked or an Object
+     * is already registered for the key.
+     * @param key: Registry Key for the item
+     * @param item: Object to be registered
+     */
     public void register(RegistryKey key, T item) {
         if (locked) {
             throw new RegistryException(getClass().getSimpleName() + " is locked.");
         }
-        if (registry.containsKey(key)) {
-            throw new RegistryException("'" + key + "' is already registered.");
+        if (registryEntries.containsKey(key)) {
+            throw new RegistryException("'" + key + "' is already registered in this registry.");
         }
-        RegistryItem<T> registryItem = new RegistryItem<>(key, item);
-        registry.put(key, registryItem);
-        item.setEntry(registryItem);
+        RegistryEntry<T> registryEntry = new RegistryEntry<>(key, item);
+        registryEntries.put(key, registryEntry);
 
-        onRegistered(key, item);
-        logger.debug(getClass().getSimpleName() + ": registered item " + item + " for key '" + key + "'");
+        onRegistered(registryEntry);
+        logger.debug("{}: registered item '{}' for key '{}'", getClass().getSimpleName(), item, key);
     }
 
+    /**
+     * Registers an item
+     * Throws a RegistryException if the Registry is locked or an Object
+     * is already registered for the key.
+     * @param domain: Registry Key domain for the item
+     * @param id: Registry Key id for the item
+     * @param item: Object to be registered
+     */
     public void register(String domain, String id, T item) {
         register(new RegistryKey(domain, id), item);
     }
 
+    /**
+     * Locks the Registry so that no more Objects can be registered.
+     * Throws a RegistryException if the Registry is already locked.
+     */
     public void lock() {
         if (locked) {
             throw new RegistryException("Registry is already locked.");
@@ -45,21 +63,49 @@ public abstract class Registry<T extends Registerable> {
         onLocked();
     }
 
-    public T getEntry(RegistryKey key) {
-        return registry.get(key).getValue();
+    /**
+     * Returns the Object that is registered with the RegistryKey key
+     * in this registry. Returns null if no Object is registered for the
+     * RegistryKey
+     * @param key: RegistryKey to get the Object of
+     * @return Object that is registered with key
+     */
+    public T getItem(RegistryKey key) {
+        return registryEntries.get(key).getValue();
     }
 
-    public T getEntry(String domain, String id) {
-        return getEntry(new RegistryKey(domain, id));
+    /**
+     * Returns the Object that is registered with the RegistryKey key
+     * in this registry. Returns null if no Object is registered for the
+     * RegistryKey
+     * @param domain: Domain of the Registry key
+     * @param id: id of the Registry key
+     * @return Object that is registered with key
+     */
+    public T getItem(String domain, String id) {
+        return getItem(new RegistryKey(domain, id));
     }
 
-    public Collection<RegistryItem<T>> getItems() {
-        return registry.values();
+    /**
+     * Returns a Collection of all RegistryEntries that are registered
+     * in this registry
+     * @return Collection of all RegistryEntries registered in this registry
+     */
+    public List<RegistryEntry<T>> getEntries() {
+        List<RegistryEntry<T>> l = new ArrayList<>(registryEntries.values());
+        l.sort(Comparator.comparingInt(RegistryEntry::getId));
+        return l;
     }
 
+    /**
+     * Called every time a new Object is registered, after the Object has been registered
+     * @param entry: RegistryEntry that was just registered
+     */
+    protected abstract void onRegistered(RegistryEntry<T> entry);
 
-    protected abstract void onRegistered(RegistryKey key, T item);
-
+    /**
+     * Called after the Registry is locked.
+     */
     protected abstract void onLocked();
 
 }

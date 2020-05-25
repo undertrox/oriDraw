@@ -13,11 +13,10 @@ import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registries;
-import de.undertrox.oridraw.util.registry.RegistryItem;
+import de.undertrox.oridraw.util.registry.RegistryEntry;
 import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -45,7 +44,7 @@ public class MainWindowController implements Initializable {
 
     public GridPane toolGridPane;
     public ToggleGroup type;
-    public TextField gridSize;
+    public NumberTextField gridSize;
     public CheckBox showGrid;
     private Logger logger = LogManager.getLogger(MainWindowController.class);
 
@@ -86,29 +85,36 @@ public class MainWindowController implements Initializable {
         mainTabPane.heightProperty().addListener(sizeChangeListener);
         updateText();
         createNewFileTab(null);
-
-        gridSize.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                gridSize.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 CanvasTab tab = getSelectedTab();
                 if (tab == null) {
-                    MainApp.primaryStage.close();
+                    MainApp.getPrimaryStage().close();
                     return;
                 }
                 tab.render();
             }
         };
+        createToolButtons();
+        updateTab();
+
+        mainTabPane.getSelectionModel().selectedItemProperty().addListener((ov, t, t1) -> updateTab());
+
+        timer.start();
+        mainTabPane.requestFocus();
+
+        MainApp.getPrimaryStage().setOnCloseRequest(this::onCloseRequest);
+    }
+
+    private void createToolButtons() {
         int col = 0;
         int row = 0;
         int maxCol = 4;
-        for (RegistryItem<CreasePatternToolFactory<? extends CreasePatternTool>> item :
-                Registries.TOOL_FACTORY_REGISTRY.getItems()) {
-            InputStream iconStream = getClass().getClassLoader().getResourceAsStream("ui/icon/" + item.getKey().getId() + "/lightmode/enabled_mountain.png");
+        for (RegistryEntry<CreasePatternToolFactory<? extends CreasePatternTool>> item :
+                Registries.TOOL_FACTORY_REGISTRY.getEntries()) {
+            InputStream iconStream = getClass().getClassLoader().getResourceAsStream(
+                    "ui/icon/" + item.getKey().getId() + "/lightmode/enabled_mountain.png");
             ToolButton btn;
             if (iconStream != null) {
                 Image image = new Image(iconStream);
@@ -118,22 +124,9 @@ public class MainWindowController implements Initializable {
                 btn = new ToolButton("", view);
             } else {
                 btn = new ToolButton(item.getKey().getId());
-                logger.warn("Could not find icon for '" + item.getKey() + "'. Using id as text insted");
+                logger.warn("Could not find icon for '{}'. Using id as text instead", item.getKey());
             }
-            btn.setToolKey(item.getKey());
-            btn.setToggleGroup(toolToggleGroup);
-            btn.setToolSupplier(() -> {
-                CreasePatternTab tab;
-                if (getSelectedTab() instanceof CreasePatternTab) {
-                    tab = (CreasePatternTab) getSelectedTab();
-                    for (CreasePatternTool tool : tab.getTools()) {
-                        if (tool.getFactory().getRegistryEntry().getKey().equals(item.getKey())) {
-                            return tool;
-                        }
-                    }
-                }
-                return null;
-            });
+            initToolButton(btn, item.getKey());
             toolGridPane.add(btn, col, row);
             toolButtons.add(btn);
             col++;
@@ -142,14 +135,23 @@ public class MainWindowController implements Initializable {
                 row++;
             }
         }
-        updateTab();
+    }
 
-        mainTabPane.getSelectionModel().selectedItemProperty().addListener((ov, t, t1) -> updateTab());
-
-        timer.start();
-        mainTabPane.requestFocus();
-
-        MainApp.primaryStage.setOnCloseRequest(this::onCloseRequest);
+    private void initToolButton(ToolButton btn, RegistryKey key) {
+        btn.setToolKey(key);
+        btn.setToggleGroup(toolToggleGroup);
+        btn.setToolSupplier(() -> {
+            CreasePatternTab tab;
+            if (getSelectedTab() instanceof CreasePatternTab) {
+                tab = (CreasePatternTab) getSelectedTab();
+                for (CreasePatternTool tool : tab.getTools()) {
+                    if (tool.getFactory().getRegistryKey().equals(key)) {
+                        return tool;
+                    }
+                }
+            }
+            return null;
+        });
     }
 
     private void updateGridControls() {
@@ -166,7 +168,6 @@ public class MainWindowController implements Initializable {
             CreasePatternTab cpTab = (CreasePatternTab) tab;
             cpTab.setText(cpTab.getDoc().getTitle());
         }
-        updateCreaseType();
         updateActiveTool();
         updateGridControls();
     }
@@ -176,7 +177,7 @@ public class MainWindowController implements Initializable {
         if (getSelectedTab() instanceof CreasePatternTab) {
             tab = (CreasePatternTab) getSelectedTab();
             CreasePatternTool activeTool = tab.getActiveTool();
-            RegistryKey key = activeTool.getFactory().getRegistryEntry().getKey();
+            RegistryKey key = activeTool.getFactory().getRegistryKey();
             for (ToolButton toolButton : toolButtons) {
                 if (toolButton.getToolKey().equals(key)) {
                     toolButton.setSelected(true);
@@ -254,7 +255,7 @@ public class MainWindowController implements Initializable {
                 bundle.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
 
         chooser.getExtensionFilters().add(filter);
-        File file = chooser.showOpenDialog(MainApp.primaryStage);
+        File file = chooser.showOpenDialog(MainApp.getPrimaryStage());
         if (file == null) {
             return;
         }
@@ -274,7 +275,7 @@ public class MainWindowController implements Initializable {
         if (tab instanceof CreasePatternTab) {
             CreasePatternTab cpTab = (CreasePatternTab) tab;
             statusLabel.setText("Mouse Position: " + MouseHandler
-                .normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTab.getCpTransform()));
+                .normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTab.getDocTransform()));
         }
         tab.getMouseHandler().onMove(e);
     }
@@ -305,28 +306,28 @@ public class MainWindowController implements Initializable {
         getSelectedTab().getKeyboardHandler().onKeyUp(e);
     }
 
-    public void setTypeAux(ActionEvent actionEvent) {
+    public void setTypeAux() {
         TypedCreasePatternTool tool = getActiveTypedCpTool();
         if (tool != null) {
             tool.setType(OriLine.Type.AUX);
         }
     }
 
-    public void setTypeEdge(ActionEvent actionEvent) {
+    public void setTypeEdge() {
         TypedCreasePatternTool tool = getActiveTypedCpTool();
         if (tool != null) {
             tool.setType(OriLine.Type.EDGE);
         }
     }
 
-    public void setTypeValley(ActionEvent actionEvent) {
+    public void setTypeValley() {
         TypedCreasePatternTool tool = getActiveTypedCpTool();
         if (tool != null) {
             tool.setType(OriLine.Type.VALLEY);
         }
     }
 
-    public void setTypeMountain(ActionEvent actionEvent) {
+    public void setTypeMountain() {
         TypedCreasePatternTool tool = getActiveTypedCpTool();
         if (tool != null) {
             tool.setType(OriLine.Type.MOUNTAIN);
@@ -362,23 +363,25 @@ public class MainWindowController implements Initializable {
         btnValley.setDisable(false);
         btnEdge.setDisable(false);
         btnAux.setDisable(false);
-        OriLine.Type type = tool.getType();
-        switch (type) {
+        OriLine.Type toolType = tool.getType();
+        switch (toolType) {
             case MOUNTAIN:
-                setBorderColor(btnMountain, RenderSettings.getColorManager().MOUNTAIN_COLOR);
+                setBorderColor(btnMountain, RenderSettings.getColorManager().getMountainColor());
                 btnMountain.setSelected(true);
                 break;
             case VALLEY:
-                setBorderColor(btnValley, RenderSettings.getColorManager().VALLEY_COLOR);
+                setBorderColor(btnValley, RenderSettings.getColorManager().getValleyColor());
                 btnValley.setSelected(true);
                 break;
             case EDGE:
-                setBorderColor(btnEdge, RenderSettings.getColorManager().EDGE_COLOR);
+                setBorderColor(btnEdge, RenderSettings.getColorManager().getEdgeColor());
                 btnEdge.setSelected(true);
                 break;
             case AUX:
-                setBorderColor(btnAux, RenderSettings.getColorManager().AUX_COLOR);
+                setBorderColor(btnAux, RenderSettings.getColorManager().getAuxColor());
                 btnAux.setSelected(true);
+                break;
+            default:
                 break;
         }
     }
@@ -395,7 +398,7 @@ public class MainWindowController implements Initializable {
         getSelectedTab().getMouseHandler().onMouseDown(event);
     }
 
-    public void setGridSize(ActionEvent actionEvent) {
+    public void setGridSize() {
         int grid = Integer.parseInt(gridSize.getText());
         CreasePatternTab tab = getSelectedCpTab();
         if (tab != null) {
@@ -411,8 +414,7 @@ public class MainWindowController implements Initializable {
         return null;
     }
 
-    public void updateShowGrid(ActionEvent actionEvent) {
-        System.out.println(showGrid.isSelected());
+    public void updateShowGrid() {
         CreasePatternTab tab = getSelectedCpTab();
         if (tab != null) {
             tab.getDoc().setShowGrid(showGrid.isSelected());

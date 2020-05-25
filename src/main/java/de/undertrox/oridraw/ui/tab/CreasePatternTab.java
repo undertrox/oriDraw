@@ -7,13 +7,14 @@ import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.MainApp;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
-import de.undertrox.oridraw.ui.render.Transform;
-import de.undertrox.oridraw.ui.render.renderer.BackgroundRenderer;
-import de.undertrox.oridraw.ui.render.renderer.DocumentRenderer;
+import de.undertrox.oridraw.util.math.Transform;
+import de.undertrox.oridraw.ui.render.BackgroundRenderer;
+import de.undertrox.oridraw.ui.render.DocumentRenderer;
 import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registries;
-import de.undertrox.oridraw.util.registry.RegistryItem;
+import de.undertrox.oridraw.util.registry.RegistryEntry;
+import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
@@ -29,13 +30,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * This class is used to use a Canvas inside a tab while scaling it appropriately
+ * This class is used to display and edit a Crease Pattern inside a tab
  */
 public class CreasePatternTab extends CanvasTab {
     private Logger logger = LogManager.getLogger(CreasePatternTab.class);
     private List<CreasePatternTool> tools;
     private CreasePatternTool activeTool;
-    private Transform cpTransform;
+    private Transform docTransform;
     private Transform bgTransform;
     private Document doc;
 
@@ -54,30 +55,27 @@ public class CreasePatternTab extends CanvasTab {
 
     public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane, ResourceBundle bundle) {
         super(doc.getTitle(), canvas, bundle);
+
         logger.debug("Initializing Crease Pattern");
         this.doc = doc;
         doc.getCp().createSquare(Vector.ORIGIN, Constants.DEFAULT_PAPER_SIZE);
-        cpTransform = new Transform(new Vector(300, 250), 1, 0);
+        docTransform = new Transform(new Vector(300, 250), 1, 0);
         bgTransform = new Transform(new Vector(0, 0), 1, 0);
-        logger.debug("Initializing Renderers");
-        logger.debug("Initializing BackgroundRenderer");
-        getRenderers().add(new BackgroundRenderer(bgTransform));
-        logger.debug("Initializing Document Renderer");
-        getRenderers().add(new DocumentRenderer(cpTransform, doc));
-        setMouseHandler(new MouseHandler(doc, cpTransform));
-        setKeyboardHandler(new KeyboardHandler(doc));
 
         logger.debug("Initializing Tools");
+        setMouseHandler(new MouseHandler(doc, docTransform));
+        setKeyboardHandler(new KeyboardHandler(doc));
         tools = new ArrayList<>();
-        for (RegistryItem<CreasePatternToolFactory<? extends CreasePatternTool>> toolFactory :
-                Registries.TOOL_FACTORY_REGISTRY.getItems()) {
+        for (RegistryEntry<CreasePatternToolFactory<? extends CreasePatternTool>> toolFactory :
+                Registries.TOOL_FACTORY_REGISTRY.getEntries()) {
             tools.add(toolFactory.getValue().create(this));
         }
-
         setActiveTool(tools.get(0));
 
-        logger.debug("Initializing Tool Renderers");
-        tools.forEach((tool) -> getRenderers().add(tool.getRenderer()));
+        logger.debug("Initializing Renderers");
+        getRenderers().add(new BackgroundRenderer(bgTransform));
+        getRenderers().add(new DocumentRenderer(docTransform, doc));
+        tools.forEach(tool -> getRenderers().add(tool.getRenderer()));
 
         canvas.widthProperty().bind(tabPane.widthProperty());
         canvas.heightProperty().bind(tabPane.heightProperty());
@@ -89,26 +87,56 @@ public class CreasePatternTab extends CanvasTab {
         return tools;
     }
 
+    /**
+     * Sets the CreasePatternTool that is currently being used on this Tab
+     * @param activeTool: Tool to use
+     */
     public void setActiveTool(CreasePatternTool activeTool) {
+        if (!tools.contains(activeTool)) {
+            throw new IllegalArgumentException("Cant activate a Tool that doesnt belong to this tab");
+        }
         tools.forEach(t -> t.setEnabled(false));
         this.activeTool = activeTool;
+        activeTool.setEnabled(true);
         ((MouseHandler) getMouseHandler()).setActiveTool(activeTool);
         ((KeyboardHandler) getKeyboardHandler()).setActiveTool(activeTool);
-        activeTool.setEnabled(true);
     }
 
+    /**
+     * @return the CreasePatternTool that is currently being used on this Tab
+     */
     public CreasePatternTool getActiveTool() {
         return activeTool;
     }
 
-    public Transform getCpTransform() {
-        return cpTransform;
+    public void setActiveTool(RegistryKey registryKey) {
+        for (CreasePatternTool tool : tools) {
+            if (tool.getFactory().getRegistryKey().equals(registryKey)) {
+                setActiveTool(tool);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Tried to activate a tool that does not exist, registry name: " + registryKey);
     }
 
+    /**
+     *
+     * @return the Transform that is being applied to the Document
+     */
+    public Transform getDocTransform() {
+        return docTransform;
+    }
+
+    /**
+     *
+     * @return the Document that is being shown in this tab
+     */
     public Document getDoc() {
         return doc;
     }
 
+    // Show dialog if the Document has unsaved changes
+    @Override
     public void onCloseRequest(Event e) {
         if (getDoc().hasUnsavedChanges() && !e.isConsumed()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("oridraw.action.close.alert.desc"),
@@ -116,7 +144,9 @@ public class CreasePatternTab extends CanvasTab {
             alert.showAndWait();
 
             if (alert.getResult() == ButtonType.YES) {
-                if (!saveDocument()) {
+                // if the chosen File dialog is closed without selecting a file, the Tab stays open
+                boolean fileChosen = saveDocument();
+                if (!fileChosen) {
                     e.consume();
                     return;
                 }
@@ -128,14 +158,17 @@ public class CreasePatternTab extends CanvasTab {
         this.getTabPane().getTabs().remove(this);
     }
 
+    /**
+     * Shows a file Dialog to save the current Document and saves the Document to the selected file.
+     * @return false if no file is selected, true otherwise
+     */
     public boolean saveDocument() {
-
         FileChooser chooser = new FileChooser();
         chooser.setTitle(bundle.getString("oridraw.action.save.filedialog.title"));
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
                 bundle.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
         chooser.getExtensionFilters().add(filter);
-        File file = chooser.showSaveDialog(MainApp.primaryStage);
+        File file = chooser.showSaveDialog(MainApp.getPrimaryStage());
         if (file == null) {
             return false;
         }

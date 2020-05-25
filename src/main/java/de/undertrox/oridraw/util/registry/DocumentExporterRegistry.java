@@ -6,12 +6,12 @@ import de.undertrox.oridraw.util.io.export.Exporter;
 public class DocumentExporterRegistry extends Registry<Exporter<Document>> {
 
     @Override
-    protected void onRegistered(RegistryKey key, Exporter<Document> item) {
-
+    protected void onRegistered(RegistryEntry<Exporter<Document>> entry) {
+        // nothing to do
     }
 
     @Override
     protected void onLocked() {
-
+        // TODO: add code for adding Menu items
     }
 }

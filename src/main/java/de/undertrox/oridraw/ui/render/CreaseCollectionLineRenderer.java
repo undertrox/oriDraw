@@ -1,15 +1,15 @@
-package de.undertrox.oridraw.ui.render.renderer;
+package de.undertrox.oridraw.ui.render;
 
-import de.undertrox.oridraw.origami.CreaseCollection;
+import de.undertrox.oridraw.origami.OriLineCollection;
 import de.undertrox.oridraw.origami.OriLine;
-import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.util.math.Transform;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import javafx.scene.paint.Paint;
 
 public class CreaseCollectionLineRenderer extends Renderer {
-    private CreaseCollection cc;
+    private OriLineCollection cc;
 
-    public CreaseCollectionLineRenderer(Transform t, CreaseCollection cc) {
+    public CreaseCollectionLineRenderer(Transform t, OriLineCollection cc) {
         super(t);
         this.cc = cc;
     }

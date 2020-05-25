@@ -2,21 +2,58 @@ package de.undertrox.oridraw.ui.render.settings;
 
 import de.undertrox.oridraw.origami.OriLine;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class ColorManager {
     private static ColorManager instance;
 
-    public Color EDGE_COLOR = Color.BLACK;
-    public Color MOUNTAIN_COLOR = Color.RED;
-    public Color VALLEY_COLOR = Color.BLUE;
-    public Color AUX_COLOR = Color.GRAY;
-    public Color UNKNOWN_COLOR = Color.YELLOW;
+    private Paint edgeColor = Color.BLACK;
+    private Paint mountainColor = Color.RED;
+    private Paint valleyColor = Color.BLUE;
+    private Paint auxColor = Color.GRAY;
+    private Paint unknownColor = Color.YELLOW;
 
-    public Color POINT_COLOR = Color.BLACK;
-    public Color TO_BE_SELECTED_COLOR = Color.LIMEGREEN;
-    public Color SELECTED_COLOR = Color.GREEN;
+    private Paint pointColor = Color.BLACK;
+    private Paint toBeSelectedColor = Color.LIMEGREEN;
+    private Paint selectedColor = Color.LIMEGREEN;
 
-    public Color CP_EDITOR_BACKGROUND_COLOR = Color.WHITE;
+    private Paint cpEditorBackgroundColor = Color.WHITE;
+
+    public Paint getEdgeColor() {
+        return edgeColor;
+    }
+
+    public Paint getMountainColor() {
+        return mountainColor;
+    }
+
+    public Paint getValleyColor() {
+        return valleyColor;
+    }
+
+    public Paint getAuxColor() {
+        return auxColor;
+    }
+
+    public Paint getUnknownColor() {
+        return unknownColor;
+    }
+
+    public Paint getPointColor() {
+        return pointColor;
+    }
+
+    public Paint getToBeSelectedColor() {
+        return toBeSelectedColor;
+    }
+
+    public Paint getSelectedColor() {
+        return selectedColor;
+    }
+
+    public Paint getCpEditorBackgroundColor() {
+        return cpEditorBackgroundColor;
+    }
 
     /**
      * Returns Paint to use for the OriLine type
@@ -24,18 +61,18 @@ public class ColorManager {
      * @param type: OriLine type
      * @return Paint to use for type
      */
-    public Color getPaintForCreaseType(OriLine.Type type) {
+    public Paint getPaintForCreaseType(OriLine.Type type) {
         switch (type) {
             case EDGE:
-                return getInstance().EDGE_COLOR;
+                return getInstance().edgeColor;
             case MOUNTAIN:
-                return getInstance().MOUNTAIN_COLOR;
+                return getInstance().mountainColor;
             case VALLEY:
-                return getInstance().VALLEY_COLOR;
+                return getInstance().valleyColor;
             case AUX:
-                return getInstance().AUX_COLOR;
+                return getInstance().auxColor;
             default:
-                return getInstance().UNKNOWN_COLOR;
+                return getInstance().unknownColor;
         }
     }
 
@@ -45,4 +82,5 @@ public class ColorManager {
         }
         return instance;
     }
+
 }

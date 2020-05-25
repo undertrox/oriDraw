@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
+<?import de.undertrox.oridraw.ui.NumberTextField?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0"
             xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.undertrox.oridraw.ui.MainWindowController">
@@ -89,7 +90,7 @@
                 <children>
                     <HBox prefHeight="30.0" prefWidth="180.0">
                         <children>
-                            <TextField fx:id="gridSize" prefHeight="25.0" prefWidth="178.0" promptText="Grid Size"
+                            <NumberTextField fx:id="gridSize" prefHeight="25.0" prefWidth="178.0" promptText="Grid Size"
                                        text="8"/>
                             <Button mnemonicParsing="false" onAction="#setGridSize" prefHeight="25.0" prefWidth="75.0"
                                     text="OK"/>

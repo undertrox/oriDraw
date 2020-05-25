@@ -2,7 +2,7 @@ package de.undertrox.oridraw.ui.tab;
 
 import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
 import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;
-import de.undertrox.oridraw.ui.render.renderer.Renderer;
+import de.undertrox.oridraw.ui.render.Renderer;
 import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Tab;
@@ -10,7 +10,9 @@ import javafx.scene.control.Tab;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
+/**
+ * This class is used to use a Canvas inside a tab while scaling it appropriately
+ */
 public class CanvasTab extends Tab {
 
     private Canvas canvas;
@@ -52,6 +54,7 @@ public class CanvasTab extends Tab {
     }
 
     public void onCloseRequest(Event e) {
+        // nothing to do
     }
 
     /**

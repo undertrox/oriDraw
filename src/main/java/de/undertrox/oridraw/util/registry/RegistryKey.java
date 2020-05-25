@@ -18,6 +18,13 @@ public class RegistryKey {
         return domain + ":" + id;
     }
 
+    /**
+     * Creates a new RegistryKey. If the domain or id contain a colon,
+     * this will throw a RegistryException
+     * @param domain: Domain of the RegistryKey. Usually this is the name of the program that
+     *              registers it
+     * @param id: Id of the RegistryKey. Usually the name of the Object that will be registered
+     */
     public RegistryKey(String domain, String id) {
         if (domain.contains(":") || id.contains(":")) {
             throw new RegistryException("Invalid Registry name: neither domain nor id can contain :");

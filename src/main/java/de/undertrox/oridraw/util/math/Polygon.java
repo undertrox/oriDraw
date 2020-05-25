@@ -5,8 +5,8 @@ import de.undertrox.oridraw.util.UniqueItemList;
 import java.util.ArrayList;
 
 public class Polygon {
-    public UniqueItemList<Vector> points;
-    public UniqueItemList<Line> boundary;
+    private UniqueItemList<Vector> points;
+    private UniqueItemList<Line> boundary;
 
     public Polygon(Vector... points) {
         this.points = new UniqueItemList<>();
@@ -21,7 +21,7 @@ public class Polygon {
         for (int i = 1; i < points.size(); i++) {
             boundary.push(new Line(points.get(i - 1), points.get(i)));
         }
-        boundary.push(new Line(points.get(points.size()), points.get(0)));
+        boundary.push(new Line(points.get(points.size()-1), points.get(0)));
     }
 
     /**
@@ -37,6 +37,6 @@ public class Polygon {
         for (Vector point : points) {
             newPoints.add(line.flip(point));
         }
-        return new Polygon((Vector[]) newPoints.toArray());
+        return new Polygon(newPoints.toArray(new Vector[0]));
     }
 }

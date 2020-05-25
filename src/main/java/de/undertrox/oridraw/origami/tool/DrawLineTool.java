@@ -5,15 +5,16 @@ import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
-import de.undertrox.oridraw.ui.render.renderer.tool.DrawLineToolRenderer;
-import de.undertrox.oridraw.ui.render.renderer.tool.ToolRenderer;
+import de.undertrox.oridraw.ui.render.tool.DrawLineToolRenderer;
+import de.undertrox.oridraw.ui.render.tool.ToolRenderer;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class DrawLineTool extends TypedCreasePatternTool {
-    OriPoint point0, point1;
+    OriPoint point0;
+    OriPoint point1;
 
     public DrawLineTool(CreasePatternTab tab, OriLine.Type type,
                         CreasePatternToolFactory<? extends CreasePatternTool> factory) {
@@ -27,7 +28,7 @@ public class DrawLineTool extends TypedCreasePatternTool {
 
     @Override
     protected void disable() {
-
+        // Nothing to do
     }
 
     protected void clearSelection() {
@@ -51,7 +52,7 @@ public class DrawLineTool extends TypedCreasePatternTool {
                 getSelection().select(point0);
             } else {
                 point1 = getNextPoint();
-                getCp().addCrease(point0, point1, getType());
+                getCp().addOriLine(point0, point1, getType());
                 clearSelection();
             }
         }

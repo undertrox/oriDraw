@@ -6,8 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Grid extends CreaseCollection {
+public class Grid extends OriLineCollection {
     private Logger logger = LogManager.getLogger(Grid.class);
     private int divisions;
     private double paperSize;
@@ -39,11 +40,10 @@ public class Grid extends CreaseCollection {
         updateCorners();
         logger.info("Creating Grid");
         for (double x = topLeftCorner.getX(); x <= bottomRightCorner.getX(); x += getGridSquareSize()) {
-            addCrease(new OriPoint(x, topLeftCorner.getY()), new OriPoint(x, bottomRightCorner.getY()), OriLine.Type.AUX);
+            addOriLine(new OriPoint(x, topLeftCorner.getY()), new OriPoint(x, bottomRightCorner.getY()), OriLine.Type.AUX);
             for (double y = topLeftCorner.getY(); y <= bottomRightCorner.getY(); y += getGridSquareSize()) {
-                //getPoints().push(new OriPoint(x, y));
                 if (x == topLeftCorner.getX()) {
-                    addCrease(new OriPoint(x, y), new OriPoint(bottomRightCorner.getX(), y), OriLine.Type.AUX);
+                    addOriLine(new OriPoint(x, y), new OriPoint(bottomRightCorner.getX(), y), OriLine.Type.AUX);
                 }
             }
         }
@@ -98,15 +98,17 @@ public class Grid extends CreaseCollection {
         updateGrid();
     }
 
+    @Override
     public UniqueItemList<OriLine> getOriLines() {
         return oriLines;
     }
 
+    @Override
     public UniqueItemList<OriPoint> getPoints() {
         return points;
     }
 
-    public ArrayList<OriPoint> getGridPointsNear(Vector pos, int radius) {
+    public List<OriPoint> getGridPointsNear(Vector pos, int radius) {
         double x = topLeftCorner.getX();
         double y = topLeftCorner.getY();
         ArrayList<OriPoint> points = new ArrayList<>();

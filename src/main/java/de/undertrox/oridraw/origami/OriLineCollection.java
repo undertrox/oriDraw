@@ -2,11 +2,11 @@ package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
 
-public class CreaseCollection {
+public class OriLineCollection {
     protected UniqueItemList<OriLine> oriLines;
     protected UniqueItemList<OriPoint> points;
 
-    public CreaseCollection() {
+    public OriLineCollection() {
         oriLines = new UniqueItemList<>();
         points = new UniqueItemList<>();
     }
@@ -21,7 +21,13 @@ public class CreaseCollection {
         return points.push(vec);
     }
 
-    public void addCrease(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
+    /**
+     * Adds an OriLine starting from startPoint, ending on endPoint and with the type type.
+     * @param startPoint: Starting Point of the Crease
+     * @param endPoint: Ending Point of the Crease
+     * @param type: Type of the crease
+     */
+    public void addOriLine(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
         startPoint = addPoint(startPoint);
         endPoint = addPoint(endPoint);
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
@@ -38,7 +44,11 @@ public class CreaseCollection {
         return points;
     }
 
-    public void addCrease(OriLine line) {
-        addCrease(line.getStartPoint(), line.getEndPoint(), line.getType());
+    /**
+     * Adds an OriLine
+     * @param line: OriLine to add
+     */
+    public void addOriLine(OriLine line) {
+        addOriLine(line.getStartPoint(), line.getEndPoint(), line.getType());
     }
 }

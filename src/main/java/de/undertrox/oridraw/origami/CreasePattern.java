@@ -3,18 +3,13 @@ package de.undertrox.oridraw.origami;
 import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Comparator;
 
-public class CreasePattern extends CreaseCollection {
-
-    private Logger logger;
+public class CreasePattern extends OriLineCollection {
 
     public CreasePattern() {
         super();
-        logger = LogManager.getLogger(this.getClass());
     }
 
     /**
@@ -29,10 +24,10 @@ public class CreasePattern extends CreaseCollection {
         OriPoint point2 = new OriPoint(center.add(new Vector(-radius, radius)));
         OriPoint point3 = new OriPoint(center.add(new Vector(radius, radius)));
         OriPoint point4 = new OriPoint(center.add(new Vector(radius, -radius)));
-        addCrease(point1, point2, OriLine.Type.EDGE);
-        addCrease(point2, point3, OriLine.Type.EDGE);
-        addCrease(point3, point4, OriLine.Type.EDGE);
-        addCrease(point4, point1, OriLine.Type.EDGE);
+        addOriLine(point1, point2, OriLine.Type.EDGE);
+        addOriLine(point2, point3, OriLine.Type.EDGE);
+        addOriLine(point3, point4, OriLine.Type.EDGE);
+        addOriLine(point4, point1, OriLine.Type.EDGE);
     }
 
     /**
@@ -43,7 +38,8 @@ public class CreasePattern extends CreaseCollection {
      * @param endPoint   :   end Point of the crease
      * @param type       : OriLine Type
      */
-    public void addCrease(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
+    @Override
+    public void addOriLine(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
         if (startPoint.equals(endPoint)) {
             return;
         }
@@ -53,7 +49,7 @@ public class CreasePattern extends CreaseCollection {
         intersections.sort(Comparator.comparingDouble(a -> oriLine.getStartPoint().distanceSquared(a)));
         OriPoint lastPoint = startPoint;
         for (OriPoint intersection : intersections) {
-            super.addCrease(lastPoint, new OriPoint(intersection), type);
+            super.addOriLine(lastPoint, new OriPoint(intersection), type);
             if (intersection.getLines().size() == 1) {
                 OriLine l = intersection.getLines().get(0);
                 intersection.getLines().remove(l);
@@ -61,17 +57,22 @@ public class CreasePattern extends CreaseCollection {
             }
             lastPoint = intersection;
         }
-        super.addCrease(lastPoint, endPoint, type);
+        super.addOriLine(lastPoint, endPoint, type);
     }
 
+    /**
+     * Returns a List of Points at which l intersects lines in this cp
+     * @param l: Line
+     * @return List of Points at which l intersects lines in this cp
+     */
     public UniqueItemList<OriPoint> getLineIntersections(Line l) {
         UniqueItemList<OriPoint> intersections = new UniqueItemList<>();
         for (OriLine c : oriLines) {
             Vector intersection = l.getIntersection(c);
             if (intersection != null
                     && !(intersection.equals(l.getStartPoint()))
-                    && !(intersection.equals(l.getStartPoint()))
-                    && intersection.isValid()) {
+                    && !(intersection.equals(l.getEndPoint()))
+                    && intersection != Vector.UNDEFINED) {
                 OriPoint p = new OriPoint(intersection);
                 p.addLine(c);
                 intersections.push(p);
@@ -80,6 +81,11 @@ public class CreasePattern extends CreaseCollection {
         return intersections;
     }
 
+    /**
+     * Returns a List of all Points where an existing Point in the cp lies on l
+     * @param l: line
+     * @return List of all Points where an existing Point in the cp lies on l
+     */
     public UniqueItemList<OriPoint> getPointIntersections(Line l) {
         UniqueItemList<OriPoint> intersections = new UniqueItemList<>();
         for (Vector p : points) {
@@ -90,14 +96,25 @@ public class CreasePattern extends CreaseCollection {
         return intersections;
     }
 
+    /**
+     * Splits l at the point p
+     * @param l: Line to be split
+     * @param p: Point to split the line at
+     */
     public void splitLine(OriLine l, OriPoint p) {
+        if (!l.contains(p)) {
+            throw new IllegalArgumentException("Cant split at a point that is not on the line");
+        }
+        if (!getOriLines().contains(l)) {
+            throw new IllegalArgumentException("Cant split a line that is not in the Crease Pattern");
+        }
         OriPoint start = l.getStartPoint();
         OriPoint end = l.getEndPoint();
         OriLine.Type t = l.getType();
         getOriLines().remove(l);
         start.getLines().remove(l);
         end.getLines().remove(l);
-        super.addCrease(start, p, t);
-        super.addCrease(p, end, t);
+        super.addOriLine(start, p, t);
+        super.addOriLine(p, end, t);
     }
 }

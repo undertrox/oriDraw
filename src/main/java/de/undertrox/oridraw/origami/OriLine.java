@@ -57,6 +57,11 @@ public class OriLine extends Line {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     /**
      * Exact equals method that doesnt ignore the Type
      *
@@ -120,10 +125,12 @@ public class OriLine extends Line {
         }
     }
 
+    @Override
     public OriPoint getStartPoint() {
         return (OriPoint) super.getStartPoint();
     }
 
+    @Override
     public OriPoint getEndPoint() {
         return (OriPoint) super.getEndPoint();
     }

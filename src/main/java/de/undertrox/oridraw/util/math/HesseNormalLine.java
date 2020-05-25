@@ -4,18 +4,27 @@ import de.undertrox.oridraw.Constants;
 
 import static java.lang.Math.sqrt;
 
+/**
+ * Represents a Line in 2D space using the formula
+ * ax + by + c = 0
+ */
 public class HesseNormalLine {
     private double a;
     private double b;
     private double c;
 
-    public HesseNormalLine(Vector start, Vector end) {
-        double x1 = start.getX();
-        double y1 = start.getY();
-        double x2 = end.getX();
-        double y2 = end.getY();
+    /**
+     * Creates a Line that goes through point1 and point2
+     * @param point1: Vector
+     * @param point2: Vector
+     */
+    public HesseNormalLine(Vector point1, Vector point2) {
+        double x1 = point1.getX();
+        double y1 = point1.getY();
+        double x2 = point2.getX();
+        double y2 = point2.getY();
 
-        if (start.equals(end)) {
+        if (point1.equals(point2)) {
             throw new IllegalArgumentException("Start and End Points of a Hesse Normal Line cant be equal");
         }
 
@@ -25,6 +34,13 @@ public class HesseNormalLine {
         correctCoeffs();
     }
 
+    /**
+     * Creates a Line using the Forumla
+     * ax + by + c = 0
+     * @param a: double
+     * @param b: double
+     * @param c:double
+     */
     public HesseNormalLine(double a, double b, double c) {
         this.a = a;
         this.b = b;
@@ -33,35 +49,47 @@ public class HesseNormalLine {
     }
 
 
+    /**
+     * Corrects a, b, and c so that as x increases, y does as well (if applicable)
+     */
     private void correctCoeffs() {
-        if ((a < 0.0)) {
+        if ((a < 0)) {
             a = -a;
             b = -b;
             c = -c;
         }
-        if (Math.abs(a) < Constants.EPSILON) {
-            if (b < 0.0) {
-                a = -a;
-                b = -b;
-                c = -c;
-            }
+        if (Math.abs(a) < Constants.EPSILON && b < 0) {
+            a = -a;
+            b = -b;
+            c = -c;
         }
     }
 
+    /**
+     * Normalizes the Line
+     * @return Normalized line
+     */
     public HesseNormalLine normalize() {
         double m = sqrt(a * a + b * b);
-        double newA = a / m;
-        double newB = b / m;
-        double newC = c / m;
-        return new HesseNormalLine(a, b, c);
+        return new HesseNormalLine(a/m, b/m, c/m);
     }
 
+    /**
+     * Squared distance to a Point p
+     * @param p: Point to calculate the distance to
+     * @return Squared Distance to p
+     */
     public double squaredDistance(Vector p) {
         double x = p.getX();
         double y = p.getY();
         return (a * x + b * y + c) * (a * x + b * y + c) / (a * a + b * b);
     }
 
+    /**
+     * distance to a Point p
+     * @param p: Point to calculate the distance to
+     * @return Distance to p
+     */
     public double distance(Vector p) {
         double x = p.getX();
         double y = p.getY();
@@ -87,7 +115,6 @@ public class HesseNormalLine {
      */
     public HesseNormalLine normal(Vector p) {
         HesseNormalLine l = new HesseNormalLine(0, 0, 0);
-        double e;
         double x = p.getX();
         double y = p.getY();
         l.c = -b * x + a * y;
@@ -107,9 +134,15 @@ public class HesseNormalLine {
 
         double x = (b * c2 - b2 * c) / (a * b2 - a2 * b);
         double y = (a2 * c - a * c2) / (a * b2 - a2 * b);
-        return new Vector(x, y);
+        Vector v = new Vector(x,y);
+        return v.isValid() ? v : Vector.UNDEFINED;
     }
 
+    /**
+     * whether the Line l is Parallel to this line
+     * @param l: line to check
+     * @return true if l is parallel to this line, false otherwise
+     */
     public boolean parallel(HesseNormalLine l) {
         return a == l.a && b == l.b;
     }

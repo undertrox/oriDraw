@@ -2,9 +2,16 @@ package de.undertrox.oridraw.util.math;
 
 import de.undertrox.oridraw.Constants;
 
+import java.util.Objects;
+
+/**
+ * this class represents a Line that starts at a Point start
+ * and ends at the Point end
+ */
 public class Line {
 
-    private Vector start, end;
+    private Vector start;
+    private Vector end;
     private HesseNormalLine hesse;
 
     /**
@@ -14,6 +21,11 @@ public class Line {
      * @param end:   ending Point of the line
      */
     public Line(Vector start, Vector end) {
+        if (end.lengthSquared() > start.lengthSquared()) {
+            Vector tmp = end;
+            end = start;
+            start = tmp;
+        }
         this.start = start;
         this.end = end;
     }
@@ -79,6 +91,11 @@ public class Line {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getStartPoint(),getEndPoint());
+    }
+
     /**
      * Returns the point at which this and line intersect. if the lines are parallel or dont intersect,
      * this method returns null
@@ -88,21 +105,30 @@ public class Line {
      */
     public Vector getIntersection(Line line) {
         if (lengthSquared() < Constants.EPSILON || line.lengthSquared() < Constants.EPSILON) {
-            return null;
+            return Vector.UNDEFINED;
         }
         Vector p = getHesse().intersect(line.getHesse());
         if (line.contains(p) && this.contains(p)) {
             return p;
         }
-        return null;
+        return Vector.UNDEFINED;
     }
 
+    /**
+     * whether p is on this line
+     * @param p: point to check
+     * @return true if p is on this line, false if p is not on this line
+     */
     public boolean contains(Vector p) {
         double dist1 = getStartPoint().distance(p);
         double dist2 = getEndPoint().distance(p);
-        return Math.pow(dist1 + dist2, 2) - lengthSquared() < Constants.EPSILON;
+        return Math.abs(Math.pow(dist1 + dist2, 2) - lengthSquared()) < Constants.EPSILON;
     }
 
+    /**
+     *
+     * @return Hesse Normal Form representation of this line
+     */
     public HesseNormalLine getHesse() {
         if (hesse == null) {
             hesse = new HesseNormalLine(getStartPoint(), getEndPoint());
@@ -110,6 +136,10 @@ public class Line {
         return hesse;
     }
 
+    /**
+     *
+     * @return Vector representation of this line
+     */
     public Vector toVector() {
         return getEndPoint().sub(getStartPoint());
     }
@@ -128,6 +158,11 @@ public class Line {
         return getHesse().distance(point);
     }
 
+    /**
+     * Squared Distance of point to this line
+     * @param point: Point
+     * @return Squared distance of Point to this line
+     */
     public double getSquaredDistance(Vector point) {
         return getHesse().squaredDistance(point);
     }

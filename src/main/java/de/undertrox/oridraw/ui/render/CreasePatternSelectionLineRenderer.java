@@ -1,10 +1,9 @@
-package de.undertrox.oridraw.ui.render.renderer;
+package de.undertrox.oridraw.ui.render;
 
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.OriLine;
-import de.undertrox.oridraw.ui.render.Transform;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
-import javafx.scene.paint.Color;
+import de.undertrox.oridraw.util.math.Transform;
 import javafx.scene.paint.Paint;
 
 public class CreasePatternSelectionLineRenderer extends Renderer {
@@ -18,15 +17,13 @@ public class CreasePatternSelectionLineRenderer extends Renderer {
     @Override
     protected void draw() {
         for (OriLine line : selection.getToBeSelectedLines()) {
-            Color p = RenderSettings.getColorManager().TO_BE_SELECTED_COLOR;
-            Color c = Color.color(p.getRed(), p.getGreen(), p.getBlue(), 0.9);
-            RenderHelper.drawLine(line, c, RenderSettings.getWidthForCreaseType(line.getType()),
+            Paint p = RenderSettings.getColorManager().getToBeSelectedColor();
+            RenderHelper.drawLine(line, p, RenderSettings.getWidthForCreaseType(line.getType()),
                     getGc(), getTransform());
         }
         for (OriLine line : selection.getSelectedLines()) {
-            Color p = RenderSettings.getColorManager().SELECTED_COLOR;
-            Color c = Color.color(p.getRed(), p.getGreen(), p.getBlue(), 0.9);
-            RenderHelper.drawLine(line, c, RenderSettings.getWidthForCreaseType(line.getType()),
+            Paint p = RenderSettings.getColorManager().getSelectedColor();
+            RenderHelper.drawLine(line, p, RenderSettings.getWidthForCreaseType(line.getType()),
                     getGc(), getTransform());
         }
     }

@@ -26,29 +26,29 @@ public class ToolButton extends ToggleButton {
 
     public ToolButton() {
         super();
-        initialize();
+        init();
     }
 
     public ToolButton(String text) {
         super(text);
-        initialize();
+        init();
     }
 
     public ToolButton(String text, Node graphic) {
         super(text, graphic);
-        initialize();
+        init();
     }
 
     public ToolButton(String text, Supplier<CreasePatternTool> toolSupplier) {
         super(text);
         this.toolSupplier = toolSupplier;
-        initialize();
+        init();
     }
 
     public ToolButton(String text, Node graphic, Supplier<CreasePatternTool> toolSupplier) {
         super(text, graphic);
         this.toolSupplier = toolSupplier;
-        initialize();
+        init();
     }
 
     public boolean isActive() {
@@ -59,7 +59,7 @@ public class ToolButton extends ToggleButton {
         isActive = active;
     }
 
-    private void initialize() {
+    private void init() {
         isActive = false;
         this.onActionProperty().setValue(this::onClick);
     }
@@ -72,7 +72,7 @@ public class ToolButton extends ToggleButton {
         CreasePatternTool tool = toolSupplier.get();
         if (tool != null) {
             tool.activate();
-            OriDraw.getLogger().info(tool.getClass().getName() + " activated");
+            OriDraw.getLogger().info("{} activated", tool.getClass().getSimpleName());
         }
     }
 }

@@ -10,4 +10,6 @@ public class Registries {
         DOCUMENT_LOADER_REGISTRY.lock();
         TOOL_FACTORY_REGISTRY.lock();
     }
+
+    private Registries() {}
 }

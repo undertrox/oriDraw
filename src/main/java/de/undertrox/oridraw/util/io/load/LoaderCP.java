@@ -6,6 +6,7 @@ import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.StringTokenizer;
 
@@ -15,8 +16,14 @@ public class LoaderCP extends Loader<Document> {
         return new String[]{"cp"};
     }
 
+    /**
+     * Loads a .cp File to create a document
+     * @param r: reader to load data from
+     * @return Document with the Creases in the file
+     * @throws IOException if reading the file fails
+     */
     @Override
-    public Document load(Reader r) throws Exception {
+    public Document load(Reader r) throws IOException {
         Document doc = new Document("", Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS);
         String line;
         BufferedReader reader = new BufferedReader(r);
@@ -29,7 +36,7 @@ public class LoaderCP extends Loader<Document> {
                 double x2 = Double.parseDouble(tokenizer.nextToken());
                 double y2 = Double.parseDouble(tokenizer.nextToken());
 
-                doc.getCp().addCrease(new OriPoint(x1, y1), new OriPoint(x2, y2), OriLine.Type.fromCpId(lineType));
+                doc.getCp().addOriLine(new OriPoint(x1, y1), new OriPoint(x2, y2), OriLine.Type.fromCpId(lineType));
             } catch (NumberFormatException e) {
                 logger.warn("Syntax error");
             }

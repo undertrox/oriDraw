@@ -1,7 +1,7 @@
-package de.undertrox.oridraw.ui.render.renderer;
+package de.undertrox.oridraw.ui.render;
 
 import de.undertrox.oridraw.origami.Document;
-import de.undertrox.oridraw.ui.render.Transform;
+import de.undertrox.oridraw.util.math.Transform;
 
 public class DocumentRenderer extends Renderer {
     private CreaseCollectionLineRenderer creases;

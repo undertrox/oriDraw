@@ -23,6 +23,10 @@ public class Triangle {
         return c;
     }
 
+    /**
+     *
+     * @return Incenter of the Triangle, the intersection of the three Angle Bisectors
+     */
     public Vector incenter() {
         double bc = b.distance(c);
         double ab = a.distance(b);
@@ -33,6 +37,10 @@ public class Triangle {
         return new Vector(ox, oy);
     }
 
+    /**
+     *
+     * @return Perimeter of the Triangle
+     */
     public double perimeter() {
         return b.distance(c) + a.distance(b) + a.distance(c);
     }

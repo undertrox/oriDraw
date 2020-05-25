@@ -26,4 +26,14 @@ public class OriPoint extends Vector {
     public void addLine(OriLine l) {
         lines.push(l);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
