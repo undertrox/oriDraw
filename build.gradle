@@ -29,6 +29,9 @@ dependencies {
 
 jlink {
     forceMerge('log4j-api')
+    launcher{
+        name = 'OriDraw'
+    }
 }
 
 jar {

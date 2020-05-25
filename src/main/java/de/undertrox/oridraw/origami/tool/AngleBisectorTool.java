@@ -94,8 +94,16 @@ public class AngleBisectorTool extends TypedCreasePatternTool {
                 || point0.equals(point1) || point2.equals(point1) || point1.equals(point2)) {
             return null;
         }
-        Vector incenter = new Triangle(point0, point1, point2).incenter();
-        HesseNormalLine bisector = new Line(point1, incenter).getHesse();
+        HesseNormalLine bisector;
+        HesseNormalLine l = new Line(point0, point1).getHesse();
+        // if the three points are on one line, a triangle cant be constructed, so
+        // the normal of the line is returned
+        if (l.distance(point2) < Constants.EPSILON) {
+            bisector = l.normal(point1);
+        } else {
+            Vector incenter = new Triangle(point0, point1, point2).incenter();
+            bisector = new Line(point1, incenter).getHesse();
+        }
 
         return new OriLine(point1, new OriPoint(bisector.intersect(bound)), getType());
     }
