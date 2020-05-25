@@ -29,6 +29,10 @@ public class Vector {
         this(x, x);
     }
 
+    public Vector(Vector v) {
+        this(v.getX(), v.getY());
+    }
+
     /**
      * @return x coordinate of the Vector
      */
@@ -107,7 +111,7 @@ public class Vector {
      * @return new Vector with the signs of the coordinates inverted
      */
     public Vector invertSign() {
-        return new Vector(-getX(), -getY());
+        return scale(-1);
     }
 
     /**
@@ -134,6 +138,7 @@ public class Vector {
     public boolean equals(Object obj) {
         if (obj instanceof Vector) {
             Vector v = (Vector) obj;
+            if (!v.isValid()) return !isValid();
             if (Math.abs(getX() - v.getX()) > TOLERANCE) {
                 return false;
             }

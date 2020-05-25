@@ -13,6 +13,11 @@ public class Line {
     private Vector start;
     private Vector end;
     private HesseNormalLine hesse;
+    private boolean isValid;
+
+    public boolean isValid() {
+        return isValid;
+    }
 
     /**
      * Creates a new Line starting in start and ending in end
@@ -21,6 +26,7 @@ public class Line {
      * @param end:   ending Point of the line
      */
     public Line(Vector start, Vector end) {
+        isValid = start.isValid() && end.isValid();
         if (end.lengthSquared() > start.lengthSquared()) {
             Vector tmp = end;
             end = start;
@@ -57,14 +63,14 @@ public class Line {
      * @return squared length of the line
      */
     public double lengthSquared() {
-        return getStartPoint().distanceSquared(getEndPoint());
+        return isValid()? getStartPoint().distanceSquared(getEndPoint()) : -1;
     }
 
     /**
      * @return length of the line
      */
     public double length() {
-        return getStartPoint().distance(getEndPoint());
+        return isValid()? getStartPoint().distance(getEndPoint()) : -1;
     }
 
     /**
@@ -104,6 +110,7 @@ public class Line {
      * @return null if the lines are parallel or the lines dont intersect, the Intersection point if they do
      */
     public Vector getIntersection(Line line) {
+        if (!isValid) {return Vector.UNDEFINED;}
         if (lengthSquared() < Constants.EPSILON || line.lengthSquared() < Constants.EPSILON) {
             return Vector.UNDEFINED;
         }
@@ -120,6 +127,7 @@ public class Line {
      * @return true if p is on this line, false if p is not on this line
      */
     public boolean contains(Vector p) {
+        if (!isValid) return false;
         double dist1 = getStartPoint().distance(p);
         double dist2 = getEndPoint().distance(p);
         return Math.abs(Math.pow(dist1 + dist2, 2) - lengthSquared()) < Constants.EPSILON;
@@ -130,6 +138,7 @@ public class Line {
      * @return Hesse Normal Form representation of this line
      */
     public HesseNormalLine getHesse() {
+        if (!isValid) return null;
         if (hesse == null) {
             hesse = new HesseNormalLine(getStartPoint(), getEndPoint());
         }
@@ -141,11 +150,11 @@ public class Line {
      * @return Vector representation of this line
      */
     public Vector toVector() {
-        return getEndPoint().sub(getStartPoint());
+        return isValid()? getEndPoint().sub(getStartPoint()) : Vector.UNDEFINED;
     }
 
     public Vector getPointAt(double t) {
-        return getStartPoint().add(toVector().scale(t));
+        return isValid()? getStartPoint().add(toVector().scale(t)) : Vector.UNDEFINED;
     }
 
     /**
@@ -155,7 +164,7 @@ public class Line {
      * @return distance of Point to this line
      */
     public double getDistance(Vector point) {
-        return getHesse().distance(point);
+        return isValid? getHesse().distance(point) : -1;
     }
 
     /**
@@ -164,7 +173,7 @@ public class Line {
      * @return Squared distance of Point to this line
      */
     public double getSquaredDistance(Vector point) {
-        return getHesse().squaredDistance(point);
+        return isValid? getHesse().squaredDistance(point) : -1;
     }
 
     @Override
