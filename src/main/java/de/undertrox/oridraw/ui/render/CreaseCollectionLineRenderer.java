@@ -1,10 +1,10 @@
 package de.undertrox.oridraw.ui.render;
 
-import de.undertrox.oridraw.origami.OriLineCollection;
 import de.undertrox.oridraw.origami.OriLine;
-import de.undertrox.oridraw.util.math.Transform;
+import de.undertrox.oridraw.origami.OriLineCollection;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
-import javafx.scene.paint.Paint;
+import de.undertrox.oridraw.ui.theme.LineStyle;
+import de.undertrox.oridraw.util.math.Transform;
 
 public class CreaseCollectionLineRenderer extends Renderer {
     private OriLineCollection cc;
@@ -17,9 +17,8 @@ public class CreaseCollectionLineRenderer extends Renderer {
     @Override
     protected void draw() {
         for (OriLine oriLine : cc.getOriLines()) {
-            Paint p = RenderSettings.getColorManager().getPaintForCreaseType(oriLine.getType());
-            RenderHelper.drawLine(oriLine, p, RenderSettings.getWidthForCreaseType(oriLine.getType()),
-                    getGc(), getTransform());
+            LineStyle s = RenderSettings.getColorManager().getLineStyleForCreaseType(oriLine.getType());
+            RenderHelper.drawLine(oriLine, s, getGc(), getTransform());
 
         }
     }

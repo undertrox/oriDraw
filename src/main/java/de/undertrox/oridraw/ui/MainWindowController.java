@@ -17,6 +17,7 @@ import de.undertrox.oridraw.util.registry.RegistryEntry;
 import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -29,6 +30,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,10 +44,15 @@ import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
 
+    public static MainWindowController instance;
+
     public GridPane toolGridPane;
     public ToggleGroup type;
     public NumberTextField gridSize;
     public CheckBox showGrid;
+    public WebView documentation;
+    public GridPane toolSettingsGridPane;
+    public Label toolNameLabel;
     private Logger logger = LogManager.getLogger(MainWindowController.class);
 
     private List<ToolButton> toolButtons;
@@ -76,6 +83,7 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        instance = this;
         logger.debug("Initializing MainWindowController");
         bundle = resources;
         toolButtons = new ArrayList<>();
@@ -103,7 +111,7 @@ public class MainWindowController implements Initializable {
 
         timer.start();
         mainTabPane.requestFocus();
-
+        toolButtons.get(0).getOnAction().handle(new ActionEvent());
         MainApp.getPrimaryStage().setOnCloseRequest(this::onCloseRequest);
     }
 
@@ -127,6 +135,7 @@ public class MainWindowController implements Initializable {
                 logger.warn("Could not find icon for '{}'. Using id as text instead", item.getKey());
             }
             initToolButton(btn, item.getKey());
+            btn.init(this, bundle);
             toolGridPane.add(btn, col, row);
             toolButtons.add(btn);
             col++;
@@ -366,19 +375,23 @@ public class MainWindowController implements Initializable {
         OriLine.Type toolType = tool.getType();
         switch (toolType) {
             case MOUNTAIN:
-                setBorderColor(btnMountain, RenderSettings.getColorManager().getMountainColor());
+                setBorderColor(btnMountain,
+                        RenderSettings.getColorManager().getLineStyleForCreaseType(OriLine.Type.MOUNTAIN).getPaint());
                 btnMountain.setSelected(true);
                 break;
             case VALLEY:
-                setBorderColor(btnValley, RenderSettings.getColorManager().getValleyColor());
+                setBorderColor(btnValley,
+                        RenderSettings.getColorManager().getLineStyleForCreaseType(OriLine.Type.VALLEY).getPaint());
                 btnValley.setSelected(true);
                 break;
             case EDGE:
-                setBorderColor(btnEdge, RenderSettings.getColorManager().getEdgeColor());
+                setBorderColor(btnEdge,
+                        RenderSettings.getColorManager().getLineStyleForCreaseType(OriLine.Type.EDGE).getPaint());
                 btnEdge.setSelected(true);
                 break;
             case AUX:
-                setBorderColor(btnAux, RenderSettings.getColorManager().getAuxColor());
+                setBorderColor(btnAux,
+                        RenderSettings.getColorManager().getLineStyleForCreaseType(OriLine.Type.UNKNOWN).getPaint());
                 btnAux.setSelected(true);
                 break;
             default:

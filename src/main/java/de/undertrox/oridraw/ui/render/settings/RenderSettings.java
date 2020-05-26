@@ -1,6 +1,7 @@
 package de.undertrox.oridraw.ui.render.settings;
 
 import de.undertrox.oridraw.origami.OriLine;
+import de.undertrox.oridraw.ui.theme.ColorManager;
 
 public class RenderSettings {
     private static RenderSettings instance;

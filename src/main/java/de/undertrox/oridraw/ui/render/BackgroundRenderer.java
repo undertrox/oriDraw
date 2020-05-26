@@ -13,7 +13,7 @@ public class BackgroundRenderer extends Renderer {
     @Override
     protected void draw() {
         GraphicsContext gc = getGc();
-        gc.setFill(RenderSettings.getColorManager().getCpEditorBackgroundColor());
+        gc.setFill(RenderSettings.getColorManager().getActiveTheme().getBackground());
         gc.fillRect(0, 0, getWidth(), getHeight());
     }
 }

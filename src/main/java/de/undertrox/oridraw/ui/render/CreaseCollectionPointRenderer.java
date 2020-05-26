@@ -16,8 +16,8 @@ public class CreaseCollectionPointRenderer extends Renderer {
     @Override
     protected void draw() {
         for (Vector point : cc.getPoints()) {
-            RenderHelper.drawSquare(point, RenderSettings.getColorManager().getPointColor(),
-                    RenderSettings.getPointSideLength(), getGc(), getTransform());
+            RenderHelper.drawPoint(point, RenderSettings.getColorManager().getActiveTheme().getDefaultPoint(),
+                    getGc(), getTransform());
         }
     }
 }
