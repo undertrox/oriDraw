@@ -28,10 +28,16 @@ public class OriLineCollection {
      * @param type: Type of the crease
      */
     public void addOriLine(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
+        if (startPoint.equals(endPoint)) {
+            return;
+        }
         startPoint = addPoint(startPoint);
         endPoint = addPoint(endPoint);
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
         OriLine c = oriLines.push(oriLine);
+        if (c == oriLine) {
+            System.out.println("Added Line " + oriLine);
+        }
         c.setType(type);
     }
 

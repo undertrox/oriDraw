@@ -53,7 +53,14 @@ public class DrawLineTool extends TypedCreasePatternTool {
             } else {
                 point1 = getNextPoint();
                 getCp().addOriLine(point0, point1, getType());
-                clearSelection();
+                if (!e.isShiftDown()) {
+                    clearSelection();
+                } else {
+                    getSelection().clearSelection();
+                    point0 = point1;
+                    point1 = null;
+                    getSelection().select(point0);
+                }
             }
         }
     }

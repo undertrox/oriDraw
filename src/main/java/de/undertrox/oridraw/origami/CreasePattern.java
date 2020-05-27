@@ -44,6 +44,8 @@ public class CreasePattern extends OriLineCollection {
             return;
         }
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
+        //splitAtIntersections(startPoint);
+        //splitAtIntersections(endPoint);
         UniqueItemList<OriPoint> intersections = getLineIntersections(oriLine);
         intersections.addAll(getPointIntersections(oriLine));
         intersections.sort(Comparator.comparingDouble(a -> oriLine.getStartPoint().distanceSquared(a)));
@@ -58,6 +60,10 @@ public class CreasePattern extends OriLineCollection {
             lastPoint = intersection;
         }
         super.addOriLine(lastPoint, endPoint, type);
+
+        //splitAtIntersections(startPoint);
+        //splitAtIntersections(endPoint);
+
     }
 
     /**
@@ -94,6 +100,17 @@ public class CreasePattern extends OriLineCollection {
             }
         }
         return intersections;
+    }
+
+    public void splitAtIntersections(Vector p) {
+        for (int i = 0; i<oriLines.size(); i++) {
+            OriLine l = oriLines.get(i);
+            if (l.contains(p) && !p.equals(l.getStartPoint()) && !p.equals(l.getEndPoint())) {
+                OriPoint op = new OriPoint(p);
+                splitLine(l,op);
+                i = 0;
+            }
+        }
     }
 
     /**

@@ -16,6 +16,7 @@ import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryEntry;
 import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -99,8 +100,10 @@ public class MainWindowController implements Initializable {
                 CanvasTab tab = getSelectedTab();
                 if (tab == null) {
                     MainApp.getPrimaryStage().close();
+                    Platform.exit();
                     return;
                 }
+                updateCreaseType();
                 tab.render();
             }
         };
@@ -391,7 +394,7 @@ public class MainWindowController implements Initializable {
                 break;
             case AUX:
                 setBorderColor(btnAux,
-                        RenderSettings.getColorManager().getLineStyleForCreaseType(OriLine.Type.UNKNOWN).getPaint());
+                        RenderSettings.getColorManager().getLineStyleForCreaseType(OriLine.Type.AUX).getPaint());
                 btnAux.setSelected(true);
                 break;
             default:
