@@ -11,6 +11,14 @@ public class OriLineCollection {
         points = new UniqueItemList<>();
     }
 
+    // copy constructor for oriline collection
+    public OriLineCollection(OriLineCollection oriLineCollection){
+        this();
+        for(OriLine L : oriLineCollection.getOriLines()){
+            addOriLine(L);
+        }
+    }
+
     /**
      * Adds a Point into the Points list if it isnt already there
      *

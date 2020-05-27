@@ -1,5 +1,6 @@
 package de.undertrox.oridraw.ui;
 
+import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
@@ -54,6 +55,8 @@ public class MainWindowController implements Initializable {
     public WebView documentation;
     public GridPane toolSettingsGridPane;
     public Label toolNameLabel;
+
+
     private Logger logger = LogManager.getLogger(MainWindowController.class);
 
     private List<ToolButton> toolButtons;
@@ -77,6 +80,15 @@ public class MainWindowController implements Initializable {
     public Button btnNew;
     public Button btnOpen;
 
+
+    /// TODO: Add undo and redo button in scenebuilder
+    //ASD : Add redo and undo button
+    public Button btnUndo;
+    public Button btnRedo;
+    //ASD : End redo and undo button
+
+
+
     private static final int CANVAS_CORRECTION = 28;
 
 
@@ -99,12 +111,16 @@ public class MainWindowController implements Initializable {
             public void handle(long l) {
                 CanvasTab tab = getSelectedTab();
                 if (tab == null) {
-                    MainApp.getPrimaryStage().close();
-                    Platform.exit();
+                    /*This is if we do not want the program to close when there are no opened tabs.*/
+                    //MainApp.getPrimaryStage().close();
+                    //Platform.exit();
                     return;
                 }
-                updateCreaseType();
-                tab.render();
+                // Make sure there is a tab to deal with.
+                if(tab != null) {
+                    updateCreaseType();
+                    tab.render();
+                }
             }
         };
         createToolButtons();
@@ -176,12 +192,17 @@ public class MainWindowController implements Initializable {
 
     private void updateTab() {
         CanvasTab tab = getSelectedTab();
-        if (tab instanceof CreasePatternTab) {
-            CreasePatternTab cpTab = (CreasePatternTab) tab;
-            cpTab.setText(cpTab.getDoc().getTitle());
+        if(tab != null) {
+            if (tab instanceof CreasePatternTab) {
+                CreasePatternTab cpTab = (CreasePatternTab) tab;
+                cpTab.setText(cpTab.getDoc().getTitle());
+            }
+            updateActiveTool();
+            updateGridControls();
+        }else{
+            // When there are no more open tabs.
+            logger.debug("All tabs have been closed.");
         }
-        updateActiveTool();
-        updateGridControls();
     }
 
     private void updateActiveTool() {
@@ -281,6 +302,8 @@ public class MainWindowController implements Initializable {
         createNewFileTab(doc);
         mainTabPane.getSelectionModel().selectLast();
     }
+    
+    
 
     public void onMouseMoved(MouseEvent e) {
         CanvasTab tab = getSelectedTab();
@@ -289,7 +312,10 @@ public class MainWindowController implements Initializable {
             statusLabel.setText("Mouse Position: " + MouseHandler
                 .normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTab.getDocTransform()));
         }
-        tab.getMouseHandler().onMove(e);
+        if(tab != null) {
+            tab.getMouseHandler().onMove(e);
+
+        }
     }
 
     public void onMouseClicked(MouseEvent e) {
@@ -435,5 +461,68 @@ public class MainWindowController implements Initializable {
         if (tab != null) {
             tab.getDoc().setShowGrid(showGrid.isSelected());
         }
+    }
+
+    public void btnUndoClick(ActionEvent actionEvent) {
+
+
+        logger.debug("Clicked on undo button");
+
+        CreasePatternTab tab;
+        if (getSelectedTab() instanceof CreasePatternTab) {
+            tab = (CreasePatternTab) getSelectedTab();
+            if(tab.getCurrMementoStateIndex() >= 1){
+
+
+                if(tab.getCurrMementoStateIndex() != 0 && tab.getCurrMementoStateIndex() == tab.getNoOfSavedStates()-1){
+                    // TODO: If it is the last element in the arraylist in caretaker, the save the current state once and incrememt the counters before doing the
+                    // TODO: undo function else just continue to decrement the counter.
+                }
+
+                // Decrement the curr state index
+                int currIdx = tab.getCurrMementoStateIndex();
+                tab.setCurrMementoStateIndex(currIdx-1);
+                Document stateDoc = tab.getOriginator().restoreMemento(tab.getCareTaker().getMemento(currIdx-1) );
+                //tab.getCareTaker().addMementos(tab.getOriginator().createMementos());
+                tab.setDocument(stateDoc);
+
+                logger.debug("DrawLineTool Class -- getNoOfSavedStates : "+tab.getNoOfSavedStates());
+                logger.debug("DrawLineTool Class -- getCurrMementoStateIndex : "+tab.getCurrMementoStateIndex());
+            }else{
+                // TODO: Disable the undo button when the currMementoStateIndex is 0 and less
+                logger.debug("End of undo");
+            }
+        }else{
+            logger.error("selected tab is not an instance od CreasePatternTab");
+        }
+    }
+
+    public void btnRedoClick(ActionEvent actionEvent) {
+
+
+
+
+        logger.debug("Clicked on redo button");
+        CreasePatternTab tab;
+        if (getSelectedTab() instanceof CreasePatternTab) {
+            tab = (CreasePatternTab) getSelectedTab();
+            int currIdx = tab.getCurrMementoStateIndex();
+            if(currIdx < tab.getNoOfSavedStates() - 1){
+                tab.setCurrMementoStateIndex(currIdx+1);
+                Document document = tab.getOriginator().restoreMemento(tab.getCareTaker().getMemento(currIdx+1));
+                //tab.getCareTaker().addMementos(tab.getOriginator().createMementos());
+                tab.setDocument(document);   // Set the document
+
+
+                logger.debug("DrawLineTool Class -- getNoOfSavedStates : "+tab.getNoOfSavedStates());
+                logger.debug("DrawLineTool Class -- getCurrMementoStateIndex : "+tab.getCurrMementoStateIndex());
+            }else{
+                logger.debug("End of redo");
+                // TODO: Disable the redo button.
+            }
+        }else{
+            logger.error("Selected tab is not an instance of creasePatternTab") ;
+        }
+
     }
 }

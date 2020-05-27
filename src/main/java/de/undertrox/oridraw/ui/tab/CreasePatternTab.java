@@ -7,6 +7,8 @@ import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.MainApp;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
+import de.undertrox.oridraw.util.actions.CareTaker;
+import de.undertrox.oridraw.util.actions.Originator;
 import de.undertrox.oridraw.util.math.Transform;
 import de.undertrox.oridraw.ui.render.BackgroundRenderer;
 import de.undertrox.oridraw.ui.render.DocumentRenderer;
@@ -40,6 +42,15 @@ public class CreasePatternTab extends CanvasTab {
     private Transform bgTransform;
     private Document doc;
 
+    /*
+        These three objects will take care of the undo and redo for each document.
+       */
+    private CareTaker careTaker; // Retrieve and store states that was saved previously.
+    private Originator originator; // Sets and gets value from the currently targeted memento. Mementos is the object whose state would be stored.
+
+    private int currMementoStateIndex = 0 ;
+    private int noOfSavedStates = 0;
+
 
     /**
      * Constructor. Binds the width of the Canvas to that of the tabPane
@@ -50,11 +61,14 @@ public class CreasePatternTab extends CanvasTab {
      */
     public CreasePatternTab(String title, Canvas canvas, TabPane tabPane, ResourceBundle bundle) {
         this(new Document(title, Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS), canvas, tabPane, bundle);
-
     }
 
     public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane, ResourceBundle bundle) {
         super(doc.getTitle(), canvas, bundle);
+
+        this.careTaker = new CareTaker();
+        this.originator = new Originator();
+
 
         logger.debug("Initializing Crease Pattern");
         this.doc = doc;
@@ -177,4 +191,58 @@ public class CreasePatternTab extends CanvasTab {
         getDoc().setHasUnsavedChanges(false);
         return true;
     }
+
+
+    public Originator getOriginator() {
+        return this.originator;
+    }
+
+    public CareTaker getCareTaker() {
+        return this.careTaker;
+    }
+
+    public int getNoOfSavedStates(){
+        return this.careTaker.getSavedDocument().size();
+    }
+
+
+
+    public void setNoOfSavedStates(int index){
+        if(this.noOfSavedStates < 0){
+            logger.error("[setNoOfSavedStates] : The current memento state index is less than zero.");
+            return;
+        }
+
+        // TODO : Please check this condition. something might be wrong with this.
+        if(this.noOfSavedStates > this.careTaker.getSavedDocument().size()){
+            logger.error("[setNoOfSavedStates] : Potential index out of bound write!. Please check the debugger to make sure that the " +
+                    "current index should not be larger than the size of the " +
+                    "arraylist containing the mementos");
+            return;
+        }
+        this.noOfSavedStates  = index;
+    }
+
+    public int getCurrMementoStateIndex(){
+        //  This is to get the current state of the memento.
+        return this.currMementoStateIndex;
+    }
+
+    public void setCurrMementoStateIndex(int index){
+        this.currMementoStateIndex = index;
+    }
+
+
+    public void setDocument(Document document){
+        // Make sure to deep copy
+        getRenderers().clear();
+        this.doc = document;
+
+        // Rerender after the new documents have been set to update screen
+        getRenderers().add(new BackgroundRenderer(bgTransform));
+        getRenderers().add(new DocumentRenderer(docTransform, doc));
+        tools.forEach(tool -> getRenderers().add(tool.getRenderer()));
+    }
+
+
 }

@@ -1,10 +1,17 @@
 package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
+import de.undertrox.oridraw.util.actions.CareTaker;
+import de.undertrox.oridraw.util.actions.Mementos;
+import de.undertrox.oridraw.util.actions.Originator;
 import de.undertrox.oridraw.util.math.Vector;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.print.Doc;
 
 public class Document {
-
+    private Logger logger = LogManager.getLogger(Document.class);
     private CreasePattern cp;
     private Grid grid;
     private boolean showGrid;
@@ -13,7 +20,21 @@ public class Document {
     private double paperSize;
     private boolean hasUnsavedChanges;
 
+
+
+    public Document(Document document){
+
+        this.cp = new CreasePattern(document.getCp()); // TODO : this may be wrong
+        this.grid = new Grid(document.getGrid());
+        this.showGrid = document.showGrid;
+        this.selection = new CreasePatternSelection(this.cp);
+        this.title = document.getTitle();
+        this.paperSize = document.getPaperSize();
+        this.hasUnsavedChanges = document.hasUnsavedChanges();
+    }
+
     public Document(String title, double paperSize, int gridDivisions) {
+
         this.paperSize = paperSize;
         this.cp = new CreasePattern();
         this.grid = new Grid(gridDivisions, paperSize, paperSize, Vector.ORIGIN);
@@ -23,6 +44,9 @@ public class Document {
         this.title = title;
         hasUnsavedChanges = false;
     }
+
+
+
 
     public boolean hasUnsavedChanges() {
         return hasUnsavedChanges;
@@ -73,4 +97,7 @@ public class Document {
         }
         return cp.getPoints();
     }
+
+
+
 }

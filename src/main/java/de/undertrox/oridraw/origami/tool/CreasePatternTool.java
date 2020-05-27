@@ -55,7 +55,7 @@ public abstract class CreasePatternTool extends Registrable implements MouseHand
     public abstract void reset();
 
     public CreasePattern getCp() {
-        return doc.getCp();
+        return getDoc().getCp();
     }
 
     public CreasePatternSelection getSelection() {
@@ -104,5 +104,13 @@ public abstract class CreasePatternTool extends Registrable implements MouseHand
         if (e.getCode().equals(KeyCode.ESCAPE)) {
             reset();
         }
+    }
+
+    public Document getDoc(){
+        return this.tab.getDoc();
+    }
+
+    public CreasePatternTab getCPTab(){
+        return this.tab;
     }
 }

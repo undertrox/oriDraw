@@ -13,11 +13,17 @@ public class OriPoint extends Vector {
 
     public OriPoint(Vector v) {
         this(v.getX(), v.getY());
+
     }
 
     public OriPoint(double x) {
         super(x);
     }
+
+    // Copy constructor for oripoint
+    public OriPoint(OriPoint oriPoint){
+        this(oriPoint.getX(),oriPoint.getY());}
+
 
     public UniqueItemList<OriLine> getLines() {
         return lines;

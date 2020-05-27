@@ -12,6 +12,10 @@ public class CreasePattern extends OriLineCollection {
         super();
     }
 
+    public  CreasePattern(CreasePattern creasePattern){
+        super(creasePattern);
+    }
+
     /**
      * creates a square centered on center with the side length sidelength
      *

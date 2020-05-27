@@ -28,6 +28,18 @@ public class Grid extends OriLineCollection {
         this.center = center;
         updateGrid();
     }
+    public Grid(Grid grid){
+        super(grid);
+        this.divisions = grid.divisions;
+        this.paperSize = grid.paperSize;
+        this.gridSize = grid.gridSize;
+        this.gridSquareSize = grid.gridSquareSize;
+        this.center = new Vector(grid.center);
+        this.topLeftCorner = new Vector(grid.topLeftCorner);
+        this.bottomRightCorner = new Vector(grid.bottomRightCorner);
+    }
+
+
 
     public void reset() {
         getOriLines().clear();
