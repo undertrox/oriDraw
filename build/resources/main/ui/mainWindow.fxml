@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.web.WebView?>
+
+<?import de.undertrox.oridraw.ui.NumberTextField?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="821.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.undertrox.oridraw.ui.MainWindowController">
+    <top>
+        <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <Button fx:id="btnNew" mnemonicParsing="false" onAction="#btnNewClick" text="New" />
+            <Button fx:id="btnOpen" mnemonicParsing="false" onAction="#btnOpenClick" text="Open" />
+            <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClick" text="Save" />
+         <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#btnUndoClick" text="Undo" />
+         <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#btnRedoClick" text="Redo" />
+        </ToolBar>
+    </top>
+    <bottom>
+        <TextFlow fx:id="statusText" prefHeight="32.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <Label fx:id="statusLabel" text="Label" />
+        </TextFlow>
+    </bottom>
+    <left>
+        <VBox fx:id="vBoxLeft" prefHeight="528.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+            <Label text="Crease Type" />
+            <Separator prefWidth="200.0" />
+            <GridPane fx:id="creasetypeGridpane">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+                <ToggleButton fx:id="btnMountain" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTypeMountain" selected="true" text="Mountain">
+                    <GridPane.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                    </GridPane.margin>
+                    <toggleGroup>
+                        <ToggleGroup fx:id="type" />
+                    </toggleGroup>
+                </ToggleButton>
+                <ToggleButton fx:id="btnValley" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTypeValley" text="Valley" toggleGroup="$type" GridPane.columnIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                    </GridPane.margin>
+                </ToggleButton>
+                <ToggleButton fx:id="btnEdge" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTypeEdge" text="Edge" toggleGroup="$type" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                    </GridPane.margin>
+                </ToggleButton>
+                <ToggleButton fx:id="btnAux" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#setTypeAux" text="Auxiliary" toggleGroup="$type" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                    </GridPane.margin>
+                </ToggleButton>
+            </GridPane>
+            <Separator prefHeight="20.0" prefWidth="180.0" visible="false" />
+            <Label text="Tools" />
+            <Separator prefWidth="200.0" />
+            <GridPane fx:id="toolGridPane" alignment="CENTER" prefHeight="180.0" prefWidth="200.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                </rowConstraints>
+            </GridPane>
+            <Separator prefHeight="20.0" prefWidth="200.0" visible="false" />
+            <Label text="Grid" />
+            <Separator prefWidth="200.0" />
+            <VBox prefHeight="51.0" prefWidth="180.0">
+                <children>
+                    <HBox prefHeight="30.0" prefWidth="180.0">
+                        <children>
+                            <NumberTextField fx:id="gridSize" prefHeight="25.0" prefWidth="178.0" promptText="Grid Size" text="8" />
+                            <Button mnemonicParsing="false" onAction="#setGridSize" prefHeight="25.0" prefWidth="75.0" text="OK" />
+                        </children>
+                    </HBox>
+                    <CheckBox fx:id="showGrid" mnemonicParsing="false" onAction="#updateShowGrid" selected="true" text="Show Grid" />
+                </children>
+            </VBox>
+        </VBox>
+    </left>
+    <right>
+        <VBox fx:id="vBoxRight" prefHeight="528.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Tool Settings" />
+            <Separator prefWidth="200.0" />
+            <GridPane fx:id="toolSettingsGridPane">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+            <Separator prefHeight="20.0" prefWidth="180.0" visible="false" />
+            <Label fx:id="toolNameLabel" text="Tool Name" />
+            <Separator prefWidth="200.0" />
+            <WebView fx:id="documentation" prefHeight="200" prefWidth="200.0" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding></VBox>
+    </right>
+    <center>
+        <TabPane fx:id="mainTabPane" onKeyPressed="#onKeyDown" onKeyReleased="#onKeyUp" onKeyTyped="#onKeyPressed" onMouseClicked="#onMouseClicked" onMouseDragged="#onMouseDragged" onMouseMoved="#onMouseMoved" onMousePressed="#onMouseDown" onMouseReleased="#onMouseUp" onScroll="#onScroll" prefHeight="528.0" prefWidth="600.0" tabClosingPolicy="ALL_TABS" BorderPane.alignment="CENTER" />
+    </center>
+</BorderPane>
