@@ -45,8 +45,8 @@ import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
 
+    private static final int CANVAS_CORRECTION = 28;
     public static MainWindowController instance;
-
     public GridPane toolGridPane;
     public ToggleGroup type;
     public NumberTextField gridSize;
@@ -54,32 +54,23 @@ public class MainWindowController implements Initializable {
     public WebView documentation;
     public GridPane toolSettingsGridPane;
     public Label toolNameLabel;
-    private Logger logger = LogManager.getLogger(MainWindowController.class);
-
-    private List<ToolButton> toolButtons;
-
     public Label statusLabel;
     public GridPane creasetypeGridpane;
     public ToggleButton btnMountain;
     public ToggleButton btnValley;
     public ToggleButton btnEdge;
     public ToggleButton btnAux;
-
     public TextFlow statusText;
     public VBox vBoxLeft;
     public VBox vBoxRight;
     public TabPane mainTabPane;
-
     public ToggleGroup toolToggleGroup;
-
     public ToolBar toolBar;
     public Button btnSave;
     public Button btnNew;
     public Button btnOpen;
-
-    private static final int CANVAS_CORRECTION = 28;
-
-
+    private Logger logger = LogManager.getLogger(MainWindowController.class);
+    private List<ToolButton> toolButtons;
     private ResourceBundle bundle;
 
     @Override
@@ -157,9 +148,8 @@ public class MainWindowController implements Initializable {
     }
 
     private void updateActiveTool() {
-        CreasePatternTab tab;
-        if (getSelectedTab() instanceof CreasePatternTab) {
-            tab = (CreasePatternTab) getSelectedTab();
+        if (getSelectedCpTab() != null) {
+            CreasePatternTab tab = (CreasePatternTab) getSelectedTab();
             CreasePatternTool activeTool = tab.getActiveTool();
             RegistryKey key = activeTool.getFactory().getRegistryKey();
             for (ToolButton toolButton : toolButtons) {
@@ -210,9 +200,8 @@ public class MainWindowController implements Initializable {
 
     public void btnSaveClick() {
         logger.debug("Save Button clicked");
-        CreasePatternTab tab;
-        if (getSelectedTab() instanceof CreasePatternTab) {
-            tab = (CreasePatternTab) getSelectedTab();
+        if (getSelectedCpTab() != null) {
+            CreasePatternTab tab = (CreasePatternTab) getSelectedTab();
             tab.saveDocument();
         }
     }
@@ -228,6 +217,9 @@ public class MainWindowController implements Initializable {
         while (getSelectedTab() != null && !e.isConsumed()) {
             getSelectedTab().onCloseRequest(e);
             logger.info("Closed Tab ");
+        }
+        if (!e.isConsumed()) {
+            System.exit(0);
         }
     }
 
@@ -255,39 +247,50 @@ public class MainWindowController implements Initializable {
     }
 
     public void onMouseMoved(MouseEvent e) {
-        CanvasTab tab = getSelectedTab();
-        if (tab instanceof CreasePatternTab) {
-            CreasePatternTab cpTab = (CreasePatternTab) tab;
+        if (getSelectedCpTab() != null) {
+            CreasePatternTab cpTab = getSelectedCpTab();
             statusLabel.setText("Mouse Position: " + MouseHandler
-                .normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTab.getDocTransform()));
+                    .normalizeMouseCoords(new Vector(e.getX(), e.getY()), cpTab.getDocTransform()));
         }
-        tab.getMouseHandler().onMove(e);
+        if (getSelectedTab() != null) {
+            getSelectedTab().getMouseHandler().onMove(e);
+        }
     }
 
     public void onMouseClicked(MouseEvent e) {
-        if (e.getY() > CANVAS_CORRECTION) {
+        if (e.getY() > CANVAS_CORRECTION && getSelectedTab() != null) {
             getSelectedTab().getMouseHandler().onClick(e);
         }
     }
 
     public void onScroll(ScrollEvent e) {
-        getSelectedTab().getMouseHandler().onScroll(e);
+        if (getSelectedTab() != null) {
+            getSelectedTab().getMouseHandler().onScroll(e);
+        }
     }
 
     public void onMouseDragged(MouseEvent e) {
-        getSelectedTab().getMouseHandler().onDrag(e);
+        if (getSelectedTab() != null) {
+            getSelectedTab().getMouseHandler().onDrag(e);
+        }
     }
 
     public void onKeyPressed(KeyEvent e) {
-        getSelectedTab().getKeyboardHandler().onKeyPressed(e);
+        if (getSelectedTab() != null) {
+            getSelectedTab().getKeyboardHandler().onKeyPressed(e);
+        }
     }
 
     public void onKeyDown(KeyEvent e) {
-        getSelectedTab().getKeyboardHandler().onKeyDown(e);
+        if (getSelectedTab() != null) {
+            getSelectedTab().getKeyboardHandler().onKeyDown(e);
+        }
     }
 
     public void onKeyUp(KeyEvent e) {
-        getSelectedTab().getKeyboardHandler().onKeyUp(e);
+        if (getSelectedTab() != null) {
+            getSelectedTab().getKeyboardHandler().onKeyUp(e);
+        }
     }
 
     public void setTypeAux() {
@@ -319,10 +322,9 @@ public class MainWindowController implements Initializable {
     }
 
     public TypedCreasePatternTool getActiveTypedCpTool() {
-        CanvasTab tab = getSelectedTab();
-        if (tab instanceof CreasePatternTab) {
-            CreasePatternTab cptab = (CreasePatternTab) tab;
-            CreasePatternTool tool = cptab.getActiveTool();
+        CreasePatternTab tab = getSelectedCpTab();
+        if (tab != null) {
+            CreasePatternTool tool = tab.getActiveTool();
             if (tool instanceof TypedCreasePatternTool) {
                 return (TypedCreasePatternTool) tool;
             }
@@ -379,11 +381,16 @@ public class MainWindowController implements Initializable {
     }
 
     public void onMouseUp(MouseEvent event) {
-        getSelectedTab().getMouseHandler().onMouseUp(event);
+
+        if (getSelectedTab() != null) {
+            getSelectedTab().getMouseHandler().onMouseUp(event);
+        }
     }
 
     public void onMouseDown(MouseEvent event) {
-        getSelectedTab().getMouseHandler().onMouseDown(event);
+        if (getSelectedTab() != null) {
+            getSelectedTab().getMouseHandler().onMouseDown(event);
+        }
     }
 
     public void setGridSize() {

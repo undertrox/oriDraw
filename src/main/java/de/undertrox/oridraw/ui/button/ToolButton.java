@@ -102,11 +102,21 @@ public class ToolButton extends ToggleButton {
     }
 
     public void onClick(ActionEvent e) {
+        if (!isSelected()) {
+            // This will only happen when the user clicked on the button when it alreadz was
+            // selected. normally, that would deselect it, but it doesnt make sense
+            // to have no tool active, so deselecting is prevented
+            setSelected(true);
+        }
         CreasePatternTool tool = toolSupplier.get();
         if (tool != null) {
             tool.activate();
             OriDraw.getLogger().info("{} activated", tool.getClass().getSimpleName());
         }
+        loadHelpFile();
+    }
+
+    private void loadHelpFile() {
         controller.toolNameLabel.setText(bundle.getString("oridraw.tool." + toolKey.getId() + ".name"));
         StringBuilder documentation = new StringBuilder();
         InputStream docStream = getClass().getClassLoader().getResourceAsStream(
@@ -122,13 +132,13 @@ public class ToolButton extends ToggleButton {
                     }
                     documentation.append(line).append("\n");
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    logger.error(ex);
                     break;
                 }
             }
             controller.documentation.getEngine().loadContent(documentation.toString());
         } else {
-            controller.documentation.getEngine().loadContent("");
+            controller.documentation.getEngine().loadContent(bundle.getString("oridraw.tool.help.error"));
         }
     }
 }
