@@ -147,6 +147,18 @@ public class Vector {
         return false;
     }
 
+    public Vector nearestOf(Vector... vectors) {
+        double mindist = Double.POSITIVE_INFINITY;
+        Vector nearest = null;
+        for (Vector vector : vectors) {
+            if (distanceSquared(vector) < mindist) {
+                mindist = distanceSquared(vector);
+                nearest = vector;
+            }
+        }
+        return nearest;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(getX(), getY());

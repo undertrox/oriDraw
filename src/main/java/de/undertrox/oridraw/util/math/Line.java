@@ -27,11 +27,6 @@ public class Line {
      */
     public Line(Vector start, Vector end) {
         isValid = start.isValid() && end.isValid();
-        if (end.lengthSquared() > start.lengthSquared()) {
-            Vector tmp = end;
-            end = start;
-            start = tmp;
-        }
         this.start = start;
         this.end = end;
     }
@@ -179,5 +174,15 @@ public class Line {
     @Override
     public String toString() {
         return "Line(" + getStartPoint() + "," + getEndPoint() + ")";
+    }
+
+    public Line extendUntilIntersection(Line l) {
+        if (l == null) return this;
+        HesseNormalLine hnl = l.getHesse();
+        if (!hnl.parallel(getHesse())) {
+            Vector p = hnl.intersect(getHesse());
+            return new Line(start, p);
+        }
+        return this;
     }
 }

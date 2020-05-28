@@ -141,6 +141,7 @@ public class CreasePatternSelection {
 
     public void setMode(Mode mode) {
         this.mode = mode;
+        clearToBeSelected();
     }
 
     public void clearToBeSelectedLines() {

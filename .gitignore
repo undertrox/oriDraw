@@ -4,5 +4,5 @@ gradle/
 .idea/
 .gradle/
 out/
-oridraw/
+./oridraw/
 build/
