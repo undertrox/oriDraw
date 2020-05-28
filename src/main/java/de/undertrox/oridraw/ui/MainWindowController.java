@@ -94,6 +94,8 @@ public class MainWindowController implements Initializable {
         mainTabPane.heightProperty().addListener(sizeChangeListener);
         updateText();
         createNewFileTab(null);
+
+        // This timer will render the current Tab every tick
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -108,6 +110,7 @@ public class MainWindowController implements Initializable {
             }
         };
         createToolButtons();
+        // Loads the properties of the tab (Name, Grid size, active tool) into the UI
         updateTab();
 
         mainTabPane.getSelectionModel().selectedItemProperty().addListener((ov, t, t1) -> updateTab());
@@ -124,21 +127,7 @@ public class MainWindowController implements Initializable {
         int maxCol = 4;
         for (RegistryEntry<CreasePatternToolFactory<? extends CreasePatternTool>> item :
                 Registries.TOOL_FACTORY_REGISTRY.getEntries()) {
-            InputStream iconStream = getClass().getClassLoader().getResourceAsStream(
-                    "ui/icon/" + item.getKey().getId() + "/lightmode/enabled_mountain.png");
-            ToolButton btn;
-            if (iconStream != null) {
-                Image image = new Image(iconStream);
-                ImageView view = new ImageView(image);
-                view.setFitHeight(32);
-                view.setPreserveRatio(true);
-                btn = new ToolButton("", view);
-            } else {
-                btn = new ToolButton(item.getKey().getId());
-                logger.warn("Could not find icon for '{}'. Using id as text instead", item.getKey());
-            }
-            initToolButton(btn, item.getKey());
-            btn.init(this, bundle);
+            ToolButton btn = new ToolButton(item.getKey(), this, bundle);
             toolGridPane.add(btn, col, row);
             toolButtons.add(btn);
             col++;
@@ -147,23 +136,6 @@ public class MainWindowController implements Initializable {
                 row++;
             }
         }
-    }
-
-    private void initToolButton(ToolButton btn, RegistryKey key) {
-        btn.setToolKey(key);
-        btn.setToggleGroup(toolToggleGroup);
-        btn.setToolSupplier(() -> {
-            CreasePatternTab tab;
-            if (getSelectedTab() instanceof CreasePatternTab) {
-                tab = (CreasePatternTab) getSelectedTab();
-                for (CreasePatternTool tool : tab.getTools()) {
-                    if (tool.getFactory().getRegistryKey().equals(key)) {
-                        return tool;
-                    }
-                }
-            }
-            return null;
-        });
     }
 
     private void updateGridControls() {
