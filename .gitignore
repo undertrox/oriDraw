@@ -1,0 +1,8 @@
+gradlew.bat
+gradlew
+gradle/
+.idea/
+.gradle/
+out/
+oridraw/
+build/
