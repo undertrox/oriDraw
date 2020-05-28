@@ -1,7 +1,8 @@
-/gradle/
-/.idea/
-/oridraw/logs/
-/.gradle/
-/build/
-gradlew
 gradlew.bat
+gradlew
+gradle/
+.idea/
+.gradle/
+out/
+oridraw/
+build/
