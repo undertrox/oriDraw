@@ -35,9 +35,6 @@ public class OriLineCollection {
         endPoint = addPoint(endPoint);
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
         OriLine c = oriLines.push(oriLine);
-        if (c == oriLine) {
-            System.out.println("Added Line " + oriLine);
-        }
         c.setType(type);
     }
 
@@ -55,6 +52,6 @@ public class OriLineCollection {
      * @param line: OriLine to add
      */
     public void addOriLine(OriLine line) {
-        addOriLine(line.getStartPoint(), line.getEndPoint(), line.getType());
+        this.addOriLine(line.getStartPoint(), line.getEndPoint(), line.getType());
     }
 }

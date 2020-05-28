@@ -44,26 +44,30 @@ public class CreasePattern extends OriLineCollection {
             return;
         }
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
-        //splitAtIntersections(startPoint);
-        //splitAtIntersections(endPoint);
+        super.addOriLine(startPoint, endPoint, type);
         UniqueItemList<OriPoint> intersections = getLineIntersections(oriLine);
-        intersections.addAll(getPointIntersections(oriLine));
-        intersections.sort(Comparator.comparingDouble(a -> oriLine.getStartPoint().distanceSquared(a)));
-        OriPoint lastPoint = startPoint;
-        for (OriPoint intersection : intersections) {
-            super.addOriLine(lastPoint, new OriPoint(intersection), type);
-            if (intersection.getLines().size() == 1) {
-                OriLine l = intersection.getLines().get(0);
-                intersection.getLines().remove(l);
-                splitLine(l, intersection);
+        points.addAll(intersections);
+        splitLinesAtPoints();
+    }
+
+    private void splitLinesAtPoints() {
+        OriLineCollection newcp = new OriLineCollection();
+
+        for (OriLine line : oriLines) {
+            UniqueItemList<OriPoint> pointsOnLine = new UniqueItemList<>();
+            for (OriPoint point : points) {
+                if(line.contains(point)) {
+                    pointsOnLine.add(point);
+                }
             }
-            lastPoint = intersection;
+            pointsOnLine.sort(Comparator.comparingDouble(point -> line.getStartPoint().distanceSquared(point)));
+            for (int i = 1; i < pointsOnLine.size(); i++) {
+                OriLine.Type type = line.getType();
+                newcp.addOriLine(pointsOnLine.get(i-1), pointsOnLine.get(i), type);
+            }
         }
-        super.addOriLine(lastPoint, endPoint, type);
-
-        //splitAtIntersections(startPoint);
-        //splitAtIntersections(endPoint);
-
+        this.points = newcp.points;
+        this.oriLines = newcp.oriLines;
     }
 
     /**
