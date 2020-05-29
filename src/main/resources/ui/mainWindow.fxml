@@ -99,8 +99,8 @@
             <Separator prefWidth="200.0" />
             <GridPane fx:id="toolSettingsGridPane">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.0" minWidth="10.0" prefWidth="119.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="85.0" minWidth="10.0" prefWidth="61.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -111,7 +111,11 @@
             <Separator prefHeight="20.0" prefWidth="180.0" visible="false" />
             <Label fx:id="toolNameLabel" text="Tool Name" />
             <Separator prefWidth="200.0" />
-            <WebView fx:id="documentation" prefHeight="200" prefWidth="200.0" />
+            <StackPane maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <WebView fx:id="documentation" minHeight="-1.0" prefHeight="-1.0" prefWidth="200.0" />
+               </children>
+            </StackPane>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

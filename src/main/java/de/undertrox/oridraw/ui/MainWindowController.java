@@ -18,6 +18,7 @@ import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.Initializable;
@@ -31,10 +32,13 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.InputStream;
@@ -42,6 +46,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static de.undertrox.oridraw.util.io.IOHelper.loadResource;
 
 public class MainWindowController implements Initializable {
 
@@ -73,6 +79,8 @@ public class MainWindowController implements Initializable {
     private List<ToolButton> toolButtons;
     private ResourceBundle bundle;
 
+    public static long last=0;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         instance = this;
@@ -80,11 +88,21 @@ public class MainWindowController implements Initializable {
         bundle = resources;
         toolButtons = new ArrayList<>();
         toolToggleGroup = new ToggleGroup();
-        ChangeListener<Number> sizeChangeListener = (obs, oldVal, newVal) -> getSelectedTab().render();
-        mainTabPane.widthProperty().addListener(sizeChangeListener);
-        mainTabPane.heightProperty().addListener(sizeChangeListener);
         updateText();
         createNewFileTab(null);
+
+        // Make sure the right stylesheet is loaded
+        WebEngine webEngine = documentation.getEngine();
+        webEngine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                org.w3c.dom.Document doc = webEngine.getDocument();
+                Element styleNode = doc.createElement("style");
+                // TODO: use theme manager for this
+                Text styleContent = doc.createTextNode(loadResource("ui/theme/default/tips.css"));
+                styleNode.appendChild(styleContent);
+                doc.getDocumentElement().getElementsByTagName("head").item(0).appendChild(styleNode);
+            }
+        });
 
         // This timer will render the current Tab every tick
         AnimationTimer timer = new AnimationTimer() {
@@ -154,7 +172,7 @@ public class MainWindowController implements Initializable {
             RegistryKey key = activeTool.getFactory().getRegistryKey();
             for (ToolButton toolButton : toolButtons) {
                 if (toolButton.getToolKey().equals(key)) {
-                    toolButton.setSelected(true);
+                    toolButton.fire();
                     break;
                 }
             }
@@ -195,7 +213,6 @@ public class MainWindowController implements Initializable {
             tab = new CreasePatternTab(doc, c, mainTabPane, bundle);
         }
         mainTabPane.getTabs().add(tab);
-        tab.render();
     }
 
     public void btnSaveClick() {
@@ -258,8 +275,9 @@ public class MainWindowController implements Initializable {
     }
 
     public void onMouseClicked(MouseEvent e) {
-        if (e.getY() > CANVAS_CORRECTION && getSelectedTab() != null) {
+        if (e.getY() > CANVAS_CORRECTION && getSelectedCpTab() != null) {
             getSelectedTab().getMouseHandler().onClick(e);
+
         }
     }
 

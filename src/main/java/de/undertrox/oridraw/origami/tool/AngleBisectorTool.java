@@ -5,6 +5,7 @@ import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
+import de.undertrox.oridraw.origami.tool.setting.ToolSetting;
 import de.undertrox.oridraw.ui.render.tool.AngleBisectorToolRenderer;
 import de.undertrox.oridraw.ui.render.tool.ToolRenderer;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
@@ -127,6 +128,11 @@ public class AngleBisectorTool extends TypedCreasePatternTool {
     @Override
     protected ToolRenderer<? extends CreasePatternTool> createRenderer() {
         return new AngleBisectorToolRenderer(getTransform(), this);
+    }
+
+    @Override
+    public ToolSetting[] getSettings() {
+        return new ToolSetting[0];
     }
 
 

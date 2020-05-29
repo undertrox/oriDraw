@@ -27,6 +27,7 @@ public class CanvasTab extends Tab {
         this.canvas = canvas;
         this.bundle = bundle;
         renderers = new ArrayList<>();
+        canvas.setCache(false);
     }
 
     public Canvas getCanvas() {
@@ -61,6 +62,7 @@ public class CanvasTab extends Tab {
      * Renders all enabled renderers
      */
     public void render() {
+        getCanvas().getGraphicsContext2D().clearRect(0,0,getCanvas().getWidth(), getCanvas().getHeight());
         for (Renderer renderer : getRenderers()) {
             renderer.render(getCanvas());
         }

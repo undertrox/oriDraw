@@ -8,9 +8,7 @@ import de.undertrox.oridraw.util.registry.RegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.Arrays;
 
 public class IOHelper {
@@ -82,6 +80,29 @@ public class IOHelper {
             return "";
         else
             return fileName.substring(dotInd + 1).toLowerCase();
+    }
+
+    public static String loadResource(String resourcePath) {
+        StringBuilder data = new StringBuilder();
+        InputStream resourceStream = IOHelper.class.getClassLoader().getResourceAsStream(resourcePath);
+        if (resourceStream != null) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(resourceStream));
+            String line;
+            while (true) {
+                try {
+                    line = reader.readLine();
+                    if (line == null) {
+                        break;
+                    }
+                    data.append(line).append("\n");
+                } catch (IOException ex) {
+                    logger.error(ex);
+                }
+            }
+            return data.toString();
+        } else {
+            return "";
+        }
     }
 
 }

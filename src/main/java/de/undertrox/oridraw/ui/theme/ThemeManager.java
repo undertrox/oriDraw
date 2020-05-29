@@ -2,10 +2,10 @@ package de.undertrox.oridraw.ui.theme;
 
 import de.undertrox.oridraw.origami.OriLine;
 
-public class ColorManager {
-    private static ColorManager instance;
+public class ThemeManager {
+    private static ThemeManager instance;
 
-    private Theme activeTheme = Theme.DARK;
+    private Theme activeTheme = Theme.DEFAULT;
 
     public LineStyle getEdgeStyle() {
         return getActiveTheme().getEdge();
@@ -40,9 +40,9 @@ public class ColorManager {
         }
     }
 
-    public static ColorManager getInstance() {
+    public static ThemeManager getInstance() {
         if (instance == null) {
-            instance = new ColorManager();;
+            instance = new ThemeManager();;
         }
         return instance;
     }

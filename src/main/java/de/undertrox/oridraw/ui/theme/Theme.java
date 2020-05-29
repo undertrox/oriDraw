@@ -25,7 +25,7 @@ public class Theme extends Registrable {
 
     public static final Theme DEFAULT = new Theme(
             new LineStyle(Color.RED, 1),
-            new LineStyle(Color.BLACK, 1),
+            new LineStyle(Color.BLUE, 1),
             new LineStyle(Color.BLACK, 1),
             new LineStyle(Color.LIGHTGRAY, 1),
             new LineStyle(Color.YELLOW, 1),

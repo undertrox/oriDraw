@@ -2,16 +2,24 @@ package de.undertrox.oridraw.ui.button;
 
 import de.undertrox.oridraw.OriDraw;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
+import de.undertrox.oridraw.origami.tool.setting.ToolSetting;
 import de.undertrox.oridraw.ui.MainWindowController;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.registry.RegistryKey;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.web.WebEngine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +27,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
+
+import static de.undertrox.oridraw.util.io.IOHelper.loadResource;
 
 
 public class ToolButton extends ToggleButton {
@@ -103,7 +113,7 @@ public class ToolButton extends ToggleButton {
 
     public void onClick(ActionEvent e) {
         if (!isSelected()) {
-            // This will only happen when the user clicked on the button when it alreadz was
+            // This will only happen when the user clicked on the button when it already was
             // selected. normally, that would deselect it, but it doesnt make sense
             // to have no tool active, so deselecting is prevented
             setSelected(true);
@@ -114,29 +124,21 @@ public class ToolButton extends ToggleButton {
             OriDraw.getLogger().info("{} activated", tool.getClass().getSimpleName());
         }
         loadHelpFile();
+        loadToolSettings();
+    }
+
+    private void loadToolSettings() {
+        // TODO: implement this
+        controller.toolSettingsGridPane.getChildren().clear();
+
     }
 
     private void loadHelpFile() {
         controller.toolNameLabel.setText(bundle.getString("oridraw.tool." + toolKey.getId() + ".name"));
-        StringBuilder documentation = new StringBuilder();
-        InputStream docStream = getClass().getClassLoader().getResourceAsStream(
+        String documentation = loadResource(
                 "lang/doc/tools/" + toolKey.getId() + "/tips_" + bundle.getLocale().toString() + ".html");
-        if (docStream != null) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(docStream));
-            String line;
-            while (true) {
-                try {
-                    line = reader.readLine();
-                    if (line == null) {
-                        break;
-                    }
-                    documentation.append(line).append("\n");
-                } catch (IOException ex) {
-                    logger.error(ex);
-                    break;
-                }
-            }
-            controller.documentation.getEngine().loadContent(documentation.toString());
+        if (!documentation.isBlank()) {
+            controller.documentation.getEngine().loadContent(documentation);
         } else {
             controller.documentation.getEngine().loadContent(bundle.getString("oridraw.tool.help.error"));
         }

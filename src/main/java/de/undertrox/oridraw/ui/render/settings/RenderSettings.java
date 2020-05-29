@@ -1,6 +1,6 @@
 package de.undertrox.oridraw.ui.render.settings;
 
-import de.undertrox.oridraw.ui.theme.ColorManager;
+import de.undertrox.oridraw.ui.theme.ThemeManager;
 
 public class RenderSettings {
     private static RenderSettings instance;
@@ -12,7 +12,7 @@ public class RenderSettings {
         return instance;
     }
 
-    public static ColorManager getColorManager() {
-        return ColorManager.getInstance();
+    public static ThemeManager getColorManager() {
+        return ThemeManager.getInstance();
     }
 }
