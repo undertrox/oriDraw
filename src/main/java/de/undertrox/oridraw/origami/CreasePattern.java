@@ -117,6 +117,10 @@ public class CreasePattern extends OriLineCollection {
         }
     }
 
+    public void addLineWithoutIntersectionCheck(OriPoint start, OriPoint end, OriLine.Type type) {
+        super.addOriLine(start, end, type);
+    }
+
     /**
      * Splits l at the point p
      * @param l: Line to be split

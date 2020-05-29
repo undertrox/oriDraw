@@ -35,8 +35,8 @@ public class LoaderCP extends Loader<Document> {
                 double y1 = Double.parseDouble(tokenizer.nextToken());
                 double x2 = Double.parseDouble(tokenizer.nextToken());
                 double y2 = Double.parseDouble(tokenizer.nextToken());
+                doc.getCp().addLineWithoutIntersectionCheck(new OriPoint(x1, y1), new OriPoint(x2, y2), OriLine.Type.fromCpId(lineType));
 
-                doc.getCp().addOriLine(new OriPoint(x1, y1), new OriPoint(x2, y2), OriLine.Type.fromCpId(lineType));
             } catch (NumberFormatException e) {
                 logger.warn("Syntax error");
             }
