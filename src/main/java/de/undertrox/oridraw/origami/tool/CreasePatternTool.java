@@ -4,7 +4,6 @@ import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
-import de.undertrox.oridraw.origami.tool.setting.ToolSetting;
 import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
 import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;
 import de.undertrox.oridraw.util.math.Transform;
@@ -75,8 +74,6 @@ public abstract class CreasePatternTool extends Registrable implements MouseHand
     }
 
     protected abstract ToolRenderer<? extends CreasePatternTool> createRenderer();
-
-    public abstract ToolSetting[] getSettings();
 
     public Vector getCurrentMousePos() {
         return currentMousePos;

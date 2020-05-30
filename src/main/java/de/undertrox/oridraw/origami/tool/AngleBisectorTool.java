@@ -5,7 +5,6 @@ import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
-import de.undertrox.oridraw.origami.tool.setting.ToolSetting;
 import de.undertrox.oridraw.ui.render.tool.AngleBisectorToolRenderer;
 import de.undertrox.oridraw.ui.render.tool.ToolRenderer;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
@@ -92,7 +91,7 @@ public class AngleBisectorTool extends TypedCreasePatternTool {
     public OriLine angleBisector(OriPoint point0, OriPoint point1, OriPoint point2, OriLine line) {
         HesseNormalLine bound = line.getHesse();
         if (bound.squaredDistance(point1) < Constants.EPSILON
-                || point0.equals(point1) || point2.equals(point1) || point1.equals(point0)) {
+                || point0.equals(point1) || point2.equals(point1)) {
             return null;
         }
         HesseNormalLine bisector;
@@ -129,12 +128,6 @@ public class AngleBisectorTool extends TypedCreasePatternTool {
     protected ToolRenderer<? extends CreasePatternTool> createRenderer() {
         return new AngleBisectorToolRenderer(getTransform(), this);
     }
-
-    @Override
-    public ToolSetting[] getSettings() {
-        return new ToolSetting[0];
-    }
-
 
     public OriPoint getPoint0() {
         return point0;

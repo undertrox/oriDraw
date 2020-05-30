@@ -2,29 +2,17 @@ package de.undertrox.oridraw.ui.button;
 
 import de.undertrox.oridraw.OriDraw;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
-import de.undertrox.oridraw.origami.tool.setting.ToolSetting;
 import de.undertrox.oridraw.ui.MainWindowController;
-import de.undertrox.oridraw.ui.tab.CreasePatternTab;
+import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryKey;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.web.WebEngine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
@@ -130,7 +118,7 @@ public class ToolButton extends ToggleButton {
     private void loadToolSettings() {
         // TODO: implement this
         controller.toolSettingsGridPane.getChildren().clear();
-
+        Registries.TOOL_FACTORY_REGISTRY.getItem(toolKey).getSettings().showToolSettings(controller.toolSettingsGridPane, bundle);
     }
 
     private void loadHelpFile() {

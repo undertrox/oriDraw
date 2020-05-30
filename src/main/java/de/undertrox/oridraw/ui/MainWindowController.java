@@ -14,18 +14,13 @@ import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryEntry;
-import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Worker;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -41,7 +36,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +72,6 @@ public class MainWindowController implements Initializable {
     private Logger logger = LogManager.getLogger(MainWindowController.class);
     private List<ToolButton> toolButtons;
     private ResourceBundle bundle;
-
-    public static long last=0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -126,7 +118,7 @@ public class MainWindowController implements Initializable {
 
         timer.start();
         mainTabPane.requestFocus();
-        toolButtons.get(0).getOnAction().handle(new ActionEvent());
+        toolButtons.get(0).fire();
         MainApp.getPrimaryStage().setOnCloseRequest(this::onCloseRequest);
     }
 
@@ -167,13 +159,9 @@ public class MainWindowController implements Initializable {
 
     private void updateActiveTool() {
         if (getSelectedCpTab() != null) {
-            CreasePatternTab tab = (CreasePatternTab) getSelectedTab();
-            CreasePatternTool activeTool = tab.getActiveTool();
-            RegistryKey key = activeTool.getFactory().getRegistryKey();
-            for (ToolButton toolButton : toolButtons) {
-                if (toolButton.getToolKey().equals(key)) {
-                    toolButton.fire();
-                    break;
+            for (ToolButton btn : toolButtons) {
+                if (btn.isSelected()) {
+                    btn.fire();
                 }
             }
         }

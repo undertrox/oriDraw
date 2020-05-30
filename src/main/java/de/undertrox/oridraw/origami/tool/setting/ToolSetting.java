@@ -1,11 +1,10 @@
 package de.undertrox.oridraw.origami.tool.setting;
 
-import de.undertrox.oridraw.util.registry.Registrable;
+import javafx.scene.Node;
 
-public class ToolSetting<T> {
+public abstract class ToolSetting<T>{
     T state;
     private String id;
-
 
     public ToolSetting(String id, T startingState) {
         this.state = startingState;
@@ -24,4 +23,5 @@ public class ToolSetting<T> {
         this.state = state;
     }
 
+    public abstract Node getControlNode();
 }

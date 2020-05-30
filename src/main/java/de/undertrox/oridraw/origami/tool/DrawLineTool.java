@@ -4,7 +4,7 @@ import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
-import de.undertrox.oridraw.origami.tool.setting.ToolSetting;
+import de.undertrox.oridraw.origami.tool.setting.DrawLineToolSettings;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.tool.DrawLineToolRenderer;
 import de.undertrox.oridraw.ui.render.tool.ToolRenderer;
@@ -40,13 +40,12 @@ public class DrawLineTool extends TypedCreasePatternTool {
         point1 = null;
     }
 
-    protected ToolRenderer<DrawLineTool> createRenderer() {
-        return new DrawLineToolRenderer(getTransform(), this);
+    private DrawLineToolSettings getSettings() {
+        return (DrawLineToolSettings) getFactory().getSettings();
     }
 
-    @Override
-    public ToolSetting[] getSettings() {
-        return new ToolSetting[] {};
+    protected ToolRenderer<DrawLineTool> createRenderer() {
+        return new DrawLineToolRenderer(getTransform(), this);
     }
 
     @Override
@@ -59,9 +58,9 @@ public class DrawLineTool extends TypedCreasePatternTool {
                 point0 = getNextPoint(false);
                 getSelection().select(point0);
             } else {
-                point1 = getNextPoint(e.isControlDown());
+                point1 = getNextPoint(getSettings().snapTo225());
                 getCp().addOriLine(point0, point1, getType());
-                if (!e.isShiftDown()) {
+                if (!getSettings().continueLine()) {
                     clearSelection();
                 } else {
                     getSelection().clearSelection();
@@ -102,8 +101,8 @@ public class DrawLineTool extends TypedCreasePatternTool {
     public void onMove(MouseEvent e) {
         super.onMove(e);
         setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
-        point1 = getNextPoint(e.isControlDown());
-        if (e.isControlDown() && point0 != null) {
+        point1 = getNextPoint(getSettings().snapTo225());
+        if (getSettings().snapTo225() && point0 != null) {
             if (getSelection().getMode() == CreasePatternSelection.Mode.POINT) {
                 getSelection().setMode(CreasePatternSelection.Mode.LINE);
             }
