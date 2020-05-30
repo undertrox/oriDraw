@@ -1,7 +1,7 @@
 package de.undertrox.oridraw.ui.render.tool;
 
 import de.undertrox.oridraw.origami.OriLine;
-import de.undertrox.oridraw.origami.tool.AngleBisectorTool;
+import de.undertrox.oridraw.origami.tool.anglebisector.AngleBisectorTool;
 import de.undertrox.oridraw.ui.render.RenderHelper;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import de.undertrox.oridraw.ui.theme.LineStyle;

@@ -1,8 +1,7 @@
-package de.undertrox.oridraw.origami.tool.factory;
+package de.undertrox.oridraw.origami.tool.anglebisector;
 
 import de.undertrox.oridraw.origami.OriLine;
-import de.undertrox.oridraw.origami.tool.AngleBisectorTool;
-import de.undertrox.oridraw.origami.tool.setting.AngleBisectorSettings;
+import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 
 public class AngleBisectorToolFactory extends CreasePatternToolFactory<AngleBisectorTool> {

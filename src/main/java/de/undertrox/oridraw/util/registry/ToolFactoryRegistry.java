@@ -1,7 +1,7 @@
 package de.undertrox.oridraw.util.registry;
 
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
-import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
+import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 
 public class ToolFactoryRegistry extends Registry<CreasePatternToolFactory<? extends CreasePatternTool>> {
     @Override

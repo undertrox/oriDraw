@@ -3,7 +3,7 @@ package de.undertrox.oridraw.ui.tab;
 import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
-import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
+import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.MainApp;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;

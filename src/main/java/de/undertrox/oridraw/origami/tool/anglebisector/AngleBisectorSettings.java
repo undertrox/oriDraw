@@ -1,5 +1,6 @@
-package de.undertrox.oridraw.origami.tool.setting;
+package de.undertrox.oridraw.origami.tool.anglebisector;
 
+import de.undertrox.oridraw.origami.tool.setting.ToolSettings;
 import javafx.scene.layout.GridPane;
 
 import java.util.ResourceBundle;

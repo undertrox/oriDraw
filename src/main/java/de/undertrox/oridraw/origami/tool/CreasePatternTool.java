@@ -3,7 +3,6 @@ package de.undertrox.oridraw.origami.tool;
 import de.undertrox.oridraw.origami.CreasePattern;
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.Document;
-import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
 import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;
 import de.undertrox.oridraw.util.math.Transform;

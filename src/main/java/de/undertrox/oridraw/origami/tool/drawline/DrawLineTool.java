@@ -1,10 +1,11 @@
-package de.undertrox.oridraw.origami.tool;
+package de.undertrox.oridraw.origami.tool.drawline;
 
 import de.undertrox.oridraw.origami.CreasePatternSelection;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
-import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
-import de.undertrox.oridraw.origami.tool.setting.DrawLineToolSettings;
+import de.undertrox.oridraw.origami.tool.CreasePatternTool;
+import de.undertrox.oridraw.origami.tool.TypedCreasePatternTool;
+import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.tool.DrawLineToolRenderer;
 import de.undertrox.oridraw.ui.render.tool.ToolRenderer;

@@ -4,7 +4,7 @@ import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.TypedCreasePatternTool;
-import de.undertrox.oridraw.origami.tool.factory.CreasePatternToolFactory;
+import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.button.ToolButton;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;

@@ -1,6 +1,6 @@
 package de.undertrox.oridraw.ui.render.tool;
 
-import de.undertrox.oridraw.origami.tool.DrawLineTool;
+import de.undertrox.oridraw.origami.tool.drawline.DrawLineTool;
 import de.undertrox.oridraw.ui.render.RenderHelper;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import de.undertrox.oridraw.util.math.Line;

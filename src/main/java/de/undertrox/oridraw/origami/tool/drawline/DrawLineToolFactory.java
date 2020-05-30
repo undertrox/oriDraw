@@ -1,8 +1,7 @@
-package de.undertrox.oridraw.origami.tool.factory;
+package de.undertrox.oridraw.origami.tool.drawline;
 
 import de.undertrox.oridraw.origami.OriLine;
-import de.undertrox.oridraw.origami.tool.DrawLineTool;
-import de.undertrox.oridraw.origami.tool.setting.DrawLineToolSettings;
+import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.tab.CreasePatternTab;
 
 public class DrawLineToolFactory extends CreasePatternToolFactory<DrawLineTool> {
