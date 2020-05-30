@@ -13,6 +13,7 @@
             <Button fx:id="btnNew" mnemonicParsing="false" onAction="#btnNewClick" text="New" />
             <Button fx:id="btnOpen" mnemonicParsing="false" onAction="#btnOpenClick" text="Open" />
             <Button fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClick" text="Save" />
+         <Button fx:id="btnSettings" mnemonicParsing="false" onAction="#openSettings" text="Settings" />
         </ToolBar>
     </top>
     <bottom>

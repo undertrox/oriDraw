@@ -84,37 +84,10 @@ public class CreasePattern extends OriLineCollection {
                     && !(intersection.equals(l.getEndPoint()))
                     && intersection != Vector.UNDEFINED) {
                 OriPoint p = new OriPoint(intersection);
-                p.addLine(c);
                 intersections.push(p);
             }
         }
         return intersections;
-    }
-
-    /**
-     * Returns a List of all Points where an existing Point in the cp lies on l
-     * @param l: line
-     * @return List of all Points where an existing Point in the cp lies on l
-     */
-    public UniqueItemList<OriPoint> getPointIntersections(Line l) {
-        UniqueItemList<OriPoint> intersections = new UniqueItemList<>();
-        for (Vector p : points) {
-            if (l.contains(p)) {
-                intersections.push(new OriPoint(p));
-            }
-        }
-        return intersections;
-    }
-
-    public void splitAtIntersections(Vector p) {
-        for (int i = 0; i<oriLines.size(); i++) {
-            OriLine l = oriLines.get(i);
-            if (l.contains(p) && !p.equals(l.getStartPoint()) && !p.equals(l.getEndPoint())) {
-                OriPoint op = new OriPoint(p);
-                splitLine(l,op);
-                i = 0;
-            }
-        }
     }
 
     public void addLineWithoutIntersectionCheck(OriPoint start, OriPoint end, OriLine.Type type) {

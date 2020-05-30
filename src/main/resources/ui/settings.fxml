@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Theme" />
+                              <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Keyboard Shortcuts" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="300.0" prefHeight="160.0" prefWidth="100.0" />
+              </items>
+            </SplitPane>
+            <HBox prefHeight="0.0" prefWidth="200.0">
+               <children>
+                  <ToolBar minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0">
+                    <items>
+                      <Button cancelButton="true" mnemonicParsing="false" text="Cancel" />
+                    </items>
+                  </ToolBar>
+                  <ToolBar maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="1000.0">
+                    <items>
+                      <Button mnemonicParsing="false" text="Apply" />
+                        <Button alignment="CENTER_RIGHT" defaultButton="true" mnemonicParsing="false" text="Ok" />
+                    </items>
+                  </ToolBar>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

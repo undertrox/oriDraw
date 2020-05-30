@@ -17,8 +17,12 @@ import de.undertrox.oridraw.util.registry.RegistryEntry;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
@@ -30,12 +34,15 @@ import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +76,7 @@ public class MainWindowController implements Initializable {
     public Button btnSave;
     public Button btnNew;
     public Button btnOpen;
+    public Button btnSettings;
     private Logger logger = LogManager.getLogger(MainWindowController.class);
     private List<ToolButton> toolButtons;
     private ResourceBundle bundle;
@@ -419,6 +427,24 @@ public class MainWindowController implements Initializable {
         CreasePatternTab tab = getSelectedCpTab();
         if (tab != null) {
             tab.getDoc().setShowGrid(showGrid.isSelected());
+        }
+    }
+
+    public void openSettings(ActionEvent actionEvent) {
+        logger.debug("Opening Settings");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/settings.fxml"));
+        try {
+            Parent settings = loader.load();
+            Scene scene = new Scene(settings);
+            Stage s = new Stage();
+            s.setScene(scene);
+            s.setTitle(bundle.getString("oridraw.settings.windowtitle"));
+            s.initModality(Modality.APPLICATION_MODAL);
+            s.setMinHeight(400);
+            s.setMinWidth(600);
+            s.show();
+        } catch (IOException e) {
+            logger.error(e);
         }
     }
 }

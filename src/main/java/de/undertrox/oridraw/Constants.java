@@ -1,7 +1,7 @@
 package de.undertrox.oridraw;
 
 public class Constants {
-    public static final double EPSILON = 0.00000001;
+    public static final double EPSILON = 0.0000001;
     public static final String REGISTRY_DOMAIN = "oridraw";
 
     public static final double DEFAULT_PAPER_SIZE = 400;

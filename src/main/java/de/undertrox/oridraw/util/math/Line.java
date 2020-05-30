@@ -106,6 +106,9 @@ public class Line {
      */
     public Vector getIntersection(Line line) {
         if (!isValid) {return Vector.UNDEFINED;}
+        if (getHesse().parallel(line.getHesse())) {
+            return Vector.UNDEFINED;
+        }
         if (lengthSquared() < Constants.EPSILON || line.lengthSquared() < Constants.EPSILON) {
             return Vector.UNDEFINED;
         }
@@ -135,7 +138,7 @@ public class Line {
     public HesseNormalLine getHesse() {
         if (!isValid) return null;
         if (hesse == null) {
-            hesse = new HesseNormalLine(getStartPoint(), getEndPoint());
+            hesse = new HesseNormalLine(getStartPoint(), getEndPoint()).normalize();
         }
         return hesse;
     }
@@ -177,12 +180,13 @@ public class Line {
     }
 
     public Line extendUntilIntersection(Line l) {
-        if (l == null) return this;
+        if (l == null) return new Line(start, end);
         HesseNormalLine hnl = l.getHesse();
         if (!hnl.parallel(getHesse())) {
             Vector p = hnl.intersect(getHesse());
-            return new Line(start, p);
+            if (p.isValid())
+                return new Line(start, p);
         }
-        return this;
+        return new Line(start, end);
     }
 }

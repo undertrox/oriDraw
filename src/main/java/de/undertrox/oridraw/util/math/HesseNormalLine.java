@@ -144,7 +144,7 @@ public class HesseNormalLine {
      * @return true if l is parallel to this line, false otherwise
      */
     public boolean parallel(HesseNormalLine l) {
-        return a == l.a && b == l.b;
+        return Math.abs(a-l.a) < Constants.EPSILON && Math.abs(b-l.b) < Constants.EPSILON;
     }
 
     /**

@@ -82,11 +82,10 @@ public class DrawLineTool extends TypedCreasePatternTool {
         if (!lockTo225 && !getSelection().getToBeSelectedPoints().isEmpty()) {
             return new OriPoint(getSelection().getToBeSelectedPoints().get(0));
         } else if (lockTo225 && point0 != null) {
-            // this should ideally be somewhere else
             double dist = point0.distance(getCurrentMousePos());
             Vector[] inc = new Circle(point0, dist).get225Points();
             Vector nearest = getCurrentMousePos().nearestOf(inc);
-            if (!getSelection().getToBeSelectedLines().isEmpty()) {
+            if (!getSelection().getToBeSelectedLines().isEmpty() && !point0.getLines().contains(getSelection().getToBeSelectedLines().get(0))) {
                 Line l = getSelection().getToBeSelectedLines().get(0);
                 Line newL = new Line(point0, nearest).extendUntilIntersection(l);
                 return new OriPoint(newL.getEndPoint());
