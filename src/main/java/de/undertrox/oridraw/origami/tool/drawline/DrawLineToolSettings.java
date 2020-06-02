@@ -2,6 +2,7 @@ package de.undertrox.oridraw.origami.tool.drawline;
 
 import de.undertrox.oridraw.origami.tool.setting.BooleanToolSetting;
 import de.undertrox.oridraw.origami.tool.setting.ToolSettings;
+import de.undertrox.oridraw.util.LocalizationHelper;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
@@ -17,10 +18,10 @@ public class DrawLineToolSettings extends ToolSettings {
     }
 
     @Override
-    public void showToolSettings(GridPane grid, ResourceBundle bundle) {
-        grid.add(new Label(bundle.getString("oridraw.tool.point_to_point.setting.continueline")), 0, 0);
+    public void showToolSettings(GridPane grid) {
+        grid.add(new Label(LocalizationHelper.getString("oridraw.tool.point_to_point.setting.continueline")), 0, 0);
         grid.add(continueLine.getControlNode(), 1, 0);
-        grid.add(new Label(bundle.getString("oridraw.tool.point_to_point.setting.snap225")), 0, 1);
+        grid.add(new Label(LocalizationHelper.getString("oridraw.tool.point_to_point.setting.snap225")), 0, 1);
         grid.add(snapTo225.getControlNode(), 1, 1);
     }
 

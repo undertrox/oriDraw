@@ -3,6 +3,7 @@ package de.undertrox.oridraw.ui.component;
 import de.undertrox.oridraw.OriDraw;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.ui.MainWindowController;
+import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.event.ActionEvent;
@@ -24,7 +25,6 @@ public class ToolButton extends ToggleButton {
     Supplier<CreasePatternTool> toolSupplier;
     RegistryKey toolKey;
     MainWindowController controller;
-    ResourceBundle bundle;
 
     public RegistryKey getToolKey() {
         return toolKey;
@@ -41,11 +41,10 @@ public class ToolButton extends ToggleButton {
         init();
     }
 
-    public ToolButton(RegistryKey key, MainWindowController controller, ResourceBundle bundle) {
+    public ToolButton(RegistryKey key, MainWindowController controller) {
         super();
         this.controller = controller;
         this.toolKey = key;
-        this.bundle = bundle;
         init();
     }
 
@@ -118,17 +117,17 @@ public class ToolButton extends ToggleButton {
     private void loadToolSettings() {
         // TODO: implement this
         controller.toolSettingsGridPane.getChildren().clear();
-        Registries.TOOL_FACTORY_REGISTRY.getItem(toolKey).getSettings().showToolSettings(controller.toolSettingsGridPane, bundle);
+        Registries.TOOL_FACTORY_REGISTRY.getItem(toolKey).getSettings().showToolSettings(controller.toolSettingsGridPane);
     }
 
     private void loadHelpFile() {
-        controller.toolNameLabel.setText(bundle.getString("oridraw.tool." + toolKey.getId() + ".name"));
+        controller.toolNameLabel.setText(LocalizationHelper.getString("oridraw.tool." + toolKey.getId() + ".name"));
         String documentation = loadResource(
-                "lang/doc/tools/" + toolKey.getId() + "/tips_" + bundle.getLocale().toString() + ".html");
+                "lang/doc/tools/" + toolKey.getId() + "/tips_" + LocalizationHelper.getLocale().toString() + ".html");
         if (!documentation.isBlank()) {
             controller.documentation.getEngine().loadContent(documentation);
         } else {
-            controller.documentation.getEngine().loadContent(bundle.getString("oridraw.tool.help.error"));
+            controller.documentation.getEngine().loadContent(LocalizationHelper.getString("oridraw.tool.help.error"));
         }
     }
 }

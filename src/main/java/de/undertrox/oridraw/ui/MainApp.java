@@ -6,6 +6,7 @@ import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.anglebisector.AngleBisectorToolFactory;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolFactory;
+import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.io.export.ExporterCP;
 import de.undertrox.oridraw.util.io.load.Loader;
@@ -50,6 +51,7 @@ public class MainApp extends Application {
         logger.debug("Loading Resources");
         Locale locale = new Locale("en");
         ResourceBundle bundle = ResourceBundle.getBundle("lang.lang", locale);
+        LocalizationHelper.setBundle(bundle);
         logger.debug("Initializing Window");
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader()
                 .getResource("ui/mainWindow.fxml")), bundle);

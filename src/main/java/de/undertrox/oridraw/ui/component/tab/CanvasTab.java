@@ -20,12 +20,9 @@ public class CanvasTab extends Tab {
     private KeyboardHandlerInterface keyboardHandler;
     private List<Renderer> renderers;
 
-    protected ResourceBundle bundle;
-
-    public CanvasTab(String title, Canvas canvas, ResourceBundle bundle) {
+    public CanvasTab(String title, Canvas canvas) {
         super(title, canvas);
         this.canvas = canvas;
-        this.bundle = bundle;
         renderers = new ArrayList<>();
         canvas.setCache(false);
     }

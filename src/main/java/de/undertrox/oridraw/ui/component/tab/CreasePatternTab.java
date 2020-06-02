@@ -7,6 +7,7 @@ import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.MainApp;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
+import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.math.Transform;
 import de.undertrox.oridraw.ui.render.BackgroundRenderer;
 import de.undertrox.oridraw.ui.render.DocumentRenderer;
@@ -48,13 +49,13 @@ public class CreasePatternTab extends CanvasTab {
      * @param canvas  Canvas to be rendered inside the tab
      * @param tabPane parent tabPane of the Tab
      */
-    public CreasePatternTab(String title, Canvas canvas, TabPane tabPane, ResourceBundle bundle) {
-        this(new Document(title, Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS), canvas, tabPane, bundle);
+    public CreasePatternTab(String title, Canvas canvas, TabPane tabPane) {
+        this(new Document(title, Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS), canvas, tabPane);
 
     }
 
-    public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane, ResourceBundle bundle) {
-        super(doc.getTitle(), canvas, bundle);
+    public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane) {
+        super(doc.getTitle(), canvas);
 
         logger.debug("Initializing Crease Pattern");
         this.doc = doc;
@@ -139,7 +140,7 @@ public class CreasePatternTab extends CanvasTab {
     @Override
     public void onCloseRequest(Event e) {
         if (getDoc().hasUnsavedChanges() && !e.isConsumed()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, bundle.getString("oridraw.action.close.alert.desc"),
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, LocalizationHelper.getString("oridraw.action.close.alert.desc"),
                     ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
             alert.showAndWait();
 
@@ -164,9 +165,9 @@ public class CreasePatternTab extends CanvasTab {
      */
     public boolean saveDocument() {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle(bundle.getString("oridraw.action.save.filedialog.title"));
+        chooser.setTitle(LocalizationHelper.getString("oridraw.action.save.filedialog.title"));
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                bundle.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
+                LocalizationHelper.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
         chooser.getExtensionFilters().add(filter);
         File file = chooser.showSaveDialog(MainApp.getPrimaryStage());
         if (file == null) {

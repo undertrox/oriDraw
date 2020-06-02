@@ -10,6 +10,7 @@ import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
 import de.undertrox.oridraw.ui.component.tab.CanvasTab;
 import de.undertrox.oridraw.ui.component.tab.CreasePatternTab;
+import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registries;
@@ -80,22 +81,14 @@ public class MainWindowController implements Initializable {
     private Logger logger = LogManager.getLogger(MainWindowController.class);
     private List<ToolButton> toolButtons;
 
-
-    private ResourceBundle bundle;
-
     private Settings settings;
 
-    public ResourceBundle getBundle() {
-        return bundle;
-    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         instance = this;
         settings = MainApp.getSettings();
         settings.getKeybindSettings().loadFromRegistry();
-        settings.getKeybindSettings().setBundle(resources);
         logger.debug("Initializing MainWindowController");
-        bundle = resources;
         toolButtons = new ArrayList<>();
         toolToggleGroup = new ToggleGroup();
         updateText();
@@ -146,7 +139,7 @@ public class MainWindowController implements Initializable {
         int maxCol = 4;
         for (RegistryEntry<CreasePatternToolFactory<? extends CreasePatternTool>> item :
                 Registries.TOOL_FACTORY_REGISTRY.getEntries()) {
-            ToolButton btn = new ToolButton(item.getKey(), this, bundle);
+            ToolButton btn = new ToolButton(item.getKey(), this);
             toolGridPane.add(btn, col, row);
             toolButtons.add(btn);
             col++;
@@ -201,9 +194,9 @@ public class MainWindowController implements Initializable {
      */
     private void updateText() {
         logger.debug("Loading Localization");
-        btnSave.setText(bundle.getString("oridraw.toolbar.button.save"));
-        btnNew.setText(bundle.getString("oridraw.toolbar.button.new"));
-        btnOpen.setText(bundle.getString("oridraw.toolbar.button.open"));
+        btnSave.setText(LocalizationHelper.getString("oridraw.toolbar.button.save"));
+        btnNew.setText(LocalizationHelper.getString("oridraw.toolbar.button.new"));
+        btnOpen.setText(LocalizationHelper.getString("oridraw.toolbar.button.open"));
     }
 
     /**
@@ -214,9 +207,9 @@ public class MainWindowController implements Initializable {
         Canvas c = new Canvas();
         CreasePatternTab tab;
         if (doc == null) {
-            tab = new CreasePatternTab(bundle.getString("oridraw.file.new"), c, mainTabPane, bundle);
+            tab = new CreasePatternTab(LocalizationHelper.getString("oridraw.file.new"), c, mainTabPane);
         } else {
-            tab = new CreasePatternTab(doc, c, mainTabPane, bundle);
+            tab = new CreasePatternTab(doc, c, mainTabPane);
         }
         mainTabPane.getTabs().add(tab);
     }
@@ -249,9 +242,9 @@ public class MainWindowController implements Initializable {
     public void btnOpenClick() {
         logger.debug("Open Button clicked");
         FileChooser chooser = new FileChooser();
-        chooser.setTitle(bundle.getString("oridraw.action.open.filedialog.title"));
+        chooser.setTitle(LocalizationHelper.getString("oridraw.action.open.filedialog.title"));
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                bundle.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
+                LocalizationHelper.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
 
         chooser.getExtensionFilters().add(filter);
         File file = chooser.showOpenDialog(MainApp.getPrimaryStage());
@@ -260,7 +253,7 @@ public class MainWindowController implements Initializable {
         }
         Document doc = IOHelper.readFromFile(file.getAbsolutePath());
         if (doc == null) {
-            Alert info = new Alert(Alert.AlertType.ERROR, bundle.getString("oridraw.action.open.error"));
+            Alert info = new Alert(Alert.AlertType.ERROR, LocalizationHelper.getString("oridraw.action.open.error"));
             info.showAndWait();
             return;
         }
@@ -444,17 +437,18 @@ public class MainWindowController implements Initializable {
         logger.debug("Opening Settings");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/settings/settings.fxml"));
         try {
-            Parent settings = loader.load();
-            Scene scene = new Scene(settings);
+            Parent settingsFxml = loader.load();
+            Scene scene = new Scene(settingsFxml);
             Stage s = new Stage();
             s.setScene(scene);
-            s.setTitle(bundle.getString("oridraw.settings.windowtitle"));
+            s.setTitle(LocalizationHelper.getString("oridraw.settings.windowtitle"));
             s.initModality(Modality.APPLICATION_MODAL);
             s.setMinHeight(400);
             s.setMinWidth(600);
             s.show();
         } catch (IOException e) {
             logger.error(e);
+
         }
     }
 }

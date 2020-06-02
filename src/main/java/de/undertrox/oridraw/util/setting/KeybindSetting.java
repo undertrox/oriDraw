@@ -1,5 +1,6 @@
 package de.undertrox.oridraw.util.setting;
 
+import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.registry.Registrable;
 import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,13 +13,10 @@ public class KeybindSetting extends Registrable {
     private Runnable action;
     private KeyCombination keyCombination;
 
-
     public final SimpleStringProperty localizationKey;
 
     public final SimpleStringProperty keybind;
-    public final SimpleStringProperty localizedAction;
 
-    private ResourceBundle bundle;
 
     public void saveTo(Preferences node) {
         node.put(getRegistryKey().toString(), keyCombination.getName());
@@ -29,16 +27,10 @@ public class KeybindSetting extends Registrable {
         this.keyCombination = keyCombination;
         keybind = new SimpleStringProperty(keyCombination.getDisplayText());
         localizationKey = new SimpleStringProperty(key.getDomain() + ".settings.keybinds." + key.getId());
-        localizedAction = new SimpleStringProperty(localizationKey.getValue());
     }
 
     public Runnable getAction() {
         return action;
-    }
-
-    public void setBundle(ResourceBundle bundle) {
-        this.bundle = bundle;
-        localizedAction.set(bundle.getString(localizationKey.get()));
     }
 
     public KeyCombination getKeyCombination() {
@@ -75,13 +67,5 @@ public class KeybindSetting extends Registrable {
 
     public SimpleStringProperty keybindProperty() {
         return keybind;
-    }
-
-    public String getLocalizedAction() {
-        return localizedAction.get();
-    }
-
-    public SimpleStringProperty localizedActionProperty() {
-        return localizedAction;
     }
 }

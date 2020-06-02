@@ -5,11 +5,9 @@ import javafx.scene.Scene;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class KeybindSettings {
     private List<KeybindSetting> keybinds;
-    private ResourceBundle bundle;
 
     public KeybindSettings() {
         keybinds = new ArrayList<>();
@@ -20,11 +18,6 @@ public class KeybindSettings {
         for (var o : Registries.KEYBIND_REGISTRY.getEntries()) {
             keybinds.add(o.getValue());
         }
-    }
-
-    public void setBundle(ResourceBundle bundle) {
-        this.bundle = bundle;
-        keybinds.forEach((k) -> k.setBundle(bundle));
     }
 
     public void apply(Scene scene){
