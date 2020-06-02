@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.ui.tab;
+package de.undertrox.oridraw.ui.component.tab;
 
 import javafx.scene.canvas.Canvas;
 

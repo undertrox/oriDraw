@@ -1,7 +1,7 @@
 package de.undertrox.oridraw.origami.tool;
 
 import de.undertrox.oridraw.origami.OriLine;
-import de.undertrox.oridraw.ui.tab.CreasePatternTab;
+import de.undertrox.oridraw.ui.component.tab.CreasePatternTab;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 

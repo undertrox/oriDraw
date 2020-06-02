@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.ui.tab;
+package de.undertrox.oridraw.ui.component.tab;
 
 import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.Document;

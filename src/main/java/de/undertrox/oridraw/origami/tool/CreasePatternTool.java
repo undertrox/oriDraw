@@ -7,7 +7,7 @@ import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
 import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;
 import de.undertrox.oridraw.util.math.Transform;
 import de.undertrox.oridraw.ui.render.tool.ToolRenderer;
-import de.undertrox.oridraw.ui.tab.CreasePatternTab;
+import de.undertrox.oridraw.ui.component.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registrable;
 import javafx.scene.input.KeyCode;

@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.ui.button;
+package de.undertrox.oridraw.ui.component;
 
 import de.undertrox.oridraw.OriDraw;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;

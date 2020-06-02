@@ -1,4 +1,4 @@
-package de.undertrox.oridraw.ui.tab;
+package de.undertrox.oridraw.ui.component.tab;
 
 import de.undertrox.oridraw.ui.handler.KeyboardHandlerInterface;
 import de.undertrox.oridraw.ui.handler.MouseHandlerInterface;

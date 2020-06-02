@@ -9,7 +9,7 @@ import de.undertrox.oridraw.origami.tool.TypedCreasePatternTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.render.tool.AngleBisectorToolRenderer;
 import de.undertrox.oridraw.ui.render.tool.ToolRenderer;
-import de.undertrox.oridraw.ui.tab.CreasePatternTab;
+import de.undertrox.oridraw.ui.component.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.math.HesseNormalLine;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Triangle;

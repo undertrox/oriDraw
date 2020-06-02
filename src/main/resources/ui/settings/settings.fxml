@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.undertrox.oridraw.ui.SettingsController">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
@@ -13,26 +13,27 @@
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Button alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Theme" />
-                              <Button alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Keyboard Shortcuts" />
+                              <Button fx:id="btnGeneral" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnGeneralClick" text="General" />
+                              <Button fx:id="btnTheme" alignment="BASELINE_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnThemeClick" text="Theme" />
+                              <Button fx:id="btnKeybinds" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#btnKeybindClick" text="Keyboard Shortcuts" />
                            </children>
                         </VBox>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="300.0" prefHeight="160.0" prefWidth="100.0" />
+                <AnchorPane fx:id="paneSettings" minHeight="0.0" minWidth="300.0" prefHeight="160.0" prefWidth="100.0" />
               </items>
             </SplitPane>
             <HBox prefHeight="0.0" prefWidth="200.0">
                <children>
                   <ToolBar minWidth="-Infinity" prefHeight="40.0" prefWidth="200.0">
                     <items>
-                      <Button cancelButton="true" mnemonicParsing="false" text="Cancel" />
+                      <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#btnCancelClick" text="Cancel" />
                     </items>
                   </ToolBar>
                   <ToolBar maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="1000.0">
                     <items>
-                      <Button mnemonicParsing="false" text="Apply" />
-                        <Button alignment="CENTER_RIGHT" defaultButton="true" mnemonicParsing="false" text="Ok" />
+                      <Button fx:id="btnApply" mnemonicParsing="false" onAction="#btnApplyClick" text="Apply" />
+                        <Button fx:id="btnOk" alignment="CENTER_RIGHT" defaultButton="true" mnemonicParsing="false" onAction="#btnOkClick" text="Ok" />
                     </items>
                   </ToolBar>
                </children>

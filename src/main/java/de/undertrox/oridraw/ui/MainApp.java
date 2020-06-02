@@ -12,10 +12,16 @@ import de.undertrox.oridraw.util.io.load.Loader;
 import de.undertrox.oridraw.util.io.load.LoaderCP;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.Registry;
+import de.undertrox.oridraw.util.registry.RegistryKey;
+import de.undertrox.oridraw.util.setting.KeybindSetting;
+import de.undertrox.oridraw.util.setting.Settings;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 import static de.undertrox.oridraw.Constants.REGISTRY_DOMAIN;
 
@@ -30,6 +37,12 @@ public class MainApp extends Application {
     private static Logger logger = LogManager.getLogger(MainApp.class);
     private static String title = "OriDraw v" + OriDraw.VERSION;
     private static Stage primaryStage;
+
+    public static Settings getSettings() {
+        return settings;
+    }
+
+    private static Settings settings;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -43,6 +56,7 @@ public class MainApp extends Application {
         primaryStage.setTitle(title);
         Scene rootScene = new Scene(root);
         rootScene.getStylesheets().add("css/main.css");
+        settings.getKeybindSettings().apply(rootScene);
         primaryStage.setScene(rootScene);
         primaryStage.show();
         primaryStage.setMinWidth(primaryStage.getWidth());
@@ -58,6 +72,7 @@ public class MainApp extends Application {
         registerDocumentExporters();
         registerDocumentLoaders();
         registerTools();
+        registerKeybinds();
     }
 
     /**
@@ -85,10 +100,31 @@ public class MainApp extends Application {
         registry.register(REGISTRY_DOMAIN, "angle_bisect", new AngleBisectorToolFactory());
     }
 
+    private void registerKeybinds() {
+        Preferences prefs = settings.getKeybindNode();
+        registerKeybind("save_cp", () -> MainWindowController.instance.btnSave.fire(), prefs, new KeyCodeCombination(KeyCode.S,
+                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
+                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
+        registerKeybind("new_file", () -> MainWindowController.instance.btnNew.fire(), prefs, new KeyCodeCombination(KeyCode.N,
+                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
+                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
+        registerKeybind("open_file", () -> MainWindowController.instance.btnOpen.fire(), prefs, new KeyCodeCombination(KeyCode.O,
+                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
+                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
+    }
+
+    private void registerKeybind(String id, Runnable action, Preferences node, KeyCombination defaultCombination) {
+        Registry<KeybindSetting> registry = Registries.KEYBIND_REGISTRY;
+        RegistryKey key = new RegistryKey(REGISTRY_DOMAIN, id);
+        registry.register(key, KeybindSetting.fromPref(node, key, action, defaultCombination));
+    }
+
     @Override
     public void init() {
         logger.info("Starting {}", title);
         logger.info("Initializing");
+        settings = new Settings();
+        settings.init();
         populateRegistries();
     }
 

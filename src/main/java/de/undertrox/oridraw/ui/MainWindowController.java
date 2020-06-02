@@ -5,19 +5,19 @@ import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.TypedCreasePatternTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
-import de.undertrox.oridraw.ui.button.ToolButton;
+import de.undertrox.oridraw.ui.component.ToolButton;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
-import de.undertrox.oridraw.ui.tab.CanvasTab;
-import de.undertrox.oridraw.ui.tab.CreasePatternTab;
+import de.undertrox.oridraw.ui.component.tab.CanvasTab;
+import de.undertrox.oridraw.ui.component.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryEntry;
+import de.undertrox.oridraw.util.setting.Settings;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -79,11 +79,21 @@ public class MainWindowController implements Initializable {
     public Button btnSettings;
     private Logger logger = LogManager.getLogger(MainWindowController.class);
     private List<ToolButton> toolButtons;
+
+
     private ResourceBundle bundle;
 
+    private Settings settings;
+
+    public ResourceBundle getBundle() {
+        return bundle;
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         instance = this;
+        settings = MainApp.getSettings();
+        settings.getKeybindSettings().loadFromRegistry();
+        settings.getKeybindSettings().setBundle(resources);
         logger.debug("Initializing MainWindowController");
         bundle = resources;
         toolButtons = new ArrayList<>();
@@ -430,9 +440,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    public void openSettings(ActionEvent actionEvent) {
+    public void openSettings() {
         logger.debug("Opening Settings");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/settings.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/settings/settings.fxml"));
         try {
             Parent settings = loader.load();
             Scene scene = new Scene(settings);
