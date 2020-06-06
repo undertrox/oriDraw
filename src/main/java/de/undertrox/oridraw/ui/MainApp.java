@@ -7,6 +7,7 @@ import de.undertrox.oridraw.origami.tool.anglebisector.AngleBisectorToolFactory;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolSettings;
+import de.undertrox.oridraw.origami.tool.select.box.BoxSelectionToolFactory;
 import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.io.export.ExporterCP;
@@ -103,6 +104,7 @@ public class MainApp extends Application {
         Registry<CreasePatternToolFactory<? extends CreasePatternTool>> registry = Registries.TOOL_FACTORY_REGISTRY;
         registry.register(REGISTRY_DOMAIN, "point_to_point", new DrawLineToolFactory());
         registry.register(REGISTRY_DOMAIN, "angle_bisect", new AngleBisectorToolFactory());
+        registry.register(REGISTRY_DOMAIN, "box_select", new BoxSelectionToolFactory());
     }
 
     private void registerKeybinds() {

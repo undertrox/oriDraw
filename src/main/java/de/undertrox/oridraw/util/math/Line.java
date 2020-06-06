@@ -29,6 +29,7 @@ public class Line {
         isValid = start.isValid() && end.isValid();
         this.start = start;
         this.end = end;
+        isValid = isValid() && lengthSquared()>Constants.EPSILON;
     }
 
     /**
@@ -180,7 +181,7 @@ public class Line {
     }
 
     public Line extendUntilIntersection(Line l) {
-        if (l == null) return new Line(start, end);
+        if (l == null || !isValid || !l.isValid()) return new Line(start, end);
         HesseNormalLine hnl = l.getHesse();
         if (!hnl.parallel(getHesse())) {
             Vector p = hnl.intersect(getHesse());

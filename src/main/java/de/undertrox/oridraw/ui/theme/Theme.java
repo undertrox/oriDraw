@@ -10,6 +10,7 @@ public class Theme extends Registrable {
     private LineStyle edge;
     private LineStyle aux;
     private LineStyle unknown;
+    private LineStyle selectionOutline;
 
     private LineStyle selectedLine;
     private LineStyle toBeSelectedLine;
@@ -23,6 +24,10 @@ public class Theme extends Registrable {
         return background;
     }
 
+    public LineStyle getSelectionOutline() {
+        return selectionOutline;
+    }
+
     public static final Theme DEFAULT = new Theme(
             new LineStyle(Color.RED, 1),
             new LineStyle(Color.BLUE, 1),
@@ -32,6 +37,7 @@ public class Theme extends Registrable {
 
             new LineStyle(Color.LIGHTGREEN, 1),
             new LineStyle(Color.LIMEGREEN, 1),
+            new LineStyle(Color.GRAY, 1, 5, 5),
 
             new PointStyle(Color.BLACK, 2, PointStyle.Shape.SQUARE),
             new PointStyle(Color.LIGHTGREEN, 2, PointStyle.Shape.SQUARE),
@@ -49,6 +55,8 @@ public class Theme extends Registrable {
             new LineStyle(Color.LIGHTGREEN, 1),
             new LineStyle(Color.LIMEGREEN, 1),
 
+            new LineStyle(Color.GRAY, 1, 5, 5),
+
             new PointStyle(Color.WHITE, 2, PointStyle.Shape.SQUARE),
             new PointStyle(Color.LIGHTGREEN, 2, PointStyle.Shape.SQUARE),
             new PointStyle(Color.LIMEGREEN, 2, PointStyle.Shape.SQUARE),
@@ -56,7 +64,7 @@ public class Theme extends Registrable {
     );
 
     public Theme(LineStyle mountain, LineStyle valley, LineStyle edge, LineStyle aux, LineStyle unknown,
-                 LineStyle toBeSelectedLine, LineStyle selectedLine,
+                 LineStyle toBeSelectedLine, LineStyle selectedLine, LineStyle selectionOutline,
                  PointStyle defaultPoint, PointStyle toBeSelectedPoint, PointStyle selectedPoint,
                  Paint background) {
         this.mountain = mountain;
@@ -66,6 +74,7 @@ public class Theme extends Registrable {
         this.unknown = unknown;
         this.selectedLine = selectedLine;
         this.toBeSelectedLine = toBeSelectedLine;
+        this.selectionOutline = selectionOutline;
         this.defaultPoint = defaultPoint;
         this.selectedPoint = selectedPoint;
         this.toBeSelectedPoint = toBeSelectedPoint;

@@ -74,6 +74,11 @@ public class CreasePatternSelection {
         selectedPoints.push(p);
     }
 
+    public void selectToBeSelectedLines() {
+        selectedLines.addAll(toBeSelectedLines);
+        toBeSelectedLines.clear();
+    }
+
     /**
      * Adds p to the to be selected list
      *

@@ -128,6 +128,7 @@ public class HesseNormalLine {
      * @return Intersection point between this line and l
      */
     public Vector intersect(HesseNormalLine l) {
+        if (l==null) return Vector.UNDEFINED;
         double a2 = l.a;
         double b2 = l.b;
         double c2 = l.c;
@@ -144,6 +145,7 @@ public class HesseNormalLine {
      * @return true if l is parallel to this line, false otherwise
      */
     public boolean parallel(HesseNormalLine l) {
+        if (l == null) return false;
         return Math.abs(a-l.a) < Constants.EPSILON && Math.abs(b-l.b) < Constants.EPSILON;
     }
 
