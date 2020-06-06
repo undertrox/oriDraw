@@ -15,6 +15,7 @@ import de.undertrox.oridraw.util.io.IOHelper;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryEntry;
+import de.undertrox.oridraw.util.registry.RegistryKey;
 import de.undertrox.oridraw.util.setting.Settings;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -148,6 +149,15 @@ public class MainWindowController implements Initializable {
                 row++;
             }
         }
+    }
+
+    public ToolButton getToolButtonForRegistryKey(RegistryKey key) {
+        for (ToolButton toolButton : toolButtons) {
+            if (toolButton.getToolKey().equals(key)){
+                return toolButton;
+            }
+        }
+        return null;
     }
 
     private void updateGridControls() {

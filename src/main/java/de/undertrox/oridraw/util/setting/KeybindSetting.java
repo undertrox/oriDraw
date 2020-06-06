@@ -50,6 +50,7 @@ public class KeybindSetting extends Registrable {
         } else {
             keyCombination = KeyCombination.NO_MATCH;
         }
+        node.put(key.toString(), kc);
         return new KeybindSetting(action, keyCombination, key);
     }
 

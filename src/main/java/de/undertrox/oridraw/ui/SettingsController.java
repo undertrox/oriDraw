@@ -3,8 +3,6 @@ package de.undertrox.oridraw.ui;
 import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.setting.KeybindSetting;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,7 +11,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,10 +25,12 @@ public class SettingsController implements Initializable {
     public AnchorPane paneSettings;
 
     public TableView<KeybindSetting> tableViewKeybinds;
+    public Button btnChangeKeybind;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnGeneral.fire();
+        btnChangeKeybind = new Button(LocalizationHelper.getString("oridraw.settings.keybinds.change"));
         tableViewKeybinds = new TableView<>();
         tableViewKeybinds.getItems().addAll(MainApp.getSettings().getKeybindSettings().getKeybinds());
         tableViewKeybinds.setMaxWidth(Double.MAX_VALUE);

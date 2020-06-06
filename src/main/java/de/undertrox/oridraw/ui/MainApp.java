@@ -6,6 +6,7 @@ import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.anglebisector.AngleBisectorToolFactory;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolFactory;
+import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolSettings;
 import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.io.export.ExporterCP;
@@ -20,9 +21,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -113,6 +116,35 @@ public class MainApp extends Application {
         registerKeybind("open_file", () -> MainWindowController.instance.btnOpen.fire(), prefs, new KeyCodeCombination(KeyCode.O,
                 KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
                 KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
+        // Tools
+        registerKeybind("tool_point_to_point",
+                () -> MainWindowController.instance.getToolButtonForRegistryKey(
+                        new RegistryKey("oridraw", "point_to_point")
+                ).fire(),
+                prefs, new KeyCodeCombination(KeyCode.D,
+                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP,
+                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
+        registerKeybind("tool_angle_bisect",
+                () -> MainWindowController.instance.getToolButtonForRegistryKey(
+                        new RegistryKey("oridraw", "angle_bisect")
+                ).fire(),
+                prefs, new KeyCodeCombination(KeyCode.B,
+                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP,
+                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
+        registerKeybind("tool_point_to_point_snap225",
+                () -> ((CheckBox)((DrawLineToolSettings) Registries.TOOL_FACTORY_REGISTRY.getItem(
+                        new RegistryKey("oridraw", "point_to_point")
+                ).getSettings()).getSnapTo225().getControlNode()).fire(),
+                prefs, new KeyCodeCombination(KeyCode.D,
+                        KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP,
+                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
+        registerKeybind("tool_point_to_point_continue_line",
+                () -> ((CheckBox)((DrawLineToolSettings) Registries.TOOL_FACTORY_REGISTRY.getItem(
+                        new RegistryKey("oridraw", "point_to_point")
+                ).getSettings()).getContinueLine().getControlNode()).fire(),
+                prefs, new KeyCodeCombination(KeyCode.D,
+                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
+                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
     }
 
     private void registerKeybind(String id, Runnable action, Preferences node, KeyCombination defaultCombination) {
