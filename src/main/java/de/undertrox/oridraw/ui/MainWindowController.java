@@ -85,6 +85,7 @@ public class MainWindowController implements Initializable {
     public Menu exportMenu;
     public Menu importMenu;
     public Menu toolMenu;
+    public Menu editMenu;
     private Logger logger = LogManager.getLogger(MainWindowController.class);
     private List<ToolButton> toolButtons;
 

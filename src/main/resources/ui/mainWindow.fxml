@@ -19,7 +19,7 @@
                      <Menu fx:id="importMenu" mnemonicParsing="false" text="Import" />
                </items>
              </Menu>
-             <Menu mnemonicParsing="false" text="Edit">
+             <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
                <items>
                  <MenuItem mnemonicParsing="false" text="Delete" />
                      <Menu fx:id="toolMenu" mnemonicParsing="false" text="Tools" />

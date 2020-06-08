@@ -6,13 +6,14 @@ import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.anglebisector.AngleBisectorToolFactory;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolFactory;
-import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolSettings;
 import de.undertrox.oridraw.origami.tool.select.box.BoxSelectionToolFactory;
+import de.undertrox.oridraw.ui.action.DeleteSelectedLinesAction;
 import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.io.export.ExporterCP;
 import de.undertrox.oridraw.util.io.load.Loader;
 import de.undertrox.oridraw.util.io.load.LoaderCP;
+import de.undertrox.oridraw.util.registry.ActionRegistry;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.Registry;
 import de.undertrox.oridraw.util.registry.RegistryKey;
@@ -63,8 +64,15 @@ public class MainApp extends Application {
         primaryStage.show();
         primaryStage.setMinWidth(primaryStage.getWidth());
         primaryStage.setMinHeight(primaryStage.getHeight());
+        registerActions();
         logger.debug("OriDraw is now running.");
         Registries.lockAll();
+    }
+
+    private void registerActions() {
+        ActionRegistry actionRegistry = Registries.ACTION_REGISTRY;
+
+        actionRegistry.register(REGISTRY_DOMAIN, "delete_selected_lines", new DeleteSelectedLinesAction(), MainWindowController.instance.editMenu);
     }
 
     /**
@@ -101,6 +109,7 @@ public class MainApp extends Application {
         registry.register(REGISTRY_DOMAIN, "point_to_point", new DrawLineToolFactory());
         registry.register(REGISTRY_DOMAIN, "angle_bisect", new AngleBisectorToolFactory());
         registry.register(REGISTRY_DOMAIN, "box_select", new BoxSelectionToolFactory());
+
     }
 
     private void registerKeybinds() {

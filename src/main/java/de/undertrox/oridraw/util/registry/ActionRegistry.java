@@ -18,6 +18,10 @@ public class ActionRegistry extends Registry<Action> {
         menuParent.getItems().add(action.createMenuItem());
     }
 
+    public void register(String domain, String key, Action action, Menu menuParent) {
+        register(new RegistryKey(domain, key), action, menuParent);
+    }
+
     @Override
     public void register(RegistryKey key, Action item) {
         logger.warn("ActionRegistry#register(key, item) should not be used, please use ActionRegistry#register(key,item,menuParent) instead");

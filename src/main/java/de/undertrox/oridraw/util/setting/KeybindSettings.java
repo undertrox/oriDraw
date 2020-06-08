@@ -22,7 +22,7 @@ public class KeybindSettings {
 
     public void apply(Scene scene){
         for (KeybindSetting keybind : keybinds) {
-            scene.getAccelerators().put(keybind.getKeyCombination(), keybind.getAction());
+            scene.getAccelerators().put(keybind.getKeyCombination(), keybind.getAction().getRunnable());
         }
     }
 

@@ -14,7 +14,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
-import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
 import static de.undertrox.oridraw.util.io.IOHelper.loadResource;
@@ -115,7 +114,6 @@ public class ToolButton extends ToggleButton {
     }
 
     private void loadToolSettings() {
-        // TODO: implement this
         controller.toolSettingsGridPane.getChildren().clear();
         Registries.TOOL_FACTORY_REGISTRY.getItem(toolKey).getSettings().showToolSettings(controller.toolSettingsGridPane);
     }
