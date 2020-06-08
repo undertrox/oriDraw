@@ -1,16 +1,15 @@
 package de.undertrox.oridraw.util.setting;
 
-import de.undertrox.oridraw.util.LocalizationHelper;
+import de.undertrox.oridraw.ui.action.Action;
 import de.undertrox.oridraw.util.registry.Registrable;
 import de.undertrox.oridraw.util.registry.RegistryKey;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.input.KeyCombination;
 
-import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 public class KeybindSetting extends Registrable {
-    private Runnable action;
+    private Action action;
     private KeyCombination keyCombination;
 
     public final SimpleStringProperty localizationKey;
@@ -22,14 +21,14 @@ public class KeybindSetting extends Registrable {
         node.put(getRegistryKey().toString(), keyCombination.getName());
     }
 
-    private KeybindSetting(Runnable action, KeyCombination keyCombination, RegistryKey key) {
+    private KeybindSetting(Action action, KeyCombination keyCombination, RegistryKey key) {
         this.action = action;
         this.keyCombination = keyCombination;
         keybind = new SimpleStringProperty(keyCombination.getDisplayText());
         localizationKey = new SimpleStringProperty(key.getDomain() + ".settings.keybinds." + key.getId());
     }
 
-    public Runnable getAction() {
+    public Action getAction() {
         return action;
     }
 
@@ -42,8 +41,10 @@ public class KeybindSetting extends Registrable {
         this.keybind.set(keyCombination.getDisplayText());
     }
 
-    public static KeybindSetting fromPref(Preferences node, RegistryKey key, Runnable action, KeyCombination defaultKC) {
+    public static KeybindSetting fromPref(Preferences node, RegistryKey key, Action action, KeyCombination defaultKC) {
         String kc = node.get(key.toString(), defaultKC.getName());
+        // TEMPORARY
+        kc = defaultKC.getName();
         KeyCombination keyCombination;
         if (!kc.isBlank()) {
             keyCombination = KeyCombination.valueOf(kc);

@@ -8,6 +8,7 @@ import de.undertrox.oridraw.ui.MainApp;
 import de.undertrox.oridraw.ui.handler.KeyboardHandler;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.util.LocalizationHelper;
+import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.math.Transform;
 import de.undertrox.oridraw.ui.render.BackgroundRenderer;
 import de.undertrox.oridraw.ui.render.DocumentRenderer;
@@ -28,7 +29,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * This class is used to display and edit a Crease Pattern inside a tab
@@ -174,6 +174,24 @@ public class CreasePatternTab extends CanvasTab {
             return false;
         }
         IOHelper.saveToFile(file.getAbsolutePath(), getDoc());
+        getDoc().setTitle(file.getName());
+        getDoc().setHasUnsavedChanges(false);
+        return true;
+    }
+
+    public boolean saveDocument(Exporter<Document> exporter) {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle(LocalizationHelper.getString(
+                Constants.REGISTRY_DOMAIN + ".action.export." + exporter.getRegistryKey().getId() + ".filedialog.title"));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                LocalizationHelper.getString(
+                        Constants.REGISTRY_DOMAIN + ".action.export." + exporter.getRegistryKey().getId() + ".filedialog.description"), exporter.extensions());
+        chooser.getExtensionFilters().add(filter);
+        File file = chooser.showSaveDialog(MainApp.getPrimaryStage());
+        if (file == null) {
+            return false;
+        }
+        IOHelper.saveToFile(file.getAbsolutePath(), getDoc(), exporter);
         getDoc().setTitle(file.getName());
         getDoc().setHasUnsavedChanges(false);
         return true;

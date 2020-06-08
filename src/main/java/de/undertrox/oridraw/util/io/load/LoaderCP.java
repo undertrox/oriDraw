@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
 public class LoaderCP extends Loader<Document> {
     @Override
     public String[] extensions() {
-        return new String[]{"cp"};
+        return new String[]{"*.cp"};
     }
 
     /**

@@ -8,7 +8,9 @@ import javafx.scene.input.MouseEvent;
 
 public abstract class SelectionTool extends CreasePatternTool {
 
-    boolean addToSelection = false;
+
+
+    private boolean addToSelection = false;
 
     public SelectionTool(CreasePatternTab tab, CreasePatternToolFactory<? extends CreasePatternTool> factory) {
         super(tab, factory);
@@ -31,6 +33,10 @@ public abstract class SelectionTool extends CreasePatternTool {
     public void onClick(MouseEvent e) {
         super.onClick(e);
         addToSelection = e.isShiftDown();
+    }
+
+    public boolean getAddToSelection() {
+        return addToSelection;
     }
 
     public void onDrag(MouseEvent e) {

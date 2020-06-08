@@ -1,5 +1,6 @@
 package de.undertrox.oridraw.ui;
 
+import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
@@ -12,6 +13,7 @@ import de.undertrox.oridraw.ui.component.tab.CanvasTab;
 import de.undertrox.oridraw.ui.component.tab.CreasePatternTab;
 import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.IOHelper;
+import de.undertrox.oridraw.util.io.load.Loader;
 import de.undertrox.oridraw.util.math.Vector;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.RegistryEntry;
@@ -79,6 +81,10 @@ public class MainWindowController implements Initializable {
     public Button btnNew;
     public Button btnOpen;
     public Button btnSettings;
+    public MenuBar menuBar;
+    public Menu exportMenu;
+    public Menu importMenu;
+    public Menu toolMenu;
     private Logger logger = LogManager.getLogger(MainWindowController.class);
     private List<ToolButton> toolButtons;
 
@@ -262,6 +268,28 @@ public class MainWindowController implements Initializable {
             return;
         }
         Document doc = IOHelper.readFromFile(file.getAbsolutePath());
+        if (doc == null) {
+            Alert info = new Alert(Alert.AlertType.ERROR, LocalizationHelper.getString("oridraw.action.open.error"));
+            info.showAndWait();
+            return;
+        }
+        doc.setTitle(file.getName());
+        createNewFileTab(doc);
+        mainTabPane.getSelectionModel().selectLast();
+    }
+
+    public void openFile(Loader<Document> loader) {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle(LocalizationHelper.getString(Constants.REGISTRY_DOMAIN + ".action.import." + loader.getRegistryKey().getId() + ".filedialog.title"));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
+                LocalizationHelper.getString(Constants.REGISTRY_DOMAIN + ".action.import." + loader.getRegistryKey().getId() + ".filedialog.description"),
+                loader.extensions());
+        chooser.getExtensionFilters().add(filter);
+        File file = chooser.showOpenDialog(MainApp.getPrimaryStage());
+        if (file == null) {
+            return;
+        }
+        Document doc = IOHelper.readFromFile(file.getAbsolutePath(), loader);
         if (doc == null) {
             Alert info = new Alert(Alert.AlertType.ERROR, LocalizationHelper.getString("oridraw.action.open.error"));
             info.showAndWait();

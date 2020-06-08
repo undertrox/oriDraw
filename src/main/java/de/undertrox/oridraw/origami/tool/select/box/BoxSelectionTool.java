@@ -49,6 +49,9 @@ public class BoxSelectionTool extends SelectionTool {
     public void onMouseDown(MouseEvent e) {
         super.onMouseDown(e);
         setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
+        if (!getAddToSelection()) {
+            getSelection().clear();
+        }
         start = e;
         rect = new Rectangle(getCurrentMousePos(), getCurrentMousePos());
     }

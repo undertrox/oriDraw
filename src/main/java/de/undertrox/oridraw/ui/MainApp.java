@@ -22,11 +22,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -109,50 +105,13 @@ public class MainApp extends Application {
 
     private void registerKeybinds() {
         Preferences prefs = settings.getKeybindNode();
-        registerKeybind("save_cp", () -> MainWindowController.instance.btnSave.fire(), prefs, new KeyCodeCombination(KeyCode.S,
-                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
-                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
-        registerKeybind("new_file", () -> MainWindowController.instance.btnNew.fire(), prefs, new KeyCodeCombination(KeyCode.N,
-                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
-                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
-        registerKeybind("open_file", () -> MainWindowController.instance.btnOpen.fire(), prefs, new KeyCodeCombination(KeyCode.O,
-                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
-                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
-        // Tools
-        registerKeybind("tool_point_to_point",
-                () -> MainWindowController.instance.getToolButtonForRegistryKey(
-                        new RegistryKey("oridraw", "point_to_point")
-                ).fire(),
-                prefs, new KeyCodeCombination(KeyCode.D,
-                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP,
-                KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
-        registerKeybind("tool_angle_bisect",
-                () -> MainWindowController.instance.getToolButtonForRegistryKey(
-                        new RegistryKey("oridraw", "angle_bisect")
-                ).fire(),
-                prefs, new KeyCodeCombination(KeyCode.B,
-                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP,
-                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
-        registerKeybind("tool_point_to_point_snap225",
-                () -> ((CheckBox)((DrawLineToolSettings) Registries.TOOL_FACTORY_REGISTRY.getItem(
-                        new RegistryKey("oridraw", "point_to_point")
-                ).getSettings()).getSnapTo225().getControlNode()).fire(),
-                prefs, new KeyCodeCombination(KeyCode.D,
-                        KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP,
-                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
-        registerKeybind("tool_point_to_point_continue_line",
-                () -> ((CheckBox)((DrawLineToolSettings) Registries.TOOL_FACTORY_REGISTRY.getItem(
-                        new RegistryKey("oridraw", "point_to_point")
-                ).getSettings()).getContinueLine().getControlNode()).fire(),
-                prefs, new KeyCodeCombination(KeyCode.D,
-                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.DOWN, KeyCombination.ModifierValue.UP,
-                        KeyCombination.ModifierValue.UP, KeyCombination.ModifierValue.UP));
+
     }
 
-    private void registerKeybind(String id, Runnable action, Preferences node, KeyCombination defaultCombination) {
+    private void registerKeybind(String id, Preferences node, KeyCombination defaultCombination) {
         Registry<KeybindSetting> registry = Registries.KEYBIND_REGISTRY;
         RegistryKey key = new RegistryKey(REGISTRY_DOMAIN, id);
-        registry.register(key, KeybindSetting.fromPref(node, key, action, defaultCombination));
+        registry.register(key, KeybindSetting.fromPref(node, key, Registries.ACTION_REGISTRY.getItem(key), defaultCombination));
     }
 
     @Override
