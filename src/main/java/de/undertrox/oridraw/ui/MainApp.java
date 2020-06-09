@@ -7,6 +7,7 @@ import de.undertrox.oridraw.origami.tool.anglebisector.AngleBisectorToolFactory;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolFactory;
 import de.undertrox.oridraw.origami.tool.select.box.BoxSelectionToolFactory;
+import de.undertrox.oridraw.ui.action.Action;
 import de.undertrox.oridraw.ui.action.DeleteSelectedLinesAction;
 import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.export.Exporter;
@@ -58,21 +59,16 @@ public class MainApp extends Application {
                 .getResource("ui/mainWindow.fxml")), bundle);
         primaryStage.setTitle(title);
         Scene rootScene = new Scene(root);
+        registerActions();
+        Registries.lockAll();
+        registerKeybinds();
+        settings.getKeybindSettings().loadFromRegistry();
         rootScene.getStylesheets().add("css/main.css");
-        settings.getKeybindSettings().apply(rootScene);
         primaryStage.setScene(rootScene);
         primaryStage.show();
         primaryStage.setMinWidth(primaryStage.getWidth());
         primaryStage.setMinHeight(primaryStage.getHeight());
-        registerActions();
         logger.debug("OriDraw is now running.");
-        Registries.lockAll();
-    }
-
-    private void registerActions() {
-        ActionRegistry actionRegistry = Registries.ACTION_REGISTRY;
-
-        actionRegistry.register(REGISTRY_DOMAIN, "delete_selected_lines", new DeleteSelectedLinesAction(), MainWindowController.instance.editMenu);
     }
 
     /**
@@ -82,7 +78,6 @@ public class MainApp extends Application {
         registerDocumentExporters();
         registerDocumentLoaders();
         registerTools();
-        registerKeybinds();
     }
 
     /**
@@ -112,9 +107,26 @@ public class MainApp extends Application {
 
     }
 
+    private void registerActions() {
+        ActionRegistry actionRegistry = Registries.ACTION_REGISTRY;
+        actionRegistry.register(REGISTRY_DOMAIN, "delete_selected_lines", new DeleteSelectedLinesAction(), MainWindowController.instance.editMenu);
+        actionRegistry.register(REGISTRY_DOMAIN, "save_document",
+                new Action(() -> MainWindowController.instance.btnSave.fire()), MainWindowController.instance.fileMenu);
+        actionRegistry.register(REGISTRY_DOMAIN, "open_document",
+                new Action(() -> MainWindowController.instance.btnOpen.fire()), MainWindowController.instance.fileMenu);
+        actionRegistry.register(REGISTRY_DOMAIN, "new_document",
+                new Action(() -> MainWindowController.instance.btnNew.fire()), MainWindowController.instance.fileMenu);
+    }
+
     private void registerKeybinds() {
         Preferences prefs = settings.getKeybindNode();
-
+        registerKeybind("delete_selected_lines", prefs, KeyCombination.valueOf("Delete"));
+        registerKeybind("activate_point_to_point", prefs, KeyCombination.valueOf("D"));
+        registerKeybind("activate_angle_bisect", prefs, KeyCombination.valueOf("A"));
+        registerKeybind("activate_box_select", prefs, KeyCombination.valueOf("B"));
+        registerKeybind("save_document", prefs, KeyCombination.valueOf("Ctrl+S"));
+        registerKeybind("open_document", prefs, KeyCombination.valueOf("Ctrl+O"));
+        registerKeybind("new_document", prefs, KeyCombination.valueOf("Ctrl+N"));
     }
 
     private void registerKeybind(String id, Preferences node, KeyCombination defaultCombination) {

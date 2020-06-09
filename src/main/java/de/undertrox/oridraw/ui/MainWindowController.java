@@ -86,6 +86,11 @@ public class MainWindowController implements Initializable {
     public Menu importMenu;
     public Menu toolMenu;
     public Menu editMenu;
+    public Menu fileMenu;
+    public VBox mainbox;
+    public AnchorPane mainAnchorPane;
+    public Pane mainPane;
+    public AnchorPane editorAnchorPane;
     private Logger logger = LogManager.getLogger(MainWindowController.class);
     private List<ToolButton> toolButtons;
 
@@ -95,12 +100,14 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         instance = this;
         settings = MainApp.getSettings();
-        settings.getKeybindSettings().loadFromRegistry();
         logger.debug("Initializing MainWindowController");
         toolButtons = new ArrayList<>();
         toolToggleGroup = new ToggleGroup();
         updateText();
         createNewFileTab(null);
+        mainbox.setFillWidth(true);
+        mainAnchorPane.prefWidthProperty().bind(mainPane.widthProperty());
+        editorAnchorPane.prefHeightProperty().bind(mainPane.heightProperty());
 
         // Make sure the right stylesheet is loaded
         WebEngine webEngine = documentation.getEngine();

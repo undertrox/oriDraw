@@ -5,26 +5,26 @@ import de.undertrox.oridraw.util.registry.Registrable;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Action extends Registrable {
     private Runnable runnable;
-    private List<KeyCombination> combinations;
+    private KeyCombination combination;
     private MenuItem menuItem;
 
 
     public Action(Runnable runnable) {
         this.runnable = runnable;
-        combinations = new ArrayList<>();
+        combination = KeyCombination.NO_MATCH;
     }
 
-    public void addKeyCombination(KeyCombination combination) {
-        combinations.add(combination);
+    public void setKeyCombination(KeyCombination combination) {
+        this.combination = combination;
+        if (menuItem != null) {
+            menuItem.setAccelerator(combination);
+        }
     }
 
-    public List<KeyCombination> getCombinations() {
-        return new ArrayList<>(combinations);
+    public KeyCombination getKeyCombination() {
+        return combination;
     }
 
     public Runnable getRunnable() {
@@ -44,6 +44,7 @@ public class Action extends Registrable {
     public MenuItem createMenuItem() {
         MenuItem item = new MenuItem(LocalizationHelper.getString(getRegistryKey().getDomain() + ".actions." + getRegistryKey().getId() + ".name"));
         item.setOnAction((event -> run()));
+        item.setAccelerator(getKeyCombination());
         menuItem = item;
         return item;
     }

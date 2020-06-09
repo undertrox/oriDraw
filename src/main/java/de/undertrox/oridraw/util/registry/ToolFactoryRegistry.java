@@ -19,7 +19,7 @@ public class ToolFactoryRegistry extends Registry<CreasePatternToolFactory<? ext
             Action action = new Action(() ->
                 MainWindowController.instance.getToolButtonForRegistryKey(entry.getKey()).fire()
             );
-            Registries.ACTION_REGISTRY.register(new RegistryKey(Constants.REGISTRY_DOMAIN, "action_activate_" + entry.getKey().getId()),
+            Registries.ACTION_REGISTRY.register(new RegistryKey(Constants.REGISTRY_DOMAIN, "activate_" + entry.getKey().getId()),
                     action, MainWindowController.instance.toolMenu);
         }
     }
