@@ -132,6 +132,16 @@ public class CreasePatternSelection {
         }
     }
 
+    public void toggleToBeSelectedLines() {
+        for (OriLine line : toBeSelectedLines) {
+            if (selectedLines.contains(line)) {
+                selectedLines.remove(line);
+            } else {
+                selectedLines.add(line);
+            }
+        }
+    }
+
     /**
      * selects only the points that are in toBeSelected
      */

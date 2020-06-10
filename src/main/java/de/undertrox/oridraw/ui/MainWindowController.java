@@ -151,7 +151,7 @@ public class MainWindowController implements Initializable {
     private void createToolButtons() {
         int col = 0;
         int row = 0;
-        int maxCol = 4;
+        int maxCol = 3;
         for (RegistryEntry<CreasePatternToolFactory<? extends CreasePatternTool>> item :
                 Registries.TOOL_FACTORY_REGISTRY.getEntries()) {
             ToolButton btn = new ToolButton(item.getKey(), this);
@@ -487,7 +487,7 @@ public class MainWindowController implements Initializable {
             Scene scene = new Scene(settingsFxml);
             Stage s = new Stage();
             s.setScene(scene);
-            s.setTitle(LocalizationHelper.getString("oridraw.settings.windowtitle"));
+            s.setTitle(LocalizationHelper.getString("oridraw.settings.window_title"));
             s.initModality(Modality.APPLICATION_MODAL);
             s.setMinHeight(400);
             s.setMinWidth(600);

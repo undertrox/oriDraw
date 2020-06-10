@@ -5,6 +5,7 @@ import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.anglebisector.AngleBisectorToolFactory;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
+import de.undertrox.oridraw.origami.tool.deleteline.DeleteLineToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolFactory;
 import de.undertrox.oridraw.origami.tool.select.box.BoxSelectionToolFactory;
 import de.undertrox.oridraw.ui.action.Action;
@@ -104,6 +105,7 @@ public class MainApp extends Application {
         registry.register(REGISTRY_DOMAIN, "point_to_point", new DrawLineToolFactory());
         registry.register(REGISTRY_DOMAIN, "angle_bisect", new AngleBisectorToolFactory());
         registry.register(REGISTRY_DOMAIN, "box_select", new BoxSelectionToolFactory());
+        registry.register(REGISTRY_DOMAIN, "delete_line", new DeleteLineToolFactory());
 
     }
 
@@ -127,6 +129,7 @@ public class MainApp extends Application {
         registerKeybind("save_document", prefs, KeyCombination.valueOf("Ctrl+S"));
         registerKeybind("open_document", prefs, KeyCombination.valueOf("Ctrl+O"));
         registerKeybind("new_document", prefs, KeyCombination.valueOf("Ctrl+N"));
+        registerKeybind("activate_delete_line", prefs, KeyCombination.valueOf("E"));
     }
 
     private void registerKeybind(String id, Preferences node, KeyCombination defaultCombination) {
