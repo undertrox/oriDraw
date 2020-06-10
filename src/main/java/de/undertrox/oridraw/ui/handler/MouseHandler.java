@@ -120,8 +120,8 @@ public class MouseHandler implements MouseHandlerInterface {
     }
 
     public OriPoint findNearestPoint(Vector p, List<OriPoint> points) {
-        Vector nearest = points.get(0);
-        double smallesSqrDist = p.distanceSquared(nearest);
+        Vector nearest = Vector.UNDEFINED;
+        double smallesSqrDist = Double.POSITIVE_INFINITY;
         for (Vector point : points) {
             double sqrDist = p.distanceSquared(point);
             if (sqrDist < smallesSqrDist) {

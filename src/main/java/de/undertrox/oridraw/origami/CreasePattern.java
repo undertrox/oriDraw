@@ -57,7 +57,7 @@ public class CreasePattern extends OriLineCollection {
             UniqueItemList<OriPoint> pointsOnLine = new UniqueItemList<>();
             for (OriPoint point : points) {
                 if(line.contains(point)) {
-                    pointsOnLine.add(point);
+                    pointsOnLine.add(new OriPoint(point));
                 }
             }
             pointsOnLine.sort(Comparator.comparingDouble(point -> line.getStartPoint().distanceSquared(point)));

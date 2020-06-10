@@ -18,7 +18,7 @@ public class DocumentLoaderRegistry extends Registry<Loader<Document>> {
         Action action = new Action(() ->
             MainWindowController.instance.openFile(entry.getValue())
         );
-        Registries.ACTION_REGISTRY.register(new RegistryKey(Constants.REGISTRY_DOMAIN, "action_import_" + entry.getKey().getId()),
+        Registries.ACTION_REGISTRY.register(new RegistryKey(Constants.REGISTRY_DOMAIN, "import_" + entry.getKey().getId()),
                 action, MainWindowController.instance.importMenu);
     }
     }

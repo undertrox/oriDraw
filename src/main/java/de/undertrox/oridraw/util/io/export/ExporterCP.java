@@ -9,7 +9,12 @@ import java.io.Writer;
 public class ExporterCP extends Exporter<Document> {
     @Override
     public String[] extensions() {
-        return new String[]{"*.cp"};
+        return new String[]{"cp"};
+    }
+
+    @Override
+    public boolean isLossLess() {
+        return true;
     }
 
     /**

@@ -13,6 +13,7 @@ import de.undertrox.oridraw.ui.action.DeleteSelectedLinesAction;
 import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.io.export.ExporterCP;
+import de.undertrox.oridraw.util.io.export.ExporterSVG;
 import de.undertrox.oridraw.util.io.load.Loader;
 import de.undertrox.oridraw.util.io.load.LoaderCP;
 import de.undertrox.oridraw.util.registry.ActionRegistry;
@@ -87,6 +88,7 @@ public class MainApp extends Application {
     private void registerDocumentExporters() {
         Registry<Exporter<Document>> registry = Registries.DOCUMENT_EXPORTER_REGISTRY;
         registry.register(REGISTRY_DOMAIN, "cp", new ExporterCP());
+        registry.register(REGISTRY_DOMAIN, "svg", new ExporterSVG());
     }
 
     /**

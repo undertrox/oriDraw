@@ -20,10 +20,10 @@ public class DocumentExporterRegistry extends Registry<Exporter<Document>> {
             Action action = new Action(() -> {
                 CreasePatternTab tab = MainWindowController.instance.getSelectedCpTab();
                 if (tab != null) {
-                    tab.saveDocument(entry.getValue());
+                    tab.exportDocument(entry.getValue());
                 }
             });
-            Registries.ACTION_REGISTRY.register(new RegistryKey(Constants.REGISTRY_DOMAIN, "action_export_" + entry.getKey().getId()),
+            Registries.ACTION_REGISTRY.register(new RegistryKey(Constants.REGISTRY_DOMAIN, "export_" + entry.getKey().getId()),
                     action, MainWindowController.instance.exportMenu);
         }
     }

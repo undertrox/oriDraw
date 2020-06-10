@@ -173,27 +173,33 @@ public class CreasePatternTab extends CanvasTab {
         if (file == null) {
             return false;
         }
-        IOHelper.saveToFile(file.getAbsolutePath(), getDoc());
+        IOHelper.saveToFile(file.getAbsolutePath(), getDoc(), Registries.DOCUMENT_EXPORTER_REGISTRY.getItem(Constants.REGISTRY_DOMAIN, "cp"));
         getDoc().setTitle(file.getName());
         getDoc().setHasUnsavedChanges(false);
         return true;
     }
 
-    public boolean saveDocument(Exporter<Document> exporter) {
+    public boolean exportDocument(Exporter<Document> exporter) {
         FileChooser chooser = new FileChooser();
+        String[] extensions = exporter.extensions();
+        for (int i = 0; i < extensions.length; i++) {
+            extensions[i] = "*." + extensions[i];
+        }
         chooser.setTitle(LocalizationHelper.getString(
                 Constants.REGISTRY_DOMAIN + ".action.export." + exporter.getRegistryKey().getId() + ".filedialog.title"));
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
                 LocalizationHelper.getString(
-                        Constants.REGISTRY_DOMAIN + ".action.export." + exporter.getRegistryKey().getId() + ".filedialog.description"), exporter.extensions());
+                        Constants.REGISTRY_DOMAIN + ".action.export." + exporter.getRegistryKey().getId() + ".filedialog.description"), extensions);
         chooser.getExtensionFilters().add(filter);
         File file = chooser.showSaveDialog(MainApp.getPrimaryStage());
         if (file == null) {
             return false;
         }
         IOHelper.saveToFile(file.getAbsolutePath(), getDoc(), exporter);
-        getDoc().setTitle(file.getName());
-        getDoc().setHasUnsavedChanges(false);
+        if (exporter.isLossLess()) {
+            getDoc().setTitle(file.getName());
+            getDoc().setHasUnsavedChanges(false);
+        }
         return true;
     }
 }

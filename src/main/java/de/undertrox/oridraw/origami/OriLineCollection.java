@@ -2,6 +2,8 @@ package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
 
+import java.util.Collection;
+
 public class OriLineCollection {
     protected UniqueItemList<OriLine> oriLines;
     protected UniqueItemList<OriPoint> points;
@@ -36,6 +38,30 @@ public class OriLineCollection {
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
         OriLine c = oriLines.push(oriLine);
         c.setType(type);
+    }
+
+    /**
+     * Remove a line From the Collection while taking care of deleting references to the line
+     * in the OriPoints
+     * @param l line to be removed
+     * @return true if the line was successfully removed, false if it could not be found
+     */
+    public boolean removeOriLine(OriLine l) {
+        int index = oriLines.indexOf(l);
+        if (index == -1) {
+            return false;
+        }
+        l = oriLines.get(index);
+        l.getStartPoint().getLines().remove(l);
+        l.getEndPoint().getLines().remove(l);
+        oriLines.remove(index);
+        return true;
+    }
+
+    public void removeAllOrilines(Collection<OriLine> lines) {
+        for (OriLine line : lines) {
+            removeOriLine(line);
+        }
     }
 
 

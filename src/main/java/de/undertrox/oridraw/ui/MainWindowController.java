@@ -288,10 +288,14 @@ public class MainWindowController implements Initializable {
 
     public void openFile(Loader<Document> loader) {
         FileChooser chooser = new FileChooser();
+        String[] extensions = loader.extensions();
+        for (int i = 0; i < extensions.length; i++) {
+            extensions[i] = "*." + extensions[i];
+        }
         chooser.setTitle(LocalizationHelper.getString(Constants.REGISTRY_DOMAIN + ".action.import." + loader.getRegistryKey().getId() + ".filedialog.title"));
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
                 LocalizationHelper.getString(Constants.REGISTRY_DOMAIN + ".action.import." + loader.getRegistryKey().getId() + ".filedialog.description"),
-                loader.extensions());
+                extensions);
         chooser.getExtensionFilters().add(filter);
         File file = chooser.showOpenDialog(MainApp.getPrimaryStage());
         if (file == null) {

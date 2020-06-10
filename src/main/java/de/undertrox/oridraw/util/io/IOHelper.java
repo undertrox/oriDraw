@@ -31,7 +31,6 @@ public class IOHelper {
 
     public static Document readFromFile(String filename) {
         String extension = getExtension(filename);
-
         for (RegistryEntry<Loader<Document>> item : Registries.DOCUMENT_LOADER_REGISTRY.getEntries()) {
             if (Arrays.asList(item.getValue().extensions()).contains(extension)) {
                 logger.debug("Reading Document from '{}'", filename);

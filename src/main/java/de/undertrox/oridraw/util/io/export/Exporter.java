@@ -13,6 +13,13 @@ public abstract class Exporter<T> extends Registrable {
     public abstract String[] extensions();
 
     /**
+     * whether the Exporter is lossless, meaning the file can be imported again without losing data. For example,
+     * the CP exporter is lossless, but a PNG exporter wouldn't be
+     * @return true if the exporter is lossless, false if it isn't
+     */
+    public abstract boolean isLossLess();
+
+    /**
      * exports obj using the Writer writer
      * @param writer: writer to export data into
      * @param obj: Data to export
