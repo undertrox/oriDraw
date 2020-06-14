@@ -11,16 +11,16 @@ import java.util.List;
 public class Grid extends OriLineCollection {
     private Logger logger = LogManager.getLogger(Grid.class);
     private int divisions;
-    private double paperSize;
-    private double gridSize;
-    private double gridSquareSize;
+    private Vector paperSize;
+    private Vector gridSize;
+    private Vector gridSquareSize;
     private Vector topLeftCorner;
 
     private Vector bottomRightCorner;
 
     private Vector center;
 
-    public Grid(int divisions, double paperSize, double gridSize, Vector center) {
+    public Grid(int divisions, Vector paperSize, Vector gridSize, Vector center) {
         super();
         this.divisions = divisions;
         this.paperSize = paperSize;
@@ -39,9 +39,9 @@ public class Grid extends OriLineCollection {
         updateGridSquareSize();
         updateCorners();
         logger.info("Creating Grid");
-        for (double x = topLeftCorner.getX(); x <= bottomRightCorner.getX(); x += getGridSquareSize()) {
+        for (double x = topLeftCorner.getX(); x <= bottomRightCorner.getX(); x += getGridSquareSize().getX()) {
             addOriLine(new OriPoint(x, topLeftCorner.getY()), new OriPoint(x, bottomRightCorner.getY()), OriLine.Type.AUX);
-            for (double y = topLeftCorner.getY(); y <= bottomRightCorner.getY(); y += getGridSquareSize()) {
+            for (double y = topLeftCorner.getY(); y <= bottomRightCorner.getY(); y += getGridSquareSize().getY()) {
                 if (x == topLeftCorner.getX()) {
                     addOriLine(new OriPoint(x, y), new OriPoint(bottomRightCorner.getX(), y), OriLine.Type.AUX);
                 }
@@ -59,16 +59,16 @@ public class Grid extends OriLineCollection {
     }
 
     public void updateCorners() {
-        topLeftCorner = center.sub(new Vector(gridSize / 2));
-        bottomRightCorner = center.add(new Vector(gridSize / 2));
+        topLeftCorner = center.sub(gridSize.scale(0.5));
+        bottomRightCorner = center.add(gridSize.scale(0.5));
     }
 
-    public double getGridSquareSize() {
+    public Vector getGridSquareSize() {
         return gridSquareSize;
     }
 
     private void updateGridSquareSize() {
-        gridSquareSize = paperSize / divisions;
+        gridSquareSize = paperSize.scale(1.0/divisions);
     }
 
     public int getDivisions() {
@@ -80,20 +80,20 @@ public class Grid extends OriLineCollection {
         updateGrid();
     }
 
-    public double getPaperSize() {
+    public Vector getPaperSize() {
         return paperSize;
     }
 
-    public void setPaperSize(double paperSize) {
+    public void setPaperSize(Vector paperSize) {
         this.paperSize = paperSize;
         updateGrid();
     }
 
-    public double getGridSize() {
+    public Vector getGridSize() {
         return gridSize;
     }
 
-    public void setGridSize(double gridSize) {
+    public void setGridSize(Vector gridSize) {
         this.gridSize = gridSize;
         updateGrid();
     }
@@ -114,17 +114,17 @@ public class Grid extends OriLineCollection {
         ArrayList<OriPoint> points = new ArrayList<>();
 
         while (x < pos.getX()) {
-            x += getGridSquareSize();
+            x += getGridSquareSize().getX();
         }
         while (y < pos.getY()) {
-            y += getGridSquareSize();
+            y += getGridSquareSize().getY();
         }
-        for (double gridX = x - getGridSquareSize() * radius;
-             gridX < x + getGridSquareSize() * radius;
-             gridX += getGridSquareSize()) {
-            for (double gridY = y - getGridSquareSize() * radius;
-                 gridY < y + getGridSquareSize() * radius;
-                 gridY += getGridSquareSize()) {
+        for (double gridX = x - getGridSquareSize().getX() * radius;
+             gridX < x + getGridSquareSize().getX() * radius;
+             gridX += getGridSquareSize().getX()) {
+            for (double gridY = y - getGridSquareSize().getY() * radius;
+                 gridY < y + getGridSquareSize().getY() * radius;
+                 gridY += getGridSquareSize().getY()) {
                 OriPoint p = new OriPoint(gridX, gridY);
                 if (inGrid(p)) {
                     points.add(new OriPoint(gridX, gridY));

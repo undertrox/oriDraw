@@ -57,7 +57,7 @@ public class MouseHandler implements MouseHandlerInterface {
             // Adds the nearest Point to Selection.toBeSelected
             OriPoint nearestPoint = findNearestPoint(mouseCoords, doc.getAllVisiblePoints(mouseCoords));
             if (mouseCoords.distanceSquared(nearestPoint)
-                    < Math.pow(2 * Constants.MOUSE_RANGE / cpTransform.getScale(), 2)) {
+                    < cpTransform.getScale().inverse().scale(2*Constants.MOUSE_RANGE).lengthSquared()) {
                 doc.getSelection().singleToBeSelected(nearestPoint);
             } else {
                 doc.getSelection().clearToBeSelectedPoints();
@@ -68,7 +68,7 @@ public class MouseHandler implements MouseHandlerInterface {
             if (nearestLine == null) {
                 return;
             }
-            if (nearestLine.getDistance(mouseCoords) < 2 * Constants.MOUSE_RANGE / cpTransform.getScale()) {
+            if (nearestLine.getDistanceSquared(mouseCoords) < cpTransform.getScale().inverse().scale(2*Constants.MOUSE_RANGE).lengthSquared()) {
                 doc.getSelection().singleToBeSelected(nearestLine);
             } else {
                 doc.getSelection().clearToBeSelectedLines();
@@ -83,7 +83,7 @@ public class MouseHandler implements MouseHandlerInterface {
             if (oriLine.lengthSquared() < Constants.EPSILON) {
                 continue;
             }
-            double d = oriLine.getSquaredDistance(mouseCoords);
+            double d = oriLine.getDistanceSquared(mouseCoords);
             Vector p = oriLine.getHesse().getShadowPoint(mouseCoords);
 
             if (d < smallestDist && oriLine.contains(p)) {
@@ -108,9 +108,9 @@ public class MouseHandler implements MouseHandlerInterface {
 
             if (lastMousePos != null) {
                 // Move the Crease Pattern
-                Vector m = cpTransform.getMove();
+                Vector m = cpTransform.getTranslation();
                 Vector mn = mp.sub(lastMousePos);
-                cpTransform.setMove(m.add(mn.scale(cpTransform.getScale())));
+                cpTransform.setTranslation(m.add(mn.scale(cpTransform.getScale())));
             }
             lastMousePos = new Vector(e.getX(), e.getY());
         }

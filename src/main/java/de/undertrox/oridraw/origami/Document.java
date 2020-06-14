@@ -10,18 +10,24 @@ public class Document {
     private boolean showGrid;
     private CreasePatternSelection selection;
     private String title;
-    private double paperSize;
+    private Vector paperSize;
+    private Vector center;
     private boolean hasUnsavedChanges;
 
-    public Document(String title, double paperSize, int gridDivisions) {
+    public Document(String title, Vector paperSize, Vector center, int gridDivisions) {
         this.paperSize = paperSize;
         this.cp = new CreasePattern();
-        this.grid = new Grid(gridDivisions, paperSize, paperSize, Vector.ORIGIN);
+        this.center = center;
+        this.grid = new Grid(gridDivisions, paperSize, paperSize, center);
         showGrid = true;
 
         this.selection = new CreasePatternSelection(cp);
         this.title = title;
         hasUnsavedChanges = false;
+    }
+
+    public Document(String title, Vector paperSize, int gridDivisions) {
+        this(title, paperSize, Vector.ORIGIN, gridDivisions);
     }
 
     public boolean hasUnsavedChanges() {
@@ -60,7 +66,7 @@ public class Document {
         this.showGrid = showGrid;
     }
 
-    public double getPaperSize() {
+    public Vector getPaperSize() {
         return paperSize;
     }
 

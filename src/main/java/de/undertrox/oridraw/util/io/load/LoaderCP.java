@@ -4,6 +4,7 @@ import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.origami.Document;
 import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
+import de.undertrox.oridraw.util.math.Vector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class LoaderCP extends Loader<Document> {
      */
     @Override
     public Document load(Reader r) throws IOException {
-        Document doc = new Document("", Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS);
+        Document doc = new Document("", new Vector(Constants.DEFAULT_PAPER_SIZE), Constants.DEFAULT_GRID_DIVISIONS);
         String line;
         BufferedReader reader = new BufferedReader(r);
         while ((line = reader.readLine()) != null) {

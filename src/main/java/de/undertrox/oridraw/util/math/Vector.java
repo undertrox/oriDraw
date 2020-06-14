@@ -25,6 +25,11 @@ public class Vector {
         this.y = y;
     }
 
+    public static Vector maxLength(Vector a, Vector b) {
+        if (a.lengthSquared() > b.lengthSquared()) return a;
+        return b;
+    }
+
     public Vector(double x) {
         this(x, x);
     }
@@ -132,6 +137,14 @@ public class Vector {
      */
     public Vector scale(double factor) {
         return new Vector(factor * getX(), factor * getY());
+    }
+
+    public Vector scale(Vector factor) {
+        return new Vector(factor.getX() * getX(), factor.getY() * getY());
+    }
+
+    public Vector inverse() {
+        return new Vector(1/getX(), 1/getY());
     }
 
     @Override

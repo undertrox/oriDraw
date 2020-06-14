@@ -50,8 +50,8 @@ public class CreasePatternTab extends CanvasTab {
      * @param tabPane parent tabPane of the Tab
      */
     public CreasePatternTab(String title, Canvas canvas, TabPane tabPane) {
-        this(new Document(title, Constants.DEFAULT_PAPER_SIZE, Constants.DEFAULT_GRID_DIVISIONS), canvas, tabPane);
-
+        this(new Document(title, new Vector(Constants.DEFAULT_PAPER_SIZE), Constants.DEFAULT_GRID_DIVISIONS), canvas, tabPane);
+        getDoc().getCp().createSquare(Vector.ORIGIN, getDoc().getPaperSize().getX());
     }
 
     public CreasePatternTab(Document doc, Canvas canvas, TabPane tabPane) {
@@ -59,7 +59,6 @@ public class CreasePatternTab extends CanvasTab {
 
         logger.debug("Initializing Crease Pattern");
         this.doc = doc;
-        doc.getCp().createSquare(Vector.ORIGIN, Constants.DEFAULT_PAPER_SIZE);
         docTransform = new Transform(new Vector(300, 250), 1, 0);
         bgTransform = new Transform(new Vector(0, 0), 1, 0);
 

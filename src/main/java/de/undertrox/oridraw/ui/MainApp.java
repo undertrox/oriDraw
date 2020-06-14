@@ -16,6 +16,7 @@ import de.undertrox.oridraw.util.io.export.ExporterCP;
 import de.undertrox.oridraw.util.io.export.ExporterSVG;
 import de.undertrox.oridraw.util.io.load.Loader;
 import de.undertrox.oridraw.util.io.load.LoaderCP;
+import de.undertrox.oridraw.util.io.load.LoaderFOLD;
 import de.undertrox.oridraw.util.registry.ActionRegistry;
 import de.undertrox.oridraw.util.registry.Registries;
 import de.undertrox.oridraw.util.registry.Registry;
@@ -97,6 +98,7 @@ public class MainApp extends Application {
     private void registerDocumentLoaders() {
         Registry<Loader<Document>> registry = Registries.DOCUMENT_LOADER_REGISTRY;
         registry.register(REGISTRY_DOMAIN, "cp", new LoaderCP());
+        registry.register(REGISTRY_DOMAIN, "fold", new LoaderFOLD());
     }
 
     /**

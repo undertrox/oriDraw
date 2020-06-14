@@ -307,7 +307,6 @@ public class MainWindowController implements Initializable {
             info.showAndWait();
             return;
         }
-        doc.setTitle(file.getName());
         createNewFileTab(doc);
         mainTabPane.getSelectionModel().selectLast();
     }

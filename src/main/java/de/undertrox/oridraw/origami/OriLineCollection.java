@@ -1,6 +1,7 @@
 package de.undertrox.oridraw.origami;
 
 import de.undertrox.oridraw.util.UniqueItemList;
+import de.undertrox.oridraw.util.math.Transform;
 
 import java.util.Collection;
 
@@ -71,6 +72,30 @@ public class OriLineCollection {
 
     public UniqueItemList<OriPoint> getPoints() {
         return points;
+    }
+
+    /**
+     * Transforms the whole Collection by a transform
+     * @param transform: Transformation to apply to the Collection
+     * @return transformed collection
+     */
+    public OriLineCollection transform(Transform transform) {
+        OriLineCollection newColl = new OriLineCollection();
+        for (OriLine oriLine : oriLines) {
+            newColl.addOriLine(new OriPoint(transform.apply(oriLine.getStartPoint())),
+                    new OriPoint(transform.apply(oriLine.getEndPoint())),
+                    oriLine.getType());
+        }
+        return newColl;
+    }
+
+    /**
+     * copies coll into this
+     * @param coll: Collection to copy
+     */
+    public void apply(OriLineCollection coll) {
+        this.oriLines = coll.oriLines;
+        this.points = coll.points;
     }
 
     /**

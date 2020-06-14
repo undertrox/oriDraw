@@ -5,29 +5,33 @@ import javafx.scene.transform.Translate;
 
 
 public class Transform {
-    private Vector move;
-    private double scale;
+    private Vector translation;
+    private Vector scale;
     private double rotation;
 
-    public Transform(Vector move, double scale, double rotation) {
-        this.move = move;
+    public Transform(Vector translation, Vector scale, double rotation) {
+        this.translation = translation;
         this.scale = scale;
         this.rotation = rotation;
     }
 
-    public Vector getMove() {
-        return move;
+    public Transform(Vector translation, double scale, double rotation) {
+        this(translation, new Vector(scale), rotation);
     }
 
-    public void setMove(Vector move) {
-        this.move = move;
+    public Vector getTranslation() {
+        return translation;
     }
 
-    public double getScale() {
+    public void setTranslation(Vector translation) {
+        this.translation = translation;
+    }
+
+    public Vector getScale() {
         return scale;
     }
 
-    public void setScale(double scale) {
+    public void setScale(Vector scale) {
         this.scale = scale;
     }
 
@@ -46,11 +50,11 @@ public class Transform {
      * @return transformed Point
      */
     public Vector apply(Vector p) {
-        return p.scale(scale).add(move);
+        return p.scale(scale).add(translation);
     }
 
     public Vector applyInverted(Vector p) {
-        return p.add(move.invertSign()).scale(1 / scale);
+        return p.add(translation.invertSign()).scale(scale.inverse());
     }
 
     /**
@@ -59,10 +63,10 @@ public class Transform {
      * @param gc: GraphicsContext to apply the transformation to
      */
     public void apply(GraphicsContext gc) {
-        Translate t = new Translate(move.getX(), move.getY());
+        Translate t = new Translate(translation.getX(), translation.getY());
         gc.setTransform(t.getMxx(), t.getMyx(), t.getMxy(), t.getMyy(), t.getTx(), t.getTy());
         gc.rotate(rotation);
-        gc.scale(scale, scale);
+        gc.scale(scale.getX(), scale.getY());
     }
 
     /**
@@ -72,16 +76,16 @@ public class Transform {
      * @param delta   : scale delta. negative to zoom out, positive to zoom in
      */
     public void zoom(Vector center, double delta) {
-        double oldScale = scale;
+        Vector oldScale = scale;
         if (delta < 0) {
-            scale /= 1 - delta;
+            scale = scale.scale(1/(1 - delta));
         } else {
-            scale *= 1 + delta;
+            scale = scale.scale(1 + delta);
         }
-        double scaleChange = oldScale - scale;
-        double offsetX = (center.getX() * scaleChange);
-        double offsetY = (center.getY() * scaleChange);
+        Vector scaleChange = oldScale.sub(scale);
+        double offsetX = (center.getX() * scaleChange.getX());
+        double offsetY = (center.getY() * scaleChange.getY());
 
-        move = move.add(new Vector(offsetX, offsetY));
+        translation = translation.add(new Vector(offsetX, offsetY));
     }
 }

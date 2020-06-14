@@ -171,7 +171,7 @@ public class Line {
      * @param point: Point
      * @return Squared distance of Point to this line
      */
-    public double getSquaredDistance(Vector point) {
+    public double getDistanceSquared(Vector point) {
         return isValid? getHesse().squaredDistance(point) : -1;
     }
 

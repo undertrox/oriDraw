@@ -55,6 +55,9 @@ public class IOHelper {
         try {
             FileReader reader = new FileReader(new File(fileName));
             Document doc = loader.load(reader);
+            if (doc.getTitle().isBlank()) {
+                doc.setTitle(fileName);
+            }
             reader.close();
             logger.info("read Document from '{}'", fileName);
             return doc;
