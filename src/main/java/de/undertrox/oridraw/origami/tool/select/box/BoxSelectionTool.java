@@ -15,8 +15,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class BoxSelectionTool extends SelectionTool {
-    private MouseEvent start;
     private Rectangle rect;
+    private Vector startPos;
 
 
     public BoxSelectionTool(CreasePatternTab tab, CreasePatternToolFactory<? extends CreasePatternTool> factory) {
@@ -42,18 +42,20 @@ public class BoxSelectionTool extends SelectionTool {
         getSelection().getToBeSelectedLines().clear();
         getSelection().getToBeSelectedPoints().clear();
         rect = null;
-        start = null;
+        startPos = null;
     }
 
     @Override
     public void onMouseDown(MouseEvent e) {
         super.onMouseDown(e);
         setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
-        if (!getAddToSelection()) {
-            getSelection().clear();
+        if (e.getButton() == MouseButton.PRIMARY) {
+            if (!getAddToSelection()) {
+                getSelection().clear();
+            }
+            startPos = getCurrentMousePos();
+            rect = new Rectangle(getCurrentMousePos(), getCurrentMousePos());
         }
-        start = e;
-        rect = new Rectangle(getCurrentMousePos(), getCurrentMousePos());
     }
 
     @Override
@@ -64,7 +66,7 @@ public class BoxSelectionTool extends SelectionTool {
             getSelection().getSelectedLines().removeAll(getSelection().getToBeSelectedLines());
             getSelection().getSelectedPoints().removeAll(getSelection().getToBeSelectedPoints());
             getSelection().clearToBeSelected();
-        } else {
+        } else if (e.getButton() == MouseButton.PRIMARY) {
             getSelection().selectToBeSelectedPoints();
             getSelection().selectToBeSelectedLines();
         }
@@ -75,8 +77,8 @@ public class BoxSelectionTool extends SelectionTool {
     public void onDrag(MouseEvent e) {
         super.onDrag(e);
         setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
-        if (start != null) {
-            rect = new Rectangle(rect.getCorner1(), getCurrentMousePos());
+        if (e.getButton() == MouseButton.PRIMARY && startPos != null) {
+            rect = new Rectangle(startPos, getCurrentMousePos());
             getSelection().clearToBeSelected();
             for (OriPoint point : getCp().getPoints()) {
                 if (rect.contains(point)) {

@@ -14,6 +14,7 @@ public class Line {
     private Vector end;
     private HesseNormalLine hesse;
     private boolean isValid;
+    private Rectangle boundingBox;
 
     public boolean isValid() {
         return isValid;
@@ -30,6 +31,17 @@ public class Line {
         this.start = start;
         this.end = end;
         isValid = isValid() && lengthSquared()>Constants.EPSILON;
+    }
+
+    public Rectangle getBoundingBox() {
+        if (boundingBox == null) {
+            updateBoundingBox();
+        }
+        return boundingBox;
+    }
+
+    private void updateBoundingBox() {
+        boundingBox = new Rectangle(getStartPoint(), getEndPoint());
     }
 
     /**
@@ -107,6 +119,9 @@ public class Line {
      */
     public Vector getIntersection(Line line) {
         if (!isValid) {return Vector.UNDEFINED;}
+        if (!getBoundingBox().overlaps(line.getBoundingBox())) {
+            return Vector.UNDEFINED;
+        }
         if (getHesse().parallel(line.getHesse())) {
             return Vector.UNDEFINED;
         }
