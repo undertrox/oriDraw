@@ -5,6 +5,7 @@ import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.ui.MainWindowController;
 import de.undertrox.oridraw.ui.action.Action;
+import de.undertrox.oridraw.ui.action.ActivateToolAction;
 
 public class ToolFactoryRegistry extends Registry<CreasePatternToolFactory<? extends CreasePatternTool>> {
     @Override
@@ -16,9 +17,7 @@ public class ToolFactoryRegistry extends Registry<CreasePatternToolFactory<? ext
     protected void onLocked() {
         // TODO: move code for creating Tool buttons here
         for (RegistryEntry<CreasePatternToolFactory<? extends CreasePatternTool>> entry : getEntries()) {
-            Action action = new Action(() ->
-                MainWindowController.instance.getToolButtonForRegistryKey(entry.getKey()).fire()
-            );
+            Action action = new ActivateToolAction(entry.getValue());
             Registries.ACTION_REGISTRY.register(new RegistryKey(Constants.REGISTRY_DOMAIN, "activate_" + entry.getKey().getId()),
                     action, MainWindowController.instance.toolMenu);
         }

@@ -8,8 +8,10 @@ import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.origami.tool.deleteline.DeleteLineToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolFactory;
 import de.undertrox.oridraw.origami.tool.select.box.BoxSelectionToolFactory;
-import de.undertrox.oridraw.ui.action.Action;
 import de.undertrox.oridraw.ui.action.DeleteSelectedLinesAction;
+import de.undertrox.oridraw.ui.action.button.NewDocAction;
+import de.undertrox.oridraw.ui.action.button.OpenDocAction;
+import de.undertrox.oridraw.ui.action.button.SaveDocAction;
 import de.undertrox.oridraw.util.LocalizationHelper;
 import de.undertrox.oridraw.util.io.export.Exporter;
 import de.undertrox.oridraw.util.io.export.ExporterCP;
@@ -117,11 +119,11 @@ public class MainApp extends Application {
         ActionRegistry actionRegistry = Registries.ACTION_REGISTRY;
         actionRegistry.register(REGISTRY_DOMAIN, "delete_selected_lines", new DeleteSelectedLinesAction(), MainWindowController.instance.editMenu);
         actionRegistry.register(REGISTRY_DOMAIN, "save_document",
-                new Action(() -> MainWindowController.instance.btnSave.fire()), MainWindowController.instance.fileMenu);
+                new SaveDocAction(), MainWindowController.instance.fileMenu);
         actionRegistry.register(REGISTRY_DOMAIN, "open_document",
-                new Action(() -> MainWindowController.instance.btnOpen.fire()), MainWindowController.instance.fileMenu);
+                new OpenDocAction(), MainWindowController.instance.fileMenu);
         actionRegistry.register(REGISTRY_DOMAIN, "new_document",
-                new Action(() -> MainWindowController.instance.btnNew.fire()), MainWindowController.instance.fileMenu);
+                new NewDocAction(), MainWindowController.instance.fileMenu);
     }
 
     private void registerKeybinds() {

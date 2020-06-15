@@ -240,16 +240,12 @@ public class MainWindowController implements Initializable {
 
     public void btnSaveClick() {
         logger.debug("Save Button clicked");
-        if (getSelectedCpTab() != null) {
-            CreasePatternTab tab = (CreasePatternTab) getSelectedTab();
-            tab.saveDocument();
-        }
+        Registries.ACTION_REGISTRY.getItem("save_document").action();
     }
 
     public void btnNewClick() {
         logger.debug("New Button clicked");
-        createNewFileTab(null);
-        mainTabPane.getSelectionModel().selectLast();
+        Registries.ACTION_REGISTRY.getItem("new_document").action();
 
     }
 
@@ -265,25 +261,7 @@ public class MainWindowController implements Initializable {
 
     public void btnOpenClick() {
         logger.debug("Open Button clicked");
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle(LocalizationHelper.getString("oridraw.action.open.filedialog.title"));
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                LocalizationHelper.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
-
-        chooser.getExtensionFilters().add(filter);
-        File file = chooser.showOpenDialog(MainApp.getPrimaryStage());
-        if (file == null) {
-            return;
-        }
-        Document doc = IOHelper.readFromFile(file.getAbsolutePath());
-        if (doc == null) {
-            Alert info = new Alert(Alert.AlertType.ERROR, LocalizationHelper.getString("oridraw.action.open.error"));
-            info.showAndWait();
-            return;
-        }
-        doc.setTitle(file.getName());
-        createNewFileTab(doc);
-        mainTabPane.getSelectionModel().selectLast();
+        Registries.ACTION_REGISTRY.getItem("open_document").action();
     }
 
     public void openFile(Loader<Document> loader) {

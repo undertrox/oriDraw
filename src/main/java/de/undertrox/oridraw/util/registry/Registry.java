@@ -51,6 +51,10 @@ public abstract class Registry<T extends Registrable> {
         register(new RegistryKey(domain, id), item);
     }
 
+    public void register(String key, T item) {
+        register(RegistryKey.parse(key), item);
+    }
+
     /**
      * Locks the Registry so that no more Objects can be registered.
      * Throws a RegistryException if the Registry is already locked.
@@ -72,6 +76,10 @@ public abstract class Registry<T extends Registrable> {
      */
     public T getItem(RegistryKey key) {
         return registryEntries.get(key).getValue();
+    }
+
+    public T getItem(String key) {
+        return getItem(RegistryKey.parse(key));
     }
 
     /**

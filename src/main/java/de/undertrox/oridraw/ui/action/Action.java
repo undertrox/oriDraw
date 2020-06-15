@@ -5,14 +5,12 @@ import de.undertrox.oridraw.util.registry.Registrable;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCombination;
 
-public class Action extends Registrable {
-    private Runnable runnable;
+public abstract class Action extends Registrable {
     private KeyCombination combination;
     private MenuItem menuItem;
 
 
-    public Action(Runnable runnable) {
-        this.runnable = runnable;
+    public Action() {
         combination = KeyCombination.NO_MATCH;
     }
 
@@ -28,7 +26,7 @@ public class Action extends Registrable {
     }
 
     public Runnable getRunnable() {
-        return runnable;
+        return this::run;
     }
 
     public MenuItem getMenuItem() {
@@ -37,8 +35,10 @@ public class Action extends Registrable {
         return menuItem;
     }
 
+    public abstract void action();
+
     public void run() {
-        runnable.run();
+        action();
     }
 
     public MenuItem createMenuItem() {

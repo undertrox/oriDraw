@@ -84,7 +84,7 @@ public class BoxSelectionTool extends SelectionTool {
                 }
             }
             for (OriLine line : getCp().getOriLines()) {
-                if (rect.touches(line)) {
+                if (rect.overlaps(line)) {
                     getSelection().addToBeSelected(line);
                 }
             }
