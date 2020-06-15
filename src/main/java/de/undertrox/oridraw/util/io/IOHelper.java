@@ -9,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class IOHelper {
@@ -18,51 +20,51 @@ public class IOHelper {
     // prevent instantiation
     private IOHelper() {}
 
-    public static void saveToFile(String filename, Document doc) {
-        String extension = getExtension(filename);
+    public static void saveToFile(String path, Document doc) {
+        String extension = getExtension(path);
 
         for (RegistryEntry<Exporter<Document>> item : Registries.DOCUMENT_EXPORTER_REGISTRY.getEntries()) {
             if (Arrays.asList(item.getValue().extensions()).contains(extension)) {
-                logger.debug("Saving Document to '{}'", filename);
-                saveToFile(filename, doc, item.getValue());
+                logger.debug("Saving Document to '{}'", path);
+                saveToFile(path, doc, item.getValue());
             }
         }
     }
 
-    public static Document readFromFile(String filename) {
-        String extension = getExtension(filename);
+    public static Document readFromFile(String path) {
+        String extension = getExtension(path);
         for (RegistryEntry<Loader<Document>> item : Registries.DOCUMENT_LOADER_REGISTRY.getEntries()) {
-            if (Arrays.asList(item.getValue().extensions()).contains(extension)) {
-                logger.debug("Reading Document from '{}'", filename);
-                return readFromFile(filename, item.getValue());
+            if (Arrays.asList(item.getValue().getExtensions()).contains(extension)) {
+                logger.debug("Reading Document from '{}'", path);
+                return readFromFile(path, item.getValue());
             }
         }
         return null;
     }
 
-    public static void saveToFile(String fileName, Document doc, Exporter<Document> exporter) {
+    public static void saveToFile(String path, Document doc, Exporter<Document> exporter) {
         try {
-            FileWriter fileWriter = new FileWriter(fileName);
+            FileWriter fileWriter = new FileWriter(path);
             exporter.export(doc, fileWriter);
             fileWriter.close();
-            logger.info("Saved Document to '{}'", fileName);
+            logger.info("Saved Document to '{}'", path);
         } catch (Exception e) {
-            logger.error("An error occurred while writing a Document to '{}'", fileName, e);
+            logger.error("An error occurred while writing a Document to '{}'", path, e);
         }
     }
 
-    public static Document readFromFile(String fileName, Loader<Document> loader) {
+    public static Document readFromFile(String path, Loader<Document> loader) {
         try {
-            FileReader reader = new FileReader(new File(fileName));
+            FileReader reader = new FileReader(new File(path));
             Document doc = loader.load(reader);
             if (doc.getTitle().isBlank()) {
-                doc.setTitle(fileName);
+                doc.setTitle(getFileName(path));
             }
             reader.close();
-            logger.info("read Document from '{}'", fileName);
+            logger.info("read Document from '{}'", path);
             return doc;
         } catch (Exception e) {
-            logger.error("An error occurred while reading a Document from '{}'", fileName, e);
+            logger.error("An error occurred while reading a Document from '{}'", path, e);
         }
         return null;
     }
@@ -105,6 +107,11 @@ public class IOHelper {
         } else {
             return "";
         }
+    }
+
+    public static String getFileName(String filePath) {
+        Path path = Paths.get(filePath);
+        return path.getFileName().toString();
     }
 
 }

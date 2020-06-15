@@ -65,8 +65,9 @@ public class ToolButton extends ToggleButton {
 
     private void loadIconForTool(RegistryKey toolKey) {
         // TODO: add a path utitlity to have different Icon sets
+        String iconPath = "ui/icon/" + toolKey.getId() + "/lightmode/enabled_mountain.png";
         InputStream iconStream = getClass().getClassLoader().getResourceAsStream(
-                "ui/icon/" + toolKey.getId() + "/lightmode/enabled_mountain.png");
+                iconPath );
         if (iconStream != null) {
             Image image = new Image(iconStream);
             ImageView view = new ImageView(image);
@@ -76,7 +77,7 @@ public class ToolButton extends ToggleButton {
             this.setGraphic(view);
         } else {
             this.setText(toolKey.getId());
-            logger.warn("Could not find icon for '{}'. Using id as text instead", toolKey);
+            logger.warn("Could not find icon for '{}'. Icon should be located in '{}' Using id as text instead", toolKey, iconPath);
         }
     }
 

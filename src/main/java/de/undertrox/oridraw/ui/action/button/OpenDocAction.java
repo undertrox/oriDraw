@@ -21,28 +21,29 @@ public class OpenDocAction extends Action {
     @Override
     public void action() {
         FileChooser chooser = new FileChooser();
-        chooser.setTitle(LocalizationHelper.getString("oridraw.action.open.filedialog.title"));
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                LocalizationHelper.getString("oridraw.action.save.filedialog.description.cp"), "*.cp");
+        chooser.setTitle(LocalizationHelper.getString("oridraw.actions.open.filedialog.title"));
         List<String> allSupportedExtensions = new ArrayList<>();
         for (RegistryEntry<Loader<Document>> entry : Registries.DOCUMENT_LOADER_REGISTRY.getEntries()) {
-            allSupportedExtensions.addAll(Arrays.asList(entry.getValue().extensions()));
+            allSupportedExtensions.addAll(Arrays.asList(entry.getValue().getFilterExtensions()));
+            chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
+                    LocalizationHelper.getString(
+                            entry.getKey().getDomain() + ".actions.import_" + entry.getKey().getId() + ".filedialog.description"),
+                    entry.getValue().getFilterExtensions()));
         }
-        FileChooser.ExtensionFilter all = new FileChooser.ExtensionFilter(LocalizationHelper.getString("oridraw.action.save.filedialog.description.allsupported"),
+        FileChooser.ExtensionFilter all = new FileChooser.ExtensionFilter(
+                LocalizationHelper.getString("oridraw.actions.open.filedialog.description.allsupported"),
                 allSupportedExtensions.toArray(new String[0]));
-        chooser.getExtensionFilters().add(all);
-        chooser.getExtensionFilters().add(filter);
+        chooser.getExtensionFilters().add(0,all);
         File file = chooser.showOpenDialog(MainApp.getPrimaryStage());
         if (file == null) {
             return;
         }
         Document doc = IOHelper.readFromFile(file.getAbsolutePath());
         if (doc == null) {
-            Alert info = new Alert(Alert.AlertType.ERROR, LocalizationHelper.getString("oridraw.action.open.error"));
+            Alert info = new Alert(Alert.AlertType.ERROR, LocalizationHelper.getString("oridraw.actions.open.error"));
             info.showAndWait();
             return;
         }
-        doc.setTitle(file.getName());
         MainWindowController.instance.createNewFileTab(doc);
         MainWindowController.instance.mainTabPane.getSelectionModel().selectLast();
     }

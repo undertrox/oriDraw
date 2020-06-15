@@ -6,6 +6,7 @@ import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.origami.tool.TypedCreasePatternTool;
 import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
+import de.undertrox.oridraw.ui.component.NumberTextField;
 import de.undertrox.oridraw.ui.component.ToolButton;
 import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.settings.RenderSettings;
@@ -108,6 +109,11 @@ public class MainWindowController implements Initializable {
         mainbox.setFillWidth(true);
         mainAnchorPane.prefWidthProperty().bind(mainPane.widthProperty());
         editorAnchorPane.prefHeightProperty().bind(mainPane.heightProperty());
+        gridSize.textProperty().addListener(e -> {
+            if (!gridSize.isFocused()) {
+                setGridSize();
+            }
+        } );
 
         // Make sure the right stylesheet is loaded
         WebEngine webEngine = documentation.getEngine();
@@ -266,14 +272,10 @@ public class MainWindowController implements Initializable {
 
     public void openFile(Loader<Document> loader) {
         FileChooser chooser = new FileChooser();
-        String[] extensions = loader.extensions();
-        for (int i = 0; i < extensions.length; i++) {
-            extensions[i] = "*." + extensions[i];
-        }
-        chooser.setTitle(LocalizationHelper.getString(Constants.REGISTRY_DOMAIN + ".action.import." + loader.getRegistryKey().getId() + ".filedialog.title"));
+        chooser.setTitle(LocalizationHelper.getString(Constants.REGISTRY_DOMAIN + ".actions.import_" + loader.getRegistryKey().getId() + ".filedialog.title"));
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                LocalizationHelper.getString(Constants.REGISTRY_DOMAIN + ".action.import." + loader.getRegistryKey().getId() + ".filedialog.description"),
-                extensions);
+                LocalizationHelper.getString(Constants.REGISTRY_DOMAIN + ".actions.import_" + loader.getRegistryKey().getId() + ".filedialog.description"),
+                loader.getFilterExtensions());
         chooser.getExtensionFilters().add(filter);
         File file = chooser.showOpenDialog(MainApp.getPrimaryStage());
         if (file == null) {
@@ -438,6 +440,9 @@ public class MainWindowController implements Initializable {
     }
 
     public void setGridSize() {
+        if (gridSize.getText().isBlank() || Integer.parseInt(gridSize.getText()) < 1) {
+            gridSize.setText("1");
+        }
         int grid = Integer.parseInt(gridSize.getText());
         CreasePatternTab tab = getSelectedCpTab();
         if (tab != null) {

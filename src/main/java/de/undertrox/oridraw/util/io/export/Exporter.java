@@ -1,16 +1,11 @@
 package de.undertrox.oridraw.util.io.export;
 
-import de.undertrox.oridraw.util.registry.Registrable;
+import de.undertrox.oridraw.util.io.FileInterface;
 
 import java.io.IOException;
 import java.io.Writer;
 
-public abstract class Exporter<T> extends Registrable {
-    /**
-     *
-     * @return Array of all file extensions this loader can load from (in lowercase)
-     */
-    public abstract String[] extensions();
+public abstract class Exporter<T> extends FileInterface {
 
     /**
      * whether the Exporter is lossless, meaning the file can be imported again without losing data. For example,

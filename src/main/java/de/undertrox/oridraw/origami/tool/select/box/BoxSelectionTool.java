@@ -49,7 +49,7 @@ public class BoxSelectionTool extends SelectionTool {
     public void onMouseDown(MouseEvent e) {
         super.onMouseDown(e);
         setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
-        if (e.getButton() == MouseButton.PRIMARY) {
+        if (e.getButton() == MouseButton.PRIMARY || e.getButton() == MouseButton.SECONDARY) {
             if (!getAddToSelection()) {
                 getSelection().clear();
             }
@@ -77,7 +77,7 @@ public class BoxSelectionTool extends SelectionTool {
     public void onDrag(MouseEvent e) {
         super.onDrag(e);
         setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
-        if (e.getButton() == MouseButton.PRIMARY && startPos != null) {
+        if (e.getButton() == MouseButton.PRIMARY || e.getButton() == MouseButton.SECONDARY && startPos != null) {
             rect = new Rectangle(startPos, getCurrentMousePos());
             getSelection().clearToBeSelected();
             for (OriPoint point : getCp().getPoints()) {
