@@ -10,6 +10,7 @@ import de.undertrox.oridraw.ui.handler.MouseHandler;
 import de.undertrox.oridraw.ui.render.tool.DrawLineToolRenderer;
 import de.undertrox.oridraw.ui.render.tool.ToolRenderer;
 import de.undertrox.oridraw.ui.component.tab.CreasePatternTab;
+import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Circle;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
@@ -28,7 +29,7 @@ public class DrawLineTool extends TypedCreasePatternTool {
     public DrawLineTool(CreasePatternTab tab, OriLine.Type type,
                         CreasePatternToolFactory<? extends CreasePatternTool> factory) {
         super(tab, type, factory);
-        intersections = new ArrayList<>();
+        intersections = new UniqueItemList<>();
     }
 
     @Override
@@ -38,7 +39,7 @@ public class DrawLineTool extends TypedCreasePatternTool {
 
     @Override
     protected void disable() {
-        // Nothing to do
+        reset();
     }
 
     protected void clearSelection() {
@@ -139,6 +140,8 @@ public class DrawLineTool extends TypedCreasePatternTool {
         }
         if (getSettings().flipTypeAtIntersection() && point0 != null && point1 != null) {
             intersections = getCp().getLineIntersections(new Line(point0, point1));
+            intersections.addAll(getCp().getPointsOnLine(new Line(point0, point1)));
+            intersections.removeIf(p -> p.equals(point0) || p.equals(point1));
             intersections.sort(Comparator.comparingDouble(p -> p.distanceSquared(point0)));
         }
     }

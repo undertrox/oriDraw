@@ -107,7 +107,7 @@ public class Line {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStartPoint(),getEndPoint());
+        return Objects.hash(getStartPoint(),getEndPoint())+Objects.hash(getEndPoint(), getStartPoint());
     }
 
     /**

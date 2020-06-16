@@ -36,7 +36,7 @@ public class AngleBisectorTool extends TypedCreasePatternTool {
 
     @Override
     protected void disable() {
-        // Nothing to do
+        reset();
     }
 
     @Override
@@ -67,15 +67,19 @@ public class AngleBisectorTool extends TypedCreasePatternTool {
                     getSelection().setMode(CreasePatternSelection.Mode.LINE);
                 }
             } else if (line == null) {
-                line = getNextLine();
-                if (line != null) {
-                    OriLine bisector = angleBisector(point0, point1, point2, line);
-                    if (bisector != null) {
-                        getCp().addOriLine(bisector);
-                    }
-                    reset();
-                }
+                addLine();
             }
+        }
+    }
+
+    private void addLine() {
+        line = getNextLine();
+        if (line != null) {
+            OriLine bisector = angleBisector(point0, point1, point2, line);
+            if (bisector != null) {
+                getCp().addOriLine(bisector);
+            }
+            reset();
         }
     }
 

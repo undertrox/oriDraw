@@ -103,6 +103,16 @@ public class CreasePattern extends OriLineCollection {
         return intersections;
     }
 
+    public UniqueItemList<OriPoint> getPointsOnLine(Line l) {
+        UniqueItemList<OriPoint> pointsOnLine = new UniqueItemList<>();
+        for (OriPoint point : points) {
+            if (l.contains(point)) {
+                pointsOnLine.add(new OriPoint(point));
+            }
+        }
+        return pointsOnLine;
+    }
+
     public void addLineWithoutIntersectionCheck(OriPoint start, OriPoint end, OriLine.Type type) {
         super.addOriLine(start, end, type);
     }
