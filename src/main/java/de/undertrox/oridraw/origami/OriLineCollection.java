@@ -30,15 +30,16 @@ public class OriLineCollection {
      * @param endPoint: Ending Point of the Crease
      * @param type: Type of the crease
      */
-    public void addOriLine(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
+    public OriLine addOriLine(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
         if (startPoint.equals(endPoint)) {
-            return;
+            return null;
         }
         startPoint = addPoint(startPoint);
         endPoint = addPoint(endPoint);
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
         OriLine c = oriLines.push(oriLine);
         c.setType(type);
+        return c;
     }
 
     /**

@@ -4,6 +4,7 @@ import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Line;
 import de.undertrox.oridraw.util.math.Vector;
 
+import java.util.Collection;
 import java.util.Comparator;
 
 public class CreasePattern extends OriLineCollection {
@@ -39,18 +40,31 @@ public class CreasePattern extends OriLineCollection {
      * @param type       : OriLine Type
      */
     @Override
-    public void addOriLine(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
+    public OriLine addOriLine(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
+        addOriLineWithoutRebuild(startPoint, endPoint, type);
+        rebuildCP();
+        return null;
+    }
+
+    private void addOriLineWithoutRebuild(OriPoint startPoint, OriPoint endPoint, OriLine.Type type) {
         if (startPoint.equals(endPoint)) {
             return;
         }
-        OriLine oriLine = new OriLine(startPoint, endPoint, type);
-        super.addOriLine(startPoint, endPoint, type);
+        OriLine oriLine = super.addOriLine(startPoint, endPoint, type);
         UniqueItemList<OriPoint> intersections = getLineIntersections(oriLine);
         points.addAll(intersections);
-        splitLinesAtPoints();
     }
 
-    private void splitLinesAtPoints() {
+    public void addOriLines(Collection<OriLine> lines) {
+        for (OriLine line : lines) {
+            addOriLineWithoutRebuild(new OriPoint(line.getStartPoint()), new OriPoint(line.getEndPoint()), line.getType());
+        }
+        rebuildCP();
+    }
+
+
+    // Maybe this can be optimized by only rebuilding the cp around new lines
+    private void rebuildCP() {
         OriLineCollection newcp = new OriLineCollection();
 
         for (OriLine line : oriLines) {
@@ -66,8 +80,7 @@ public class CreasePattern extends OriLineCollection {
                 newcp.addOriLine(pointsOnLine.get(i-1), pointsOnLine.get(i), type);
             }
         }
-        this.points = newcp.points;
-        this.oriLines = newcp.oriLines;
+        apply(newcp);
     }
 
     /**
@@ -92,27 +105,5 @@ public class CreasePattern extends OriLineCollection {
 
     public void addLineWithoutIntersectionCheck(OriPoint start, OriPoint end, OriLine.Type type) {
         super.addOriLine(start, end, type);
-    }
-
-    /**
-     * Splits l at the point p
-     * @param l: Line to be split
-     * @param p: Point to split the line at
-     */
-    public void splitLine(OriLine l, OriPoint p) {
-        if (!l.contains(p)) {
-            throw new IllegalArgumentException("Cant split at a point that is not on the line");
-        }
-        if (!getOriLines().contains(l)) {
-            throw new IllegalArgumentException("Cant split a line that is not in the Crease Pattern");
-        }
-        OriPoint start = l.getStartPoint();
-        OriPoint end = l.getEndPoint();
-        OriLine.Type t = l.getType();
-        getOriLines().remove(l);
-        start.getLines().remove(l);
-        end.getLines().remove(l);
-        super.addOriLine(start, p, t);
-        super.addOriLine(p, end, t);
     }
 }

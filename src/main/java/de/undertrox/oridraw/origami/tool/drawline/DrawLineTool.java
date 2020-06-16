@@ -16,13 +16,19 @@ import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class DrawLineTool extends TypedCreasePatternTool {
     private OriPoint point0;
+    private List<OriPoint> intersections;
     private OriPoint point1;
 
     public DrawLineTool(CreasePatternTab tab, OriLine.Type type,
                         CreasePatternToolFactory<? extends CreasePatternTool> factory) {
         super(tab, type, factory);
+        intersections = new ArrayList<>();
     }
 
     @Override
@@ -41,7 +47,7 @@ public class DrawLineTool extends TypedCreasePatternTool {
         point1 = null;
     }
 
-    private DrawLineToolSettings getSettings() {
+    public DrawLineToolSettings getSettings() {
         return (DrawLineToolSettings) getFactory().getSettings();
     }
 
@@ -60,7 +66,11 @@ public class DrawLineTool extends TypedCreasePatternTool {
                 getSelection().select(point0);
             } else {
                 point1 = getNextPoint(getSettings().snapTo225());
-                getCp().addOriLine(point0, point1, getType());
+                if (!getSettings().flipTypeAtIntersection()) {
+                    getCp().addOriLine(point0, point1, getType());
+                } else {
+                    getCp().addOriLines(splitLineAtIntersections());
+                }
                 if (!getSettings().continueLine()) {
                     clearSelection();
                 } else {
@@ -69,14 +79,31 @@ public class DrawLineTool extends TypedCreasePatternTool {
                     point1 = null;
                     getSelection().select(point0);
                 }
+
             }
         }
     }
 
-    public void reset() {
-        clearSelection();
+    private List<OriLine> splitLineAtIntersections() {
+        OriPoint last = point0;
+        OriLine.Type type = getType();
+        List<OriLine> lines = new ArrayList<>();
+        for (OriPoint intersection : intersections) {
+            if (!intersection.isValid()) continue;
+            lines.add(new OriLine(last, intersection, type));
+            last = intersection;
+            type = type.flip();
+        }
+        lines.add(new OriLine(last, point1, type));
+        return lines;
     }
 
+    public void reset() {
+        clearSelection();
+        if (intersections != null) {
+            intersections.clear();
+        }
+    }
 
     public OriPoint getNextPoint(boolean lockTo225) {
         if (!lockTo225 && !getSelection().getToBeSelectedPoints().isEmpty()) {
@@ -100,6 +127,7 @@ public class DrawLineTool extends TypedCreasePatternTool {
     @Override
     public void onMove(MouseEvent e) {
         super.onMove(e);
+        getIntersections().clear();
         setCurrentMousePos(MouseHandler.normalizeMouseCoords(new Vector(e.getX(), e.getY()), getTransform()));
         point1 = getNextPoint(getSettings().snapTo225());
         if (getSettings().snapTo225() && point0 != null) {
@@ -109,6 +137,10 @@ public class DrawLineTool extends TypedCreasePatternTool {
         } else if (getSelection().getMode() == CreasePatternSelection.Mode.LINE){
             getSelection().setMode(CreasePatternSelection.Mode.POINT);
         }
+        if (getSettings().flipTypeAtIntersection() && point0 != null && point1 != null) {
+            intersections = getCp().getLineIntersections(new Line(point0, point1));
+            intersections.sort(Comparator.comparingDouble(p -> p.distanceSquared(point0)));
+        }
     }
 
     public Vector getPoint0() {
@@ -117,5 +149,9 @@ public class DrawLineTool extends TypedCreasePatternTool {
 
     public Vector getPoint1() {
         return point1;
+    }
+
+    public List<OriPoint> getIntersections() {
+        return intersections;
     }
 }
