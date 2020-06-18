@@ -7,7 +7,6 @@ import java.util.ArrayList;
  * @param <T>: Type that will be stored
  */
 public class UniqueItemList<T> extends ArrayList<T> {
-
     /**
      * Behaves like ArrayList#add, but will return false if
      * t is already in the List.

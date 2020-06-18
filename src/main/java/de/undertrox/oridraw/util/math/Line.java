@@ -41,20 +41,20 @@ public class Line {
     }
 
     private void updateBoundingBox() {
-        boundingBox = new Rectangle(getStartPoint(), getEndPoint());
+        boundingBox = new Rectangle(getStart(), getEnd());
     }
 
     /**
      * @return starting point of the line
      */
-    public Vector getStartPoint() {
+    public Vector getStart() {
         return start;
     }
 
     /**
      * @return end point of the line
      */
-    public Vector getEndPoint() {
+    public Vector getEnd() {
         return end;
     }
 
@@ -62,8 +62,8 @@ public class Line {
      * Flips start- and Endpoint
      */
     public void flipPoints() {
-        Vector tmp = getStartPoint();
-        start = getEndPoint();
+        Vector tmp = getStart();
+        start = getEnd();
         end = tmp;
     }
 
@@ -71,14 +71,14 @@ public class Line {
      * @return squared length of the line
      */
     public double lengthSquared() {
-        return isValid()? getStartPoint().distanceSquared(getEndPoint()) : -1;
+        return isValid()? getStart().distanceSquared(getEnd()) : -1;
     }
 
     /**
      * @return length of the line
      */
     public double length() {
-        return isValid()? getStartPoint().distance(getEndPoint()) : -1;
+        return isValid()? getStart().distance(getEnd()) : -1;
     }
 
     /**
@@ -88,8 +88,8 @@ public class Line {
      * @return new Line translated by translation
      */
     public Line translate(Vector translation) {
-        Vector newStart = getStartPoint().add(translation);
-        Vector newEnd = getEndPoint().add(translation);
+        Vector newStart = getStart().add(translation);
+        Vector newEnd = getEnd().add(translation);
         return new Line(newStart, newEnd);
     }
 
@@ -98,8 +98,8 @@ public class Line {
         if (obj instanceof Line) {
             Line l = (Line) obj;
             boolean equal;
-            equal = (getStartPoint().equals(l.getStartPoint()) && getEndPoint().equals(l.getEndPoint()));
-            equal |= (getEndPoint().equals(l.getStartPoint()) && getStartPoint().equals(l.getEndPoint())); // Lines with flipped Points are still equal
+            equal = (getStart().equals(l.getStart()) && getEnd().equals(l.getEnd()));
+            equal |= (getEnd().equals(l.getStart()) && getStart().equals(l.getEnd())); // Lines with flipped Points are still equal
             return equal;
         }
         return false;
@@ -107,7 +107,7 @@ public class Line {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStartPoint(),getEndPoint())+Objects.hash(getEndPoint(), getStartPoint());
+        return Objects.hash(getStart(), getEnd())+Objects.hash(getEnd(), getStart());
     }
 
     /**
@@ -142,8 +142,8 @@ public class Line {
      */
     public boolean contains(Vector p) {
         if (!isValid) return false;
-        double dist1 = getStartPoint().distance(p);
-        double dist2 = getEndPoint().distance(p);
+        double dist1 = getStart().distance(p);
+        double dist2 = getEnd().distance(p);
         return Math.abs(Math.pow(dist1 + dist2, 2) - lengthSquared()) < Constants.EPSILON;
     }
 
@@ -154,7 +154,7 @@ public class Line {
     public HesseNormalLine getHesse() {
         if (!isValid) return null;
         if (hesse == null) {
-            hesse = new HesseNormalLine(getStartPoint(), getEndPoint()).normalize();
+            hesse = new HesseNormalLine(getStart(), getEnd()).normalize();
         }
         return hesse;
     }
@@ -164,11 +164,11 @@ public class Line {
      * @return Vector representation of this line
      */
     public Vector toVector() {
-        return isValid()? getEndPoint().sub(getStartPoint()) : Vector.UNDEFINED;
+        return isValid()? getEnd().sub(getStart()) : Vector.UNDEFINED;
     }
 
     public Vector getPointAt(double t) {
-        return isValid()? getStartPoint().add(toVector().scale(t)) : Vector.UNDEFINED;
+        return isValid()? getStart().add(toVector().scale(t)) : Vector.UNDEFINED;
     }
 
     /**
@@ -192,7 +192,7 @@ public class Line {
 
     @Override
     public String toString() {
-        return "Line(" + getStartPoint() + "," + getEndPoint() + ")";
+        return "Line(" + getStart() + "," + getEnd() + ")";
     }
 
     public Line extendUntilIntersection(Line l) {

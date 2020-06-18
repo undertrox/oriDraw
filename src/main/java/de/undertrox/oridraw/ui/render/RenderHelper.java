@@ -23,8 +23,8 @@ public class RenderHelper {
             dashes[i] /= transform.getScale().length();
         }
         gc.setLineDashes(dashes);
-        Vector s = line.getStartPoint();
-        Vector e = line.getEndPoint();
+        Vector s = line.getStart();
+        Vector e = line.getEnd();
         gc.strokeLine(s.getX(), s.getY(), e.getX(), e.getY());
     }
 

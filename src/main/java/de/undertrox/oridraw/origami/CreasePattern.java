@@ -6,6 +6,7 @@ import de.undertrox.oridraw.util.math.Vector;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 
 public class CreasePattern extends OriLineCollection {
 
@@ -57,27 +58,22 @@ public class CreasePattern extends OriLineCollection {
 
     public void addOriLines(Collection<OriLine> lines) {
         for (OriLine line : lines) {
-            addOriLineWithoutRebuild(new OriPoint(line.getStartPoint()), new OriPoint(line.getEndPoint()), line.getType());
+            addOriLineWithoutRebuild(new OriPoint(line.getStart()), new OriPoint(line.getEnd()), line.getType());
         }
         rebuildCP();
     }
 
 
     // Maybe this can be optimized by only rebuilding the cp around new lines
-    private void rebuildCP() {
+    public void rebuildCP() {
         OriLineCollection newcp = new OriLineCollection();
 
         for (OriLine line : oriLines) {
-            UniqueItemList<OriPoint> pointsOnLine = new UniqueItemList<>();
-            for (OriPoint point : points) {
-                if(line.contains(point)) {
-                    pointsOnLine.add(new OriPoint(point));
-                }
-            }
-            pointsOnLine.sort(Comparator.comparingDouble(point -> line.getStartPoint().distanceSquared(point)));
+            UniqueItemList<OriPoint> pointsOnLine = getPointsOnLine(line);
+            pointsOnLine.sort(Comparator.comparingDouble(point -> line.getStart().distanceSquared(point)));
             for (int i = 1; i < pointsOnLine.size(); i++) {
                 OriLine.Type type = line.getType();
-                newcp.addOriLine(pointsOnLine.get(i-1), pointsOnLine.get(i), type);
+                newcp.addOriLine(new OriPoint(pointsOnLine.get(i-1)), new OriPoint(pointsOnLine.get(i)), type);
             }
         }
         apply(newcp);
@@ -93,8 +89,8 @@ public class CreasePattern extends OriLineCollection {
         for (OriLine c : oriLines) {
             Vector intersection = l.getIntersection(c);
             if (intersection != null
-                    && !(intersection.equals(l.getStartPoint()))
-                    && !(intersection.equals(l.getEndPoint()))
+                    && !(intersection.equals(l.getStart()))
+                    && !(intersection.equals(l.getEnd()))
                     && intersection != Vector.UNDEFINED) {
                 OriPoint p = new OriPoint(intersection);
                 intersections.push(p);
@@ -111,6 +107,24 @@ public class CreasePattern extends OriLineCollection {
             }
         }
         return pointsOnLine;
+    }
+
+    public void mergeStraightLines() {
+        for (int i = points.size()-1; i >= 0 ; i--) {
+            OriPoint current = points.get(i);
+            if (current.getLines().size() == 2
+                    && current.getLines().get(0).getType() == current.getLines().get(1).getType()
+                    && current.getLines().get(0).getHesse().parallel(current.getLines().get(1).getHesse())) {
+                OriLine newLine = OriLine.merge(current.getLines().get(0), current.getLines().get(1));
+                if (newLine != null) {
+
+                    removeAllOrilines(current.getLines());
+                    points.remove(current);
+                    super.addOriLine(newLine);
+                    i = points.size();
+                }
+            }
+        }
     }
 
     public void addLineWithoutIntersectionCheck(OriPoint start, OriPoint end, OriLine.Type type) {

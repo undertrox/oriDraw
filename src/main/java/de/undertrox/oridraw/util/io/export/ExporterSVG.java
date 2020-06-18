@@ -34,8 +34,8 @@ public class ExporterSVG extends Exporter<Document> {
                 " width=\"%spx\" height=\"%s\"\n" +
                 " viewBox=\"0 0 %s %s\" >", finalSize, finalSize, finalSize, finalSize));
         for (OriLine oriLine : doc.getCp().getOriLines()) {
-            Vector transformedStart = transform.apply(oriLine.getStartPoint());
-            Vector transformedEnd = transform.apply(oriLine.getEndPoint());
+            Vector transformedStart = transform.apply(oriLine.getStart());
+            Vector transformedEnd = transform.apply(oriLine.getEnd());
             writer.append(String.format("<line style=\"%s\" x1=\"%s\" y1=\"%s\" x2=\"%s\" y2=\"%s\"/>",
                     SVGHelper.toSVGStyle(RenderSettings.getColorManager().getLineStyleForCreaseType(oriLine.getType())),
                     transformedStart.getX(), transformedStart.getY(), transformedEnd.getX(), transformedEnd.getY()

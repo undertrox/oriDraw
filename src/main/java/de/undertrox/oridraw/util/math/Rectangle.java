@@ -92,7 +92,7 @@ public class Rectangle {
     }
 
     public boolean overlaps(Line l) {
-        if (contains(l.getEndPoint()) || contains(l.getStartPoint())) return true;
+        if (contains(l.getEnd()) || contains(l.getStart())) return true;
         for (Line line : lines) {
             if (l.getIntersection(line).isValid()) {
                 return true;

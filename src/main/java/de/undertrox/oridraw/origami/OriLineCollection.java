@@ -4,6 +4,7 @@ import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Transform;
 
 import java.util.Collection;
+import java.util.List;
 
 public class OriLineCollection {
     protected UniqueItemList<OriLine> oriLines;
@@ -38,8 +39,10 @@ public class OriLineCollection {
         endPoint = addPoint(endPoint);
         OriLine oriLine = new OriLine(startPoint, endPoint, type);
         OriLine c = oriLines.push(oriLine);
+        startPoint.addLine(oriLine);
+        endPoint.addLine(oriLine);
         c.setType(type);
-        return c;
+        return oriLine;
     }
 
     /**
@@ -54,8 +57,8 @@ public class OriLineCollection {
             return false;
         }
         l = oriLines.get(index);
-        l.getStartPoint().getLines().remove(l);
-        l.getEndPoint().getLines().remove(l);
+        l.getStart().getLines().remove(l);
+        l.getEnd().getLines().remove(l);
         oriLines.remove(index);
         return true;
     }
@@ -67,7 +70,7 @@ public class OriLineCollection {
     }
 
 
-    public UniqueItemList<OriLine> getOriLines() {
+    public List<OriLine> getOriLines() {
         return oriLines;
     }
 
@@ -83,8 +86,8 @@ public class OriLineCollection {
     public OriLineCollection transform(Transform transform) {
         OriLineCollection newColl = new OriLineCollection();
         for (OriLine oriLine : oriLines) {
-            newColl.addOriLine(new OriPoint(transform.apply(oriLine.getStartPoint())),
-                    new OriPoint(transform.apply(oriLine.getEndPoint())),
+            newColl.addOriLine(new OriPoint(transform.apply(oriLine.getStart())),
+                    new OriPoint(transform.apply(oriLine.getEnd())),
                     oriLine.getType());
         }
         return newColl;
@@ -104,6 +107,6 @@ public class OriLineCollection {
      * @param line: OriLine to add
      */
     public void addOriLine(OriLine line) {
-        this.addOriLine(line.getStartPoint(), line.getEndPoint(), line.getType());
+        this.addOriLine(line.getStart(), line.getEnd(), line.getType());
     }
 }

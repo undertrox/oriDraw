@@ -1,6 +1,6 @@
 package de.undertrox.oridraw.origami;
 
-import de.undertrox.oridraw.util.UniqueItemList;
+import de.undertrox.oridraw.Constants;
 import de.undertrox.oridraw.util.math.Vector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -98,16 +98,6 @@ public class Grid extends OriLineCollection {
         updateGrid();
     }
 
-    @Override
-    public UniqueItemList<OriLine> getOriLines() {
-        return oriLines;
-    }
-
-    @Override
-    public UniqueItemList<OriPoint> getPoints() {
-        return points;
-    }
-
     public List<OriPoint> getGridPointsNear(Vector pos, int radius) {
         double x = topLeftCorner.getX();
         double y = topLeftCorner.getY();
@@ -120,10 +110,10 @@ public class Grid extends OriLineCollection {
             y += getGridSquareSize().getY();
         }
         for (double gridX = x - getGridSquareSize().getX() * radius;
-             gridX < x + getGridSquareSize().getX() * radius;
+             gridX <= x + getGridSquareSize().getX() * radius;
              gridX += getGridSquareSize().getX()) {
             for (double gridY = y - getGridSquareSize().getY() * radius;
-                 gridY < y + getGridSquareSize().getY() * radius;
+                 gridY <= y + getGridSquareSize().getY() * radius;
                  gridY += getGridSquareSize().getY()) {
                 OriPoint p = new OriPoint(gridX, gridY);
                 if (inGrid(p)) {
@@ -136,7 +126,7 @@ public class Grid extends OriLineCollection {
     }
 
     private boolean inGrid(OriPoint p) {
-        return p.getX() >= topLeftCorner.getX() && p.getY() >= topLeftCorner.getY() &&
-                p.getY() <= bottomRightCorner.getY() && p.getX() <= bottomRightCorner.getX();
+        return p.getX() >= topLeftCorner.getX()- Constants.EPSILON && p.getY() >= topLeftCorner.getY()- Constants.EPSILON &&
+                p.getY() <= bottomRightCorner.getY()+ Constants.EPSILON && p.getX() <= bottomRightCorner.getX()+ Constants.EPSILON;
     }
 }

@@ -20,11 +20,11 @@ public class LineTest {
 
     @Test
     public void flipPoints() {
-        Line d = new Line(a.getStartPoint(), a.getEndPoint());
+        Line d = new Line(a.getStart(), a.getEnd());
         d.flipPoints();
 
-        assertEquals(a.getStartPoint(), d.getEndPoint());
-        assertEquals(a.getEndPoint(), d.getStartPoint());
+        assertEquals(a.getStart(), d.getEnd());
+        assertEquals(a.getEnd(), d.getStart());
     }
 
     @Test
@@ -35,7 +35,7 @@ public class LineTest {
 
     @Test
     public void testEquals() {
-        Line d = new Line(a.getStartPoint(), a.getEndPoint());
+        Line d = new Line(a.getStart(), a.getEnd());
         d.flipPoints();
         assertEquals(a,d);
         assertEquals(new Line(new Vector(0,0), new Vector(6,8)), a);
@@ -45,7 +45,7 @@ public class LineTest {
 
     @Test
     public void testHashCode() {
-        Line d = new Line(a.getStartPoint(), a.getEndPoint());
+        Line d = new Line(a.getStart(), a.getEnd());
         d.flipPoints();
         assertEquals(new Line(new Vector(0,0), new Vector(6,8)).hashCode(), a.hashCode());
         assertEquals(b.hashCode(),b.hashCode());
@@ -53,8 +53,8 @@ public class LineTest {
 
     @Test
     public void contains() {
-        assertTrue(a.contains(a.getStartPoint()));
-        assertTrue(a.contains(a.getEndPoint()));
+        assertTrue(a.contains(a.getStart()));
+        assertTrue(a.contains(a.getEnd()));
         assertTrue(a.contains(new Vector(3,4)));
         assertFalse(a.contains(Vector.UNDEFINED));
         assertFalse(c.contains(Vector.ORIGIN));
@@ -70,8 +70,8 @@ public class LineTest {
 
     @Test
     public void getPointAt() {
-        assertEquals(a.getStartPoint(), a.getPointAt(0));
-        assertEquals(a.getEndPoint(), a.getPointAt(1));
+        assertEquals(a.getStart(), a.getPointAt(0));
+        assertEquals(a.getEnd(), a.getPointAt(1));
         assertEquals(new Vector(3,4), a.getPointAt(0.5));
         assertEquals(Vector.UNDEFINED, c.getPointAt(0));
     }

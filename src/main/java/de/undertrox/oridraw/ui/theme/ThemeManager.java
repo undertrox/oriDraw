@@ -5,7 +5,7 @@ import de.undertrox.oridraw.origami.OriLine;
 public class ThemeManager {
     private static ThemeManager instance;
 
-    private Theme activeTheme = Theme.DEFAULT;
+    private Theme activeTheme = Theme.DARK;
 
     public LineStyle getEdgeStyle() {
         return getActiveTheme().getEdge();
@@ -42,7 +42,7 @@ public class ThemeManager {
 
     public static ThemeManager getInstance() {
         if (instance == null) {
-            instance = new ThemeManager();;
+            instance = new ThemeManager();
         }
         return instance;
     }

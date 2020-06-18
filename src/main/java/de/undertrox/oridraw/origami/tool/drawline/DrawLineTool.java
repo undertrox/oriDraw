@@ -116,7 +116,7 @@ public class DrawLineTool extends TypedCreasePatternTool {
             if (!getSelection().getToBeSelectedLines().isEmpty() && !point0.getLines().contains(getSelection().getToBeSelectedLines().get(0))) {
                 Line l = getSelection().getToBeSelectedLines().get(0);
                 Line newL = new Line(point0, nearest).extendUntilIntersection(l);
-                return new OriPoint(newL.getEndPoint());
+                return new OriPoint(newL.getEnd());
             }
             return new OriPoint(getCurrentMousePos().nearestOf(inc));
         } else {

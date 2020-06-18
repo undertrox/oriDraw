@@ -6,7 +6,6 @@ import de.undertrox.oridraw.origami.OriLine;
 import de.undertrox.oridraw.origami.OriPoint;
 import de.undertrox.oridraw.origami.tool.CreasePatternTool;
 import de.undertrox.oridraw.util.math.Transform;
-import de.undertrox.oridraw.util.UniqueItemList;
 import de.undertrox.oridraw.util.math.Vector;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -58,9 +57,12 @@ public class MouseHandler implements MouseHandlerInterface {
             OriPoint nearestPoint = findNearestPoint(mouseCoords, doc.getAllVisiblePoints(mouseCoords));
             if (mouseCoords.distanceSquared(nearestPoint)
                     < cpTransform.getScale().inverse().scale(2*Constants.MOUSE_RANGE).lengthSquared()) {
+                doc.getSelection().clearToBeSelectedLines();
                 doc.getSelection().singleToBeSelected(nearestPoint);
+                doc.getSelection().getToBeSelectedLines().addAll(nearestPoint.getLines());
             } else {
                 doc.getSelection().clearToBeSelectedPoints();
+                doc.getSelection().clearToBeSelectedLines();
             }
         }
         if (doc.getSelection().getMode().selectLines()) {
@@ -76,7 +78,7 @@ public class MouseHandler implements MouseHandlerInterface {
         }
     }
 
-    private OriLine findNearestLine(Vector mouseCoords, UniqueItemList<OriLine> oriLines) {
+    private OriLine findNearestLine(Vector mouseCoords, List<OriLine> oriLines) {
         double smallestDist = Double.POSITIVE_INFINITY;
         OriLine nearestLine = null;
         for (OriLine oriLine : oriLines) {
@@ -120,16 +122,16 @@ public class MouseHandler implements MouseHandlerInterface {
     }
 
     public OriPoint findNearestPoint(Vector p, List<OriPoint> points) {
-        Vector nearest = Vector.UNDEFINED;
+        OriPoint nearest = new OriPoint(Vector.UNDEFINED);
         double smallesSqrDist = Double.POSITIVE_INFINITY;
-        for (Vector point : points) {
+        for (OriPoint point : points) {
             double sqrDist = p.distanceSquared(point);
             if (sqrDist < smallesSqrDist) {
                 smallesSqrDist = sqrDist;
                 nearest = point;
             }
         }
-        return new OriPoint(nearest);
+        return nearest;
     }
 
     @Override

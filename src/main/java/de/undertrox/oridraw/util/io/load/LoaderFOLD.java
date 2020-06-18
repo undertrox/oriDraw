@@ -91,7 +91,7 @@ public class LoaderFOLD extends Loader<Document> {
         cp.apply(cp.transform(t));
         Document doc = new Document(fileTitle, t.apply(paperSize), t.apply(center), Constants.DEFAULT_GRID_DIVISIONS);
         for (OriLine oriLine : cp.getOriLines()) {
-            doc.getCp().addOriLine(new OriPoint(oriLine.getStartPoint()), new OriPoint(oriLine.getEndPoint()), oriLine.getType());
+            doc.getCp().addOriLine(new OriPoint(oriLine.getStart()), new OriPoint(oriLine.getEnd()), oriLine.getType());
         }
         return doc;
     }

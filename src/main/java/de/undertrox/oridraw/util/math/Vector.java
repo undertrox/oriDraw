@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * 2D Vector. Can be used as a Point or as a Vector
  */
-public class Vector {
+public class Vector{
     public static final double TOLERANCE = Constants.EPSILON;
     public static final Vector ORIGIN = new Vector(0, 0);
     public static final Vector UNDEFINED = new Vector(Double.POSITIVE_INFINITY);
@@ -189,5 +189,11 @@ public class Vector {
     @Override
     public String toString() {
         return "Vector(" + getX() + "," + getY() + ")";
+    }
+
+    public int compareTo(Vector o) {
+        if (o.equals(this)) return 0;
+        return getX()<o.getX()
+                || (getX() - o.getX() < Constants.EPSILON && getY()<o.getY())? 1 : -1;
     }
 }

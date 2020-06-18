@@ -8,6 +8,7 @@ import de.undertrox.oridraw.origami.tool.CreasePatternToolFactory;
 import de.undertrox.oridraw.origami.tool.deleteline.DeleteLineToolFactory;
 import de.undertrox.oridraw.origami.tool.drawline.DrawLineToolFactory;
 import de.undertrox.oridraw.origami.tool.select.box.BoxSelectionToolFactory;
+import de.undertrox.oridraw.ui.action.CreateGridAction;
 import de.undertrox.oridraw.ui.action.DeleteSelectedLinesAction;
 import de.undertrox.oridraw.ui.action.button.NewDocAction;
 import de.undertrox.oridraw.ui.action.button.OpenDocAction;
@@ -124,6 +125,7 @@ public class MainApp extends Application {
                 new OpenDocAction(), MainWindowController.instance.fileMenu);
         actionRegistry.register(REGISTRY_DOMAIN, "new_document",
                 new NewDocAction(), MainWindowController.instance.fileMenu);
+        actionRegistry.register(REGISTRY_DOMAIN, "create_grid", new CreateGridAction(), MainWindowController.instance.editMenu);
     }
 
     private void registerKeybinds() {

@@ -26,8 +26,8 @@ public class ExporterCP extends Exporter<Document> {
     @Override
     public void export(Document doc, Writer writer) throws IOException {
         for (OriLine line : doc.getCp().getOriLines()) {
-            writer.write(line.getType().toCpId() + " " + line.getStartPoint().getX() + " " + line.getStartPoint().getY()
-                    + " " + line.getEndPoint().getX() + " " + line.getEndPoint().getY() + "\n");
+            writer.write(line.getType().toCpId() + " " + line.getStart().getX() + " " + line.getStart().getY()
+                    + " " + line.getEnd().getX() + " " + line.getEnd().getY() + "\n");
         }
     }
 }
